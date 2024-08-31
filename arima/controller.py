@@ -9,7 +9,7 @@ from config import config
 
 def train_and_evaluate_arima(
     dataset: Series,
-    max_prediction_length: int,
+    max_prediction_length: int = config.arima_max_prediction_length,
     arima_order: ArimaOrder = None,
     log_label: str = None,
     should_find_best_order: bool = True,
@@ -47,6 +47,7 @@ def train_and_evaluate_arima(
 def load_and_evaluate_arima(
     dataset: Series,
     arima_order: ArimaOrder = None,
+    max_prediction_length: int = config.arima_max_prediction_length,
     log_label: str = None,
     should_show_plot: bool = True,
     should_log_prediction: bool = False,
@@ -62,7 +63,7 @@ def load_and_evaluate_arima(
     """
     trained_model = arima.model.load_model()
     arima_datasets = arima.data.train_test_split_dataset(
-        dataset, config.max_prediction_length
+        dataset, max_prediction_length=max_prediction_length
     )
     arima.evaluation.predict(
         model=trained_model,

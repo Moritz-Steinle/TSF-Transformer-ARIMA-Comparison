@@ -4,8 +4,6 @@ from pytorch_forecasting.data.examples import get_stallion_data
 
 from data.from_db import read_file
 
-dtype = {"result": str, "table": str, "_time": str, "moisture": "float64"}
-
 
 def get_influx_dataset(resolution: str, fill_missing: bool = True) -> DataFrame:
     """
@@ -56,7 +54,9 @@ def get_sawtooth_dataset(amount_interval: int, length_interval: int = 10) -> Dat
     """
     max_range = amount_interval * length_interval
     sawtooth_values = [(i % length_interval) for i in range(1, max_range)]
-    return get_influx_dataset(sawtooth_values)
+    return DataFrame(
+        dict(value=sawtooth_values, group=0, time_idx=range(len(sawtooth_values)))
+    )
 
 
 def get_stallion_dataset() -> DataFrame:

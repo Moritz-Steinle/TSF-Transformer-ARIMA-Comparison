@@ -6,6 +6,7 @@ import transformer.evaluation
 import transformer.interface
 import transformer.model
 from arima.controller import train_and_evaluate_arima
+from arima.interface import get_sawtooth_order
 from data.process import get_influx_dataset, get_sawtooth_dataset, get_stallion_dataset
 from transformer.controller import train_and_evaluate_transformer
 from transformer.interface import (
@@ -15,6 +16,7 @@ from transformer.interface import (
 )
 
 
+# Transformer
 def influx_transformer():
     train_and_evaluate_transformer(
         dataset=get_influx_dataset(),
@@ -49,37 +51,44 @@ def evaluate_saved_transformer(dataset: DataFrame, model_path: ModelPath = None)
     )
 
 
+# ARIMA
 def influx_arima():
+    resolution = "8h"
     train_and_evaluate_arima(
-        dataset=get_influx_dataset()["value"],
-        max_prediction_length=20,
-        should_find_best_order=True,
+        dataset=get_influx_dataset(resolution=resolution)["value"],
+        should_find_best_order=False,
         log_label="InfluxDB",
         should_show_plot=False,
     )
 
 
 def sawtooth_arima():
+    resolution = "8h"
     train_and_evaluate_arima(
         dataset=get_sawtooth_dataset(amount_interval=1000)["value"],
-        max_prediction_length=20,
-        should_find_best_order=True,
         log_label="Sawtooth",
+        arima_order=get_sawtooth_order(resolution),
         should_show_plot=True,
+        should_find_best_order=False,
         should_save_model=False,
     )
 
 
 def run_arima_comparison():
-    sample_intervals = ["24h", "12h", "8h", "6h"]
-    for sample_interval in sample_intervals:
-        data.from_db.fetch(sample_interval)
+    resolutions = ["24h", "12h", "8h", "6h"]
+    for resolution in resolutions:
+        data.from_db.fetch(resolution)
         dataset = get_influx_dataset()["value"]
         train_and_evaluate_arima(
             dataset=dataset,
-            max_prediction_length=20,
-            log_label=f"FluxDB_{sample_interval}",
+            log_label=f"FluxDB_{resolution}",
         )
 
 
-train_and_evaluate_transformer()
+# Util
+def fetch_data_from_db():
+    resolution = "24h"
+    data.from_db.fetch(resolution)
+
+
+sawtooth_arima()
