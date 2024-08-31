@@ -20,6 +20,7 @@ def influx_transformer():
         dataset=get_influx_dataset(),
         dataloader_parameters=transformer.interface.get_influx_dataloader_parameters(),
         hyperparameters=get_influx_hyperparameters(),
+        fast_dev_run=True,
     )
 
 
@@ -29,7 +30,6 @@ def sawtooth_transformer():
         dataloader_parameters=transformer.interface.get_influx_dataloader_parameters(),
         hyperparameters=get_sawtooth_hyperparameters(),
         should_run_hyperparameter_study=False,
-        fast_dev_run=True,
     )
 
 
@@ -82,4 +82,4 @@ def run_arima_comparison():
         )
 
 
-sawtooth_arima()
+train_and_evaluate_transformer()

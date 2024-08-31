@@ -1,63 +1,70 @@
-import os
-
 import numpy as np
-import pandas as pd
+from pandas import DataFrame, Series
 from pytorch_forecasting.data.examples import get_stallion_data
 
-filename = "sensorData.csv"
-dirname = os.path.dirname(os.path.abspath(__file__))
-filename_with_path = os.path.join(dirname, filename)
+from data.from_db import read_file
 
 dtype = {"result": str, "table": str, "_time": str, "moisture": "float64"}
 
 
-def read_file():
-    return pd.read_csv(
-        filename_with_path,
-        sep=",",
-        encoding="utf-8",
-        dtype=dtype,
-        parse_dates=["_time"],
-    )
+def get_influx_dataset(resolution: str, fill_missing: bool = True) -> DataFrame:
+    """
+    Retrieves a dataset from InfluxDB with the specified resolution.
+    Parameters:
+        resolution (str): The resolution of the dataset., p.ex 30m, 6h, 1d
+        fill_missing (bool, optional): Flag indicating whether to fill missing values in the dataset. Defaults to True.
+    Returns:
+        pandas.DataFrame: The retrieved dataset.
+    """
 
-
-def get_influx_dataset(values=[], fill_missing=True):
-    if not values:
-        file_dataset = read_file()
-        values = file_dataset["moisture"]
-    dataframe = pd.DataFrame(
+    file_dataset = read_file(resolution)
+    values = file_dataset["moisture"]
+    dataframe = DataFrame(
         dict(
-            value=values,  # Extracting the values from the '_value' column
-            group=0,  # Setting the 'group' column to 0
-            time_idx=range(len(values)),  # Setting 'time_idx' to an increasing integer
+            value=values,
+            group=0,
+            time_idx=range(len(values)),  # TODO use actual dates instead of range
         )
     )
-    # dataframe.set_index('time_idx', inplace=True)
     if fill_missing:
-        dataframe = linear_fill_missing(dataframe)
+        dataframe["value"] = linear_fill_missing(dataframe["value"])
     return dataframe
 
 
-# Fills mising values by linear interpolation
-# Drops remaining missing values (missing values at dataset start can't be interpolated)
-def linear_fill_missing(dataset):
-    dataset["value"] = dataset["value"].interpolate(method="linear")
+def linear_fill_missing(
+    dataset: Series,
+) -> Series:
+    """
+    Drops beginning and fills missing values in a dataset.
+    Parameters:
+        dataset (pandas.Series): The dataset to be processed.
+    Returns:
+        pandas.DataFrame: The dataset with missing values filled using linear interpolation.
+    """
+    dataset = dataset.interpolate(method="linear")
     return dataset.dropna()
 
 
-def get_sawtooth_dataset(amount_interval, length_interval=10):
+def get_sawtooth_dataset(amount_interval: int, length_interval: int = 10) -> DataFrame:
+    """
+    Generates a dataset conatining a sawtooth function.
+    Parameters:
+    - amount_interval (int): The number of intervals to generate.
+    - length_interval (int): The length of each interval. Default is 10.
+    Returns:
+    - DataFrame: The generated sawtooth dataset.
+    """
     max_range = amount_interval * length_interval
     sawtooth_values = [(i % length_interval) for i in range(1, max_range)]
     return get_influx_dataset(sawtooth_values)
 
 
-def get_linear_dataset(length):
-    linear_values = range(length)
-    return get_influx_dataset(linear_values)
-
-
-# Dataset used in the pytorch_forecasting tutorial
-def get_stallion_dataset() -> pd.DataFrame:
+def get_stallion_dataset() -> DataFrame:
+    """
+    Generates the dataset used in the pytorch_forecasting tutorial
+    Returns:
+        DataFrame: Dataset used in the pytorch_forecasting tutorial
+    """
     dataset = get_stallion_data()
     # add time index
     dataset["time_idx"] = dataset["date"].dt.year * 12 + dataset["date"].dt.month

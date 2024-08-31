@@ -1,12 +1,8 @@
 # Time Series Forecasting comparsion of AI to classic statistical approaches 
 
 This project compares the relatively new approach of TSF with a transformer model to the prominent ARIMA forecasting.
-
-# Main project parts
-- main: Project entry point
-- config.ini: Configurate all app parameters. Most important is `max_epochs` to determine training length
-- transformer/controller: Main access to AI functionality
-- data/fetch_from_db: To fetch specific data from the InfluxDB
+The real-world data used is the ground dryness of a potted plant that is watered roughly every 6 days.
+This results in a one-dimensional, seasonal dataset. 
 
 # Installation
 1. Clone the repository
@@ -33,7 +29,7 @@ This README section provides an overview of the main file in our Python project,
 
 5. `influx_arima()`: Trains and evaluates an ARIMA model on the real-life scenario data.
 6. `sawtooth_arima()`: Trains and evaluates an ARIMA model on the mock sawtooth data
-7. `run_arima_comparison()`: Runs ARIMA comparisons on the real-life scenario data with different resolutions.
+7. `run_arima_comparison()`: Currently only available with database access. Runs ARIMA comparisons on the real-life scenario data with different resolutions.
 
 ## Notes
 
