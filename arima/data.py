@@ -1,9 +1,7 @@
-import matplotlib.pyplot as plt
 from pandas import DataFrame
 from pmdarima import auto_arima
 from pmdarima.arima import ARIMA as pmdARIMA
-from statsmodels.graphics.tsaplots import acf, plot_acf, plot_pacf
-from statsmodels.tsa.stattools import adfuller
+from statsmodels.graphics.tsaplots import acf
 
 from .interface import ArimaDatasets, ArimaOrder
 
@@ -69,13 +67,3 @@ def calculate_season_length(dataset: DataFrame) -> int:
     seasonal_period = peaks[peaks > 0][0]
     print(f"Detected seasonal period: {seasonal_period}")
     return seasonal_period
-
-
-def plot_acf_pacf(dataset):
-    plot_acf(dataset)
-    plot_pacf(dataset)
-    plt.show()
-
-
-def get_p_value(dataset):
-    return adfuller(dataset)[1]

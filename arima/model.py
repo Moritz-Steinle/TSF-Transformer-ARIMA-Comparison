@@ -18,11 +18,15 @@ def train_model(
     Train an ARIMA model using the given train_dataset.
     Parameters:
         train_dataset (DataFrame): The training dataset.
-        order (ArimaOrder, optional): The order (p,d,q) of the ARIMA model. Defaults to None.
-        seasonal_order (ArimaSeasonalOrder, optional): The seasonal order (p,d,q, m) of the ARIMA model. Defaults to None.
+        arima_order contains:
+            order (ArimaOrder, optional): The order (p,d,q) of the ARIMA model. Defaults to (1,0,0).
+            seasonal_order (ArimaSeasonalOrder, optional): The seasonal order (p,d,q, m) of the ARIMA model.
+                Defaults to (0,0,0,0).
+        should_save_model (bool, optional): Whether to save the trained model. Defaults to True.
     Returns:
         ARIMA: The trained ARIMA model.
     """
+    arima_order = arima_order or ArimaOrder()
     model = SARIMAX(
         train_dataset,
         order=arima_order.order,
