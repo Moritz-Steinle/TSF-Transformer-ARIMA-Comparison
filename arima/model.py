@@ -1,7 +1,7 @@
 # Taken from https://github.com/nachi-hebbar/ARIMA-Temperature_Forecasting
 import pickle
 
-from pandas import DataFrame
+from pandas import Series
 from statsmodels.tsa.statespace.sarimax import SARIMAX
 
 from config import config
@@ -10,14 +10,14 @@ from .interface import ArimaOrder
 
 
 def train_model(
-    train_dataset: DataFrame,
+    train_dataset: Series,
     arima_order: ArimaOrder = None,
     should_save_model: bool = True,
 ) -> SARIMAX:
     """
     Train an ARIMA model using the given train_dataset.
     Parameters:
-        train_dataset (DataFrame): The training dataset.
+        train_dataset (Series): The training dataset.
         arima_order contains:
             order (ArimaOrder, optional): The order (p,d,q) of the ARIMA model. Defaults to (1,0,0).
             seasonal_order (ArimaSeasonalOrder, optional): The seasonal order (p,d,q, m) of the ARIMA model.

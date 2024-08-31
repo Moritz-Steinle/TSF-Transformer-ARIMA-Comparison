@@ -1,5 +1,8 @@
-from pandas import DataFrame
+from pandas import DataFrame, Series
 
+import arima.data
+import arima.interface
+import data.analyse
 import data.from_db
 import transformer.data
 import transformer.evaluation
@@ -56,6 +59,7 @@ def influx_arima():
     resolution = "8h"
     train_and_evaluate_arima(
         dataset=get_influx_dataset(resolution=resolution)["value"],
+        arima_order=arima.interface.get_influx_order(resolution),
         should_find_best_order=False,
         log_label="InfluxDB",
         should_show_plot=False,
@@ -63,25 +67,23 @@ def influx_arima():
 
 
 def sawtooth_arima():
-    resolution = "8h"
     train_and_evaluate_arima(
         dataset=get_sawtooth_dataset(amount_interval=1000)["value"],
+        max_prediction_length=20,
         log_label="Sawtooth",
-        arima_order=get_sawtooth_order(resolution),
-        should_show_plot=True,
-        should_find_best_order=False,
-        should_save_model=False,
+        arima_order=get_sawtooth_order(),
     )
 
 
 def run_arima_comparison():
     resolutions = ["24h", "12h", "8h", "6h"]
     for resolution in resolutions:
-        data.from_db.fetch(resolution)
-        dataset = get_influx_dataset()["value"]
+        dataset = get_influx_dataset(resolution=resolution)["value"]
         train_and_evaluate_arima(
             dataset=dataset,
             log_label=f"FluxDB_{resolution}",
+            max_prediction_length=6,
+            arima_order=arima.interface.get_influx_order(resolution=resolution),
         )
 
 
@@ -91,4 +93,4 @@ def fetch_data_from_db():
     data.from_db.fetch(resolution)
 
 
-sawtooth_arima()
+run_arima_comparison()

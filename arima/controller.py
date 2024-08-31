@@ -12,9 +12,9 @@ def train_and_evaluate_arima(
     max_prediction_length: int = config.arima_max_prediction_length,
     arima_order: ArimaOrder = None,
     log_label: str = None,
-    should_find_best_order: bool = True,
-    should_show_plot: bool = True,
-    should_save_model: bool = True,
+    should_find_best_order: bool = False,
+    should_show_plot: bool = False,
+    should_save_model: bool = False,
 ) -> None:
     """
     Trains and evaluates an ARIMA model using the given dataset.
@@ -29,7 +29,9 @@ def train_and_evaluate_arima(
     """
     if should_find_best_order:
         arima_order = arima.data.find_best_order(dataset)
-    arima_datasets = arima.data.train_test_split_dataset(dataset, max_prediction_length)
+    arima_datasets = arima.data.train_test_split_dataset(
+        dataset=dataset, max_prediction_length=max_prediction_length
+    )
     trained_model = arima.model.train_model(
         train_dataset=arima_datasets.train_dataset,
         arima_order=arima_order,

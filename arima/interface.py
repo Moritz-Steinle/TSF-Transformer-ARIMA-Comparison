@@ -1,13 +1,13 @@
 from dataclasses import dataclass
 from typing import Optional
 
-from pandas import DataFrame
+from pandas import Series
 
 
 @dataclass
 class ArimaDatasets:
-    train_dataset: DataFrame
-    test_dataset: DataFrame
+    train_dataset: Series
+    test_dataset: Series
 
 
 @dataclass
@@ -16,7 +16,7 @@ class ArimaOrder:
     seasonal_order: Optional[tuple[int, int, int, int]] = (0, 0, 0, 0)
 
 
-def get_sawtooth_order(resolution: str) -> ArimaOrder:
+def get_influx_order(resolution: str) -> ArimaOrder:
     if resolution == "24h":
         return ArimaOrder(order=(0, 0, 1), seasonal_order=(0, 0, 1, 6))
     elif resolution == "12h":
@@ -27,3 +27,7 @@ def get_sawtooth_order(resolution: str) -> ArimaOrder:
         return ArimaOrder(order=(1, 0, 0), seasonal_order=(2, 0, 0, 24))
     else:
         raise ValueError(f"Resolution {resolution} not supported")
+
+
+def get_sawtooth_order() -> ArimaOrder:
+    return ArimaOrder(order=(0, 0, 0), seasonal_order=(2, 0, 2, 10))
