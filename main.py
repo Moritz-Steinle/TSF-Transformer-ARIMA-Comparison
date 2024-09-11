@@ -22,7 +22,7 @@ from transformer.interface import (
 # Transformer
 def influx_transformer():
     train_and_evaluate_transformer(
-        dataset=get_influx_dataset(),
+        dataset=get_influx_dataset(resolution="8h", should_normalize=False),
         dataloader_parameters=transformer.interface.get_influx_dataloader_parameters(),
         hyperparameters=get_influx_hyperparameters(),
     )
@@ -92,4 +92,4 @@ def fetch_data_from_db():
     data.from_db.fetch(resolution)
 
 
-run_arima_comparison()
+influx_transformer()

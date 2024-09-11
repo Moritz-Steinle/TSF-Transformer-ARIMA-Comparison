@@ -1,7 +1,8 @@
 from pandas import Series
 from pmdarima import auto_arima
 from pmdarima.arima import ARIMA as pmdARIMA
-from statsmodels.graphics.tsaplots import acf
+
+from data.analyse import calculate_season_length
 
 from .interface import ArimaDatasets, ArimaOrder
 
@@ -48,22 +49,3 @@ def find_best_order(
     if not quiet:
         stepwise_model.summary()
     return ArimaOrder(stepwise_model.order, stepwise_model.seasonal_order)
-
-
-def calculate_season_length(dataset: Series) -> int:
-    """Finds the season length of the dataset
-
-    Args:
-        dataset Series: dataset to find the season length of
-    """
-    # Calculate the ACF
-    lag_acf = acf(dataset, nlags=len(dataset) // 2)
-    # Find the peaks in the ACF
-    from scipy.signal import find_peaks
-
-    peaks, _ = find_peaks(lag_acf)
-
-    # The first peak after lag 0 is likely to be the seasonal period
-    seasonal_period = peaks[peaks > 0][0]
-    print(f"Detected seasonal period: {seasonal_period}")
-    return seasonal_period

@@ -2,10 +2,13 @@ import numpy as np
 from pandas import DataFrame, Series
 from pytorch_forecasting.data.examples import get_stallion_data
 
+from data.analyse import calculate_season_length
 from data.from_db import read_file
 
 
-def get_influx_dataset(resolution: str, fill_missing: bool = True) -> DataFrame:
+def get_influx_dataset(
+    resolution: str, should_fill_missing: bool = True, should_normalize: bool = False
+) -> DataFrame:
     """
     Retrieves a dataset from InfluxDB with the specified resolution.
     Parameters:
@@ -17,6 +20,8 @@ def get_influx_dataset(resolution: str, fill_missing: bool = True) -> DataFrame:
 
     file_dataset = read_file(resolution)
     values = file_dataset["moisture"]
+    if should_normalize:
+        values = _normalize_dataset(values)
     dataframe = DataFrame(
         dict(
             value=values,
@@ -24,23 +29,9 @@ def get_influx_dataset(resolution: str, fill_missing: bool = True) -> DataFrame:
             time_idx=range(len(values)),  # TODO use actual dates instead of range
         )
     )
-    if fill_missing:
-        dataframe["value"] = linear_fill_missing(dataframe["value"])
+    if should_fill_missing:
+        dataframe["value"] = _linear_fill_missing(dataframe["value"])
     return dataframe
-
-
-def linear_fill_missing(
-    dataset: Series,
-) -> Series:
-    """
-    Drops beginning and fills missing values in a dataset.
-    Parameters:
-        dataset (pandas.Series): The dataset to be processed.
-    Returns:
-        pandas.DataFrame: The dataset with missing values filled using linear interpolation.
-    """
-    dataset = dataset.interpolate(method="linear")
-    return dataset.dropna()
 
 
 def get_sawtooth_dataset(amount_interval: int, length_interval: int = 10) -> DataFrame:
@@ -104,3 +95,34 @@ def get_stallion_dataset() -> DataFrame:
     )
     dataset.sample(10, random_state=521)
     return dataset
+
+
+# TODO implement
+def get_influx_chained_seasons_dataset(resolution: str) -> DataFrame:
+    file_dataset = read_file(resolution)
+    season_length = calculate_season_length(file_dataset)
+
+
+def _normalize_dataset(dataseries: Series) -> Series:
+    """
+    Normalizes a data series via min-max scaling.
+    Parameters:
+        dataseries (pandas.Series): The dataset to be normalized.
+    Returns:
+        pandas.Series: The normalized dataseries.
+    """
+    return (dataseries - dataseries.min()) / (dataseries.max() - dataseries.min())
+
+
+def _linear_fill_missing(
+    dataset: Series,
+) -> Series:
+    """
+    Drops beginning and fills missing values in a dataset.
+    Parameters:
+        dataset (pandas.Series): The dataset to be processed.
+    Returns:
+        pandas.DataFrame: The dataset with missing values filled using linear interpolation.
+    """
+    dataset = dataset.interpolate(method="linear")
+    return dataset.dropna()
