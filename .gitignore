@@ -1,5 +1,4 @@
 ## Custom
-*.csv
 lightning_logs/*
 ba-env/
 *.pkl

@@ -1,0 +1,329 @@
+More data is better
+Change as little data as possible (dont exclude outliers)
+Hyperparameters check grid search
+Mention hyperparameters search
+replicate tutorial to see if its correct
+
+Trial 6 finished with value: 0.012307507917284966 and parameters: {'gradient_clip_val': 1.4302435342726507, 'hidden_size': 161, 'dropout': 0.18197369706977168, 'hidden_continuous_size': 18, 'attention_head_size': 3, 'learning_rate': 0.02818382931264452}. Best is trial 6 with value: 0.012307507917284966.
+Trial 25 finished with value: 0.009856957010924816 and parameters: {'gradient_clip_val': 47.417266730521646, 'hidden_size': 221, 'dropout': 0.22279045485864332, 'hidden_continuous_size': 14, 'attention_head_size': 3, 'learning_rate': 0.012589254117941671}.
+Trial 35 finished with value: 0.00965485256165266 and parameters: {'gradient_clip_val': 9.685123617305461, 'hidden_size': 226, 'dropout': 0.24302708554347946, 'hidden_continuous_size': 17, 'attention_head_size': 4, 'learning_rate': 0.011220184543019632}. Best is trial 35 with value: 0.00965485256165266.
+Trial 40 finished with value: 0.008502131327986717 and parameters: {'gradient_clip_val': 26.299655543511545, 'hidden_size': 256, 'dropout': 0.2389409641779281, 'hidden_continuous_size': 12, 'attention_head_size': 4, 'learning_rate': 0.007079457843841375}. Best is trial 40 with value: 0.008502131327986717.
+
+Trial 40 finished with value: 0.008502131327986717 and parameters: {'gradient_clip_val': 26.299655543511545, 'hidden_size': 256, 'dropout': 0.2389409641779281, 'hidden_continuous_size': 12, 'attention_head_size': 4, 'learning_rate': 0.007079457843841375}
+Trial 35 finished with value: 0.00965485256165266 and parameters: {'gradient_clip_val': 9.685123617305461, 'hidden_size': 226, 'dropout': 0.24302708554347946, 'hidden_continuous_size': 17, 'attention_head_size': 4, 'learning_rate': 0.011220184543019632}
+Trial 41 finished with value: 0.010177838616073132 and parameters: {'gradient_clip_val': 25.800411970587145, 'hidden_size': 255, 'dropout': 0.24148708064676572, 'hidden_continuous_size': 12, 'attention_head_size': 4, 'learning_rate': 0.007943282347242812}
+Trial 39 finished with value: 0.011806830763816833 and parameters: {'gradient_clip_val': 24.35287834575314, 'hidden_size': 265, 'dropout': 0.23619514892844679, 'hidden_continuous_size': 15, 'attention_head_size': 4, 'learning_rate': 0.011220184543019632}
+Trial 36 finished with value: 0.012341292575001717 and parameters: {'gradient_clip_val': 9.243682814284583, 'hidden_size': 232, 'dropout': 0.25432326837831776, 'hidden_continuous_size': 17, 'attention_head_size': 3, 'learning_rate': 0.014125375446227544}
+Trial 43 finished with value: 0.012734505347907543 and parameters: {'gradient_clip_val': 36.766416203979254, 'hidden_size': 227, 'dropout': 0.22864447402231475, 'hidden_continuous_size': 11, 'attention_head_size': 4, 'learning_rate': 0.012589254117941671}
+Trial 45 finished with value: 0.013646667823195457 and parameters: {'gradient_clip_val': 24.47269933441313, 'hidden_size': 225, 'dropout': 0.24098618666869348, 'hidden_continuous_size': 14, 'attention_head_size': 4, 'learning_rate': 0.014125375446227544}
+Trial 37 finished with value: 0.013936331495642662 and parameters: {'gradient_clip_val': 4.40407652112244, 'hidden_size': 183, 'dropout': 0.24543012223073324, 'hidden_continuous_size': 18, 'attention_head_size': 4, 'learning_rate': 0.025118864315095815}
+Trial 46 finished with value: 0.013467301614582539 and parameters: {'gradient_clip_val': 51.12358027399871, 'hidden_size': 265, 'dropout': 0.2246218722142536, 'hidden_continuous_size': 12, 'attention_head_size': 4, 'learning_rate': 0.007079457843841375}
+Trial 47 finished with value: 0.014714183285832405 and parameters: {'gradient_clip_val': 77.18288208175109, 'hidden_size': 175, 'dropout': 0.2645944557201866, 'hidden_continuous_size': 10, 'attention_head_size': 4, 'learning_rate': 0.02818382931264452}
+Trial 48 finished with value: 0.01435590349137783 and parameters: {'gradient_clip_val': 18.426066953542954, 'hidden_size': 143, 'dropout': 0.2508846447368964, 'hidden_continuous_size': 16, 'attention_head_size': 4, 'learning_rate': 0.02818382931264452}
+Trial 49 finished with value: 0.015254924073815346 and parameters: {'gradient_clip_val': 5.958048791952364, 'hidden_size': 163, 'dropout': 0.272131375232175, 'hidden_continuous_size': 8, 'attention_head_size': 4, 'learning_rate': 0.02818382931264452}
+Trial 42 finished with value: 0.017263686284422874 and parameters: {'gradient_clip_val': 61.727669584213544, 'hidden_size': 235, 'dropout': 0.24120752524257594, 'hidden_continuous_size': 12, 'attention_head_size': 4, 'learning_rate': 0.014125375446227544}
+Trial 44 finished with value: 0.018236424773931503 and parameters: {'gradient_clip_val': 10.791608347922798, 'hidden_size': 192, 'dropout': 0.25300889782111236, 'hidden_continuous_size': 9, 'attention_head_size': 4, 'learning_rate': 0.022387211385683406}
+Trial 38 finished with value: 0.47344714403152466 and parameters: {'gradient_clip_val': 53.55304083440872, 'hidden_size': 128, 'dropout': 0.22659491509427238, 'hidden_continuous_size': 17, 'attention_head_size': 3, 'learning_rate': 0.0446683592150963}
+
+To determine the important parameters, we'll analyze the trends in the top-performing trials and compare them to the worst-performing ones. Let's focus on the trials with the lowest (best) and highest (worst) values.
+Top 5 best trials:
+
+Trial 40: 0.008502
+Trial 35: 0.009655
+Trial 41: 0.010178
+Trial 39: 0.011807
+Trial 36: 0.012341
+
+Worst trial:
+Trial 38: 0.473447
+Analyzing the parameters:
+
+Learning rate:
+
+Best trials: 0.007-0.014
+Worst trial: 0.0447
+Observation: Lower learning rates (0.007-0.014) seem to perform better.
+
+Hidden size:
+
+Best trials: 226-265
+Worst trial: 128
+Observation: Larger hidden sizes (226-265) appear to be more effective.
+
+Dropout:
+
+Best trials: 0.23-0.25
+Worst trial: 0.227
+Observation: Dropout values don't show a clear trend, as they're similar across good and bad trials.
+
+Hidden continuous size:
+
+Best trials: 12-17
+Worst trial: 17
+Observation: No clear trend, as the range overlaps between good and bad trials.
+
+Attention head size:
+
+Best trials: 3-4
+Worst trial: 3
+Observation: No clear trend, as both good and bad trials use similar values.
+
+Gradient clip value:
+
+Best trials: 9-26
+Worst trial: 53.55
+Observation: Lower gradient clip values (9-26) seem to perform better.
+
+Based on this analysis, the most important parameters appear to be:
+
+Learning rate: Lower values (0.007-0.014) perform better.
+Hidden size: Larger values (226-265) are more effective.
+Gradient clip value: Lower values (9-26) yield better results.
+
+The other parameters (dropout, hidden continuous size, and attention head size) don't show clear trends and may have less impact on the model's performance in this case.
+To further improve the model, you might want to focus on fine-tuning the learning rate, hidden size, and gradient clip value within the ranges observed in the best-performing
+
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Finding best initial lr: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 100/100 [00:05<00:00, 17.72it/s]`Trainer.fit` stopped: `max_steps=100` reached.
+Finding best initial lr: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 100/100 [00:05<00:00, 17.54it/s]
+Learning rate set to 0.008912509381337452
+Restoring states from the checkpoint path at /home/steinle/Documents/code-ba/.lr_find_9d5cf340-19c6-441a-8c28-54e0d0e648c8.ckpt
+Restored all states from the checkpoint at /home/steinle/Documents/code-ba/.lr_find_9d5cf340-19c6-441a-8c28-54e0d0e648c8.ckpt
+[I 2024-08-27 19:22:10,652] Using learning rate of 0.0112
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+`Trainer.fit` stopped: `max_epochs=25` reached.
+[I 2024-08-27 19:26:11,601] Trial 35 finished with value: 0.00965485256165266 and parameters: {'gradient_clip_val': 9.685123617305461, 'hidden_size': 226, 'dropout': 0.24302708554347946, 'hidden_continuous_size': 17, 'attention_head_size': 4, 'learning_rate': 0.011220184543019632}. Best is trial 35 with value: 0.00965485256165266.
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Finding best initial lr: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 100/100 [00:05<00:00, 17.95it/s]`Trainer.fit` stopped: `max_steps=100` reached.
+Finding best initial lr: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 100/100 [00:05<00:00, 17.82it/s]
+Learning rate set to 0.008912509381337452
+Restoring states from the checkpoint path at /home/steinle/Documents/code-ba/.lr_find_29c2f932-81da-472f-95cc-b8ab8149458d.ckpt
+Restored all states from the checkpoint at /home/steinle/Documents/code-ba/.lr_find_29c2f932-81da-472f-95cc-b8ab8149458d.ckpt
+[I 2024-08-27 19:26:18,071] Using learning rate of 0.0141
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+`Trainer.fit` stopped: `max_epochs=25` reached.
+[I 2024-08-27 19:30:08,834] Trial 36 finished with value: 0.012341292575001717 and parameters: {'gradient_clip_val': 9.243682814284583, 'hidden_size': 232, 'dropout': 0.25432326837831776, 'hidden_continuous_size': 17, 'attention_head_size': 3, 'learning_rate': 0.014125375446227544}. Best is trial 35 with value: 0.00965485256165266.
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Finding best initial lr: 99%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▎ | 99/100 [00:05<00:00, 19.28it/s]`Trainer.fit` stopped: `max_steps=100` reached.
+Finding best initial lr: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 100/100 [00:05<00:00, 18.93it/s]
+Learning rate set to 0.017782794100389233
+Restoring states from the checkpoint path at /home/steinle/Documents/code-ba/.lr_find_cb157f5e-9ddf-4093-9294-eced1b8d252d.ckpt
+Restored all states from the checkpoint at /home/steinle/Documents/code-ba/.lr_find_cb157f5e-9ddf-4093-9294-eced1b8d252d.ckpt
+[I 2024-08-27 19:30:14,995] Using learning rate of 0.0251
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+`Trainer.fit` stopped: `max_epochs=25` reached.
+[I 2024-08-27 19:33:50,994] Trial 37 finished with value: 0.013936331495642662 and parameters: {'gradient_clip_val': 4.40407652112244, 'hidden_size': 183, 'dropout': 0.24543012223073324, 'hidden_continuous_size': 18, 'attention_head_size': 4, 'learning_rate': 0.025118864315095815}. Best is trial 35 with value: 0.00965485256165266.
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Finding best initial lr: 98%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▌ | 98/100 [00:04<00:00, 21.33it/s]`Trainer.fit` stopped: `max_steps=100` reached.
+Finding best initial lr: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 100/100 [00:04<00:00, 21.60it/s]
+Learning rate set to 0.03548133892335753
+Restoring states from the checkpoint path at /home/steinle/Documents/code-ba/.lr_find_acf31a52-4aa5-4f51-b2b4-f0ee9a13c34b.ckpt
+Restored all states from the checkpoint at /home/steinle/Documents/code-ba/.lr_find_acf31a52-4aa5-4f51-b2b4-f0ee9a13c34b.ckpt
+[I 2024-08-27 19:33:56,442] Using learning rate of 0.0447
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+`Trainer.fit` stopped: `max_epochs=25` reached.
+[I 2024-08-27 19:37:13,650] Trial 38 finished with value: 0.47344714403152466 and parameters: {'gradient_clip_val': 53.55304083440872, 'hidden_size': 128, 'dropout': 0.22659491509427238, 'hidden_continuous_size': 17, 'attention_head_size': 3, 'learning_rate': 0.0446683592150963}. Best is trial 35 with value: 0.00965485256165266.
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Finding best initial lr: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 100/100 [00:06<00:00, 16.14it/s]`Trainer.fit` stopped: `max_steps=100` reached.
+Finding best initial lr: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 100/100 [00:06<00:00, 16.02it/s]
+Learning rate set to 0.008912509381337452
+Restoring states from the checkpoint path at /home/steinle/Documents/code-ba/.lr_find_2f22fb04-d050-4df7-ba5b-2baf581dac17.ckpt
+Restored all states from the checkpoint at /home/steinle/Documents/code-ba/.lr_find_2f22fb04-d050-4df7-ba5b-2baf581dac17.ckpt
+[I 2024-08-27 19:37:20,758] Using learning rate of 0.0112
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+`Trainer.fit` stopped: `max_epochs=25` reached.
+[I 2024-08-27 19:41:50,388] Trial 39 finished with value: 0.011806830763816833 and parameters: {'gradient_clip_val': 24.35287834575314, 'hidden_size': 265, 'dropout': 0.23619514892844679, 'hidden_continuous_size': 15, 'attention_head_size': 4, 'learning_rate': 0.011220184543019632}. Best is trial 35 with value: 0.00965485256165266.
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Finding best initial lr: 100%|█████████████████████████████████████████████| 100/100 [00:05<00:00, 16.16it/s]`Trainer.fit` stopped: `max_steps=100` reached.
+Finding best initial lr: 100%|█████████████████████████████████████████████| 100/100 [00:05<00:00, 16.99it/s]
+Learning rate set to 0.007943282347242812
+Restoring states from the checkpoint path at /home/steinle/Documents/code-ba/.lr_find_0dac6e6f-6f95-4ae0-a72e-bf43108726c5.ckpt
+Restored all states from the checkpoint at /home/steinle/Documents/code-ba/.lr_find_0dac6e6f-6f95-4ae0-a72e-bf43108726c5.ckpt
+[I 2024-08-27 19:41:57,292] Using learning rate of 0.00708
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+`Trainer.fit` stopped: `max_epochs=25` reached.
+[I 2024-08-27 19:46:04,320] Trial 40 finished with value: 0.008502131327986717 and parameters: {'gradient_clip_val': 26.299655543511545, 'hidden_size': 256, 'dropout': 0.2389409641779281, 'hidden_continuous_size': 12, 'attention_head_size': 4, 'learning_rate': 0.007079457843841375}. Best is trial 40 with value: 0.008502131327986717.
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Finding best initial lr: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 100/100 [00:06<00:00, 17.06it/s]`Trainer.fit` stopped: `max_steps=100` reached.
+Finding best initial lr: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 100/100 [00:06<00:00, 16.46it/s]
+Learning rate set to 0.008912509381337452
+Restoring states from the checkpoint path at /home/steinle/Documents/code-ba/.lr_find_b1488e2f-7ed1-47bf-87ed-e3225b9fefa1.ckpt
+Restored all states from the checkpoint at /home/steinle/Documents/code-ba/.lr_find_b1488e2f-7ed1-47bf-87ed-e3225b9fefa1.ckpt
+[I 2024-08-27 19:46:11,274] Using learning rate of 0.00794
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+`Trainer.fit` stopped: `max_epochs=25` reached.
+[I 2024-08-27 19:50:21,508] Trial 41 finished with value: 0.010177838616073132 and parameters: {'gradient_clip_val': 25.800411970587145, 'hidden_size': 255, 'dropout': 0.24148708064676572, 'hidden_continuous_size': 12, 'attention_head_size': 4, 'learning_rate': 0.007943282347242812}. Best is trial 40 with value: 0.008502131327986717.
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Finding best initial lr: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 100/100 [00:05<00:00, 17.43it/s]`Trainer.fit` stopped: `max_steps=100` reached.
+Finding best initial lr: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 100/100 [00:05<00:00, 17.20it/s]
+Learning rate set to 0.008912509381337452
+Restoring states from the checkpoint path at /home/steinle/Documents/code-ba/.lr_find_8b72dff5-92e4-47f9-8607-85cbe5dd50b7.ckpt
+Restored all states from the checkpoint at /home/steinle/Documents/code-ba/.lr_find_8b72dff5-92e4-47f9-8607-85cbe5dd50b7.ckpt
+[I 2024-08-27 19:50:28,141] Using learning rate of 0.0141
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+`Trainer.fit` stopped: `max_epochs=25` reached.
+[I 2024-08-27 19:54:29,998] Trial 42 finished with value: 0.017263686284422874 and parameters: {'gradient_clip_val': 61.727669584213544, 'hidden_size': 235, 'dropout': 0.24120752524257594, 'hidden_continuous_size': 12, 'attention_head_size': 4, 'learning_rate': 0.014125375446227544}. Best is trial 40 with value: 0.008502131327986717.
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Finding best initial lr: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 100/100 [00:05<00:00, 17.32it/s]`Trainer.fit` stopped: `max_steps=100` reached.
+Finding best initial lr: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 100/100 [00:05<00:00, 17.24it/s]
+Learning rate set to 0.008912509381337452
+Restoring states from the checkpoint path at /home/steinle/Documents/code-ba/.lr_find_99c1d938-5bab-4976-b272-65a7e4aa02d9.ckpt
+Restored all states from the checkpoint at /home/steinle/Documents/code-ba/.lr_find_99c1d938-5bab-4976-b272-65a7e4aa02d9.ckpt
+[I 2024-08-27 19:54:36,636] Using learning rate of 0.0126
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+`Trainer.fit` stopped: `max_epochs=25` reached.
+[I 2024-08-27 19:58:36,739] Trial 43 finished with value: 0.012734505347907543 and parameters: {'gradient_clip_val': 36.766416203979254, 'hidden_size': 227, 'dropout': 0.22864447402231475, 'hidden_continuous_size': 11, 'attention_head_size': 4, 'learning_rate': 0.012589254117941671}. Best is trial 40 with value: 0.008502131327986717.
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Finding best initial lr: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 100/100 [00:05<00:00, 19.07it/s]`Trainer.fit` stopped: `max_steps=100` reached.
+Finding best initial lr: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 100/100 [00:05<00:00, 19.50it/s]
+Learning rate set to 0.017782794100389233
+Restoring states from the checkpoint path at /home/steinle/Documents/code-ba/.lr_find_59199d31-961d-4ddf-9fce-13e020712144.ckpt
+Restored all states from the checkpoint at /home/steinle/Documents/code-ba/.lr_find_59199d31-961d-4ddf-9fce-13e020712144.ckpt
+[I 2024-08-27 19:58:42,742] Using learning rate of 0.0224
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+`Trainer.fit` stopped: `max_epochs=25` reached.
+[I 2024-08-27 20:02:18,117] Trial 44 finished with value: 0.018236424773931503 and parameters: {'gradient_clip_val': 10.791608347922798, 'hidden_size': 192, 'dropout': 0.25300889782111236, 'hidden_continuous_size': 9, 'attention_head_size': 4, 'learning_rate': 0.022387211385683406}. Best is trial 40 with value: 0.008502131327986717.
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Finding best initial lr: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 100/100 [00:05<00:00, 17.74it/s]`Trainer.fit` stopped: `max_steps=100` reached.
+Finding best initial lr: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 100/100 [00:05<00:00, 17.43it/s]
+Learning rate set to 0.017782794100389233
+Restoring states from the checkpoint path at /home/steinle/Documents/code-ba/.lr_find_172aacce-6a45-4c0b-99ed-57bf10ec0fc0.ckpt
+Restored all states from the checkpoint at /home/steinle/Documents/code-ba/.lr_find_172aacce-6a45-4c0b-99ed-57bf10ec0fc0.ckpt
+[I 2024-08-27 20:02:24,712] Using learning rate of 0.0141
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+`Trainer.fit` stopped: `max_epochs=25` reached.
+[I 2024-08-27 20:06:28,091] Trial 45 finished with value: 0.013646667823195457 and parameters: {'gradient_clip_val': 24.47269933441313, 'hidden_size': 225, 'dropout': 0.24098618666869348, 'hidden_continuous_size': 14, 'attention_head_size': 4, 'learning_rate': 0.014125375446227544}. Best is trial 40 with value: 0.008502131327986717.
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Finding best initial lr: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 100/100 [00:06<00:00, 16.03it/s]`Trainer.fit` stopped: `max_steps=100` reached.
+Finding best initial lr: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 100/100 [00:06<00:00, 15.92it/s]
+Learning rate set to 0.007943282347242812
+Restoring states from the checkpoint path at /home/steinle/Documents/code-ba/.lr_find_857532cc-9dce-4e16-a88e-ef454bc7c36b.ckpt
+Restored all states from the checkpoint at /home/steinle/Documents/code-ba/.lr_find_857532cc-9dce-4e16-a88e-ef454bc7c36b.ckpt
+[I 2024-08-27 20:06:35,245] Using learning rate of 0.00708
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+`Trainer.fit` stopped: `max_epochs=25` reached.
+[I 2024-08-27 20:10:57,670] Trial 46 finished with value: 0.013467301614582539 and parameters: {'gradient_clip_val': 51.12358027399871, 'hidden_size': 265, 'dropout': 0.2246218722142536, 'hidden_continuous_size': 12, 'attention_head_size': 4, 'learning_rate': 0.007079457843841375}. Best is trial 40 with value: 0.008502131327986717.
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Finding best initial lr: 99%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▎ | 99/100 [00:05<00:00, 19.95it/s]`Trainer.fit` stopped: `max_steps=100` reached.
+Finding best initial lr: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 100/100 [00:05<00:00, 19.54it/s]
+Learning rate set to 0.03162277660168378
+Restoring states from the checkpoint path at /home/steinle/Documents/code-ba/.lr_find_31c3abf9-605e-40d7-b63c-05809eda1b0b.ckpt
+Restored all states from the checkpoint at /home/steinle/Documents/code-ba/.lr_find_31c3abf9-605e-40d7-b63c-05809eda1b0b.ckpt
+[I 2024-08-27 20:11:03,648] Using learning rate of 0.0282
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+`Trainer.fit` stopped: `max_epochs=25` reached.
+[I 2024-08-27 20:14:41,773] Trial 47 finished with value: 0.014714183285832405 and parameters: {'gradient_clip_val': 77.18288208175109, 'hidden_size': 175, 'dropout': 0.2645944557201866, 'hidden_continuous_size': 10, 'attention_head_size': 4, 'learning_rate': 0.02818382931264452}. Best is trial 40 with value: 0.008502131327986717.
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Finding best initial lr: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 100/100 [00:05<00:00, 19.52it/s]`Trainer.fit` stopped: `max_steps=100` reached.
+Finding best initial lr: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 100/100 [00:05<00:00, 19.71it/s]
+Learning rate set to 0.03162277660168378
+Restoring states from the checkpoint path at /home/steinle/Documents/code-ba/.lr_find_68fe29f8-15c9-4443-be85-053c1f8e8da9.ckpt
+Restored all states from the checkpoint at /home/steinle/Documents/code-ba/.lr_find_68fe29f8-15c9-4443-be85-053c1f8e8da9.ckpt
+[I 2024-08-27 20:14:47,697] Using learning rate of 0.0282
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+`Trainer.fit` stopped: `max_epochs=25` reached.
+[I 2024-08-27 20:18:18,613] Trial 48 finished with value: 0.01435590349137783 and parameters: {'gradient_clip_val': 18.426066953542954, 'hidden_size': 143, 'dropout': 0.2508846447368964, 'hidden_continuous_size': 16, 'attention_head_size': 4, 'learning_rate': 0.02818382931264452}. Best is trial 40 with value: 0.008502131327986717.
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Finding best initial lr: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 100/100 [00:05<00:00, 19.10it/s]`Trainer.fit` stopped: `max_steps=100` reached.
+Finding best initial lr: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 100/100 [00:05<00:00, 19.33it/s]
+Learning rate set to 0.03548133892335753
+Restoring states from the checkpoint path at /home/steinle/Documents/code-ba/.lr_find_85c21caa-5f75-4c58-b86f-b935ca22cda1.ckpt
+Restored all states from the checkpoint at /home/steinle/Documents/code-ba/.lr_find_85c21caa-5f75-4c58-b86f-b935ca22cda1.ckpt
+[I 2024-08-27 20:18:24,650] Using learning rate of 0.0282
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+`Trainer.fit` stopped: `max_epochs=25` reached.
+[I 2024-08-27 20:22:02,751] Trial 49 finished with value: 0.015254924073815346 and parameters: {'gradient_clip_val': 5.958048791952364, 'hidden_size': 163, 'dropout': 0.272131375232175, 'hidden_continuous_size': 8, 'attention_head_size': 4, 'learning_rate': 0.02818382931264452}. Best is trial 40 with value: 0.008502131327986717.
+{'gradient_clip_val': 26.299655543511545, 'hidden_size': 256, 'dropout': 0.2389409641779281, 'hidden_continuous_size': 12, 'attention_head_size': 4, 'learning_rate': 0.007079457843841375}
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]

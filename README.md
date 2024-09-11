@@ -4,6 +4,10 @@ This project compares the relatively new approach of TSF with a transformer mode
 The real-world data used is the ground dryness of a potted plant that is watered roughly every 6 days.
 This results in a one-dimensional, seasonal dataset. 
 
+# Dependencies
+- Python <= 3.9: Incompatible due to language features from 3.10
+- Python >= 3.11: Not compatible due to pytorch-forecasting not compatible with > 3.10.
+
 # Installation
 1. Clone the repository
 2. Create venv: `python -m venv <your-venv-name>`
@@ -27,9 +31,16 @@ This README section provides an overview of the main file in our Python project,
 
 ### ARIMA Models
 
-5. `influx_arima()`: Trains and evaluates an ARIMA model on the real-life scenario data.
-6. `sawtooth_arima()`: Trains and evaluates an ARIMA model on the mock sawtooth data
-7. `run_arima_comparison()`: Currently only available with database access. Runs ARIMA comparisons on the real-life scenario data with different resolutions.
+1. `influx_arima()`: Trains and evaluates an ARIMA model on the real-life scenario data.
+2. `sawtooth_arima()`: Trains and evaluates an ARIMA model on the mock sawtooth data
+3. `run_arima_comparison()`: Currently only available with database access. Runs ARIMA comparisons on the real-life scenario data with different resolutions.
+
+
+## Data
+`Data` provides csv files with different resolutions. Use `fetch_data_from_db()` to fetch different data.
+InfluxDB credentials are required. 
+### InfluxDB credentials
+The credentials can be set by renaming `credentials_EXAMPLE.ini` to `credentials.ini` and adding the credentials to the file.
 
 ## Notes
 

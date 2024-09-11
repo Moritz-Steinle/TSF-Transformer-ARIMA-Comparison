@@ -1,4 +1,4 @@
-from pandas import DataFrame, Series
+from pandas import DataFrame
 
 import arima.data
 import arima.interface
@@ -25,7 +25,6 @@ def influx_transformer():
         dataset=get_influx_dataset(),
         dataloader_parameters=transformer.interface.get_influx_dataloader_parameters(),
         hyperparameters=get_influx_hyperparameters(),
-        fast_dev_run=True,
     )
 
 
@@ -34,7 +33,6 @@ def sawtooth_transformer():
         dataset=get_sawtooth_dataset(amount_interval=1000),
         dataloader_parameters=transformer.interface.get_influx_dataloader_parameters(),
         hyperparameters=get_sawtooth_hyperparameters(),
-        should_run_hyperparameter_study=False,
     )
 
 
@@ -60,18 +58,15 @@ def influx_arima():
     train_and_evaluate_arima(
         dataset=get_influx_dataset(resolution=resolution)["value"],
         arima_order=arima.interface.get_influx_order(resolution),
-        should_find_best_order=False,
         log_label="InfluxDB",
-        should_show_plot=False,
     )
 
 
 def sawtooth_arima():
     train_and_evaluate_arima(
         dataset=get_sawtooth_dataset(amount_interval=1000)["value"],
-        max_prediction_length=20,
-        log_label="Sawtooth",
         arima_order=get_sawtooth_order(),
+        log_label="Sawtooth",
     )
 
 
@@ -89,6 +84,10 @@ def run_arima_comparison():
 
 # Util
 def fetch_data_from_db():
+    """
+    Fetches data from the database.
+    Resolution sets the time interval of the data.
+    """
     resolution = "24h"
     data.from_db.fetch(resolution)
 

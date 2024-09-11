@@ -11,18 +11,6 @@ from transformer.interface import (
 )
 
 
-def run_hyperparameter_study(
-    dataloaders: Dataloaders,
-    hyperparameter_rangers: HyperparameterRanges = HyperparameterRanges(),
-) -> Hyperparamters:
-    return transformer.data.run_hyperparameter_study(
-        dataloaders.train_dataloader,
-        dataloaders.val_dataloader,
-        amount_trials=1,
-        hyperparameter_ranges=hyperparameter_rangers,
-    )
-
-
 def train_and_evaluate_transformer(
     dataset: DataFrame,
     dataloader_parameters: DataloaderParameters = None,
@@ -30,6 +18,21 @@ def train_and_evaluate_transformer(
     should_run_hyperparameter_study: bool = False,
     fast_dev_run: bool = False,
 ):
+    """
+    Trains and evaluates a transformer model.
+    Args:
+        dataset (DataFrame): The dataset to train and evaluate the transformer model on.
+        dataloader_parameters (DataloaderParameters, optional):
+            Optimizing parameters specific to the data like learning rate etc.  Defaults to None.
+        hyperparameters (Hyperparamters, optional): The hyperparameters for training the model. Defaults to None.
+        should_run_hyperparameter_study (bool, optional): Whether to run a hyperparameter study. Defaults to False.
+        fast_dev_run (bool, optional):
+            Whether to run a fast development run. This runs only 1 training epoch and yields no result. Defaults to False.
+    Raises:
+        ValueError: If neither hyperparameters are provided nor should_run_hyperparameter_study is set to True.
+    Returns:
+        None: If fast_dev_run is True.
+    """
     dataloaders = transformer.data.create_dataloaders(
         dataset, dataloader_parameters=dataloader_parameters
     )
@@ -52,3 +55,26 @@ def train_and_evaluate_transformer(
         result.model, result.dataloaders.val_dataloader
     )
     print(hyperparameters)
+
+
+def run_hyperparameter_study(
+    dataloaders: Dataloaders,
+    hyperparameter_ranges: HyperparameterRanges = None,
+) -> Hyperparamters:
+    """
+    Run a hyperparameter study using the given dataloaders and hyperparameter ranges.
+    Args:
+        dataloaders (Dataloaders): The dataloaders containing the train and validation dataloaders.
+        hyperparameter_ranges (HyperparameterRanges, optional):
+            In what range to test the hyperparameters. Can make search more efficient. Defaults to an empty class.
+    Returns:
+        Hyperparamters: The hyperparameters obtained from the study.
+    """
+    if hyperparameter_ranges is None:
+        hyperparameter_ranges = HyperparameterRanges()
+    return transformer.data.run_hyperparameter_study(
+        dataloaders.train_dataloader,
+        dataloaders.val_dataloader,
+        amount_trials=1,
+        hyperparameter_ranges=hyperparameter_ranges,
+    )
