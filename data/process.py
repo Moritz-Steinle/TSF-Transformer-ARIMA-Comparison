@@ -7,7 +7,7 @@ from data.from_db import read_file
 
 
 def get_influx_dataset(
-    resolution: str, should_fill_missing: bool = True, should_normalize: bool = False
+    resolution: str, should_fill_missing: bool = True, should_normalize: bool = True
 ) -> DataFrame:
     """
     Retrieves a dataset from InfluxDB with the specified resolution.
@@ -34,17 +34,18 @@ def get_influx_dataset(
     return dataframe
 
 
-def get_sawtooth_dataset(amount_interval: int, length_interval: int = 10) -> DataFrame:
+def get_sawtooth_dataset(
+    amount_intervals: int,
+) -> DataFrame:
     """
-    Generates a dataset conatining a sawtooth function.
+    Generates a dataset conatining a sawtooth function in range (0,1).
     Parameters:
     - amount_interval (int): The number of intervals to generate.
     - length_interval (int): The length of each interval. Default is 10.
     Returns:
     - DataFrame: The generated sawtooth dataset.
     """
-    max_range = amount_interval * length_interval
-    sawtooth_values = Series([(i % length_interval) for i in range(1, max_range)])
+    sawtooth_values = Series(np.tile(np.arange(0.1, 1.0, 0.1), amount_intervals))
     return DataFrame(
         dict(value=sawtooth_values, group=0, time_idx=range(len(sawtooth_values)))
     )

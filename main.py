@@ -21,8 +21,11 @@ from transformer.interface import (
 
 # Transformer
 def influx_transformer():
+    """
+    Trains and evaluates a transformer model using the real life InfluxDB dataset.
+    """
     train_and_evaluate_transformer(
-        dataset=get_influx_dataset(resolution="8h", should_normalize=False),
+        dataset=get_influx_dataset(resolution="8h"),
         dataloader_parameters=transformer.interface.get_influx_dataloader_parameters(
             max_prediction_length=6
         ),
@@ -32,8 +35,11 @@ def influx_transformer():
 
 
 def sawtooth_transformer():
+    """
+    Trains and evaluates a transformer model using a sawtooth function dataset.
+    """
     train_and_evaluate_transformer(
-        dataset=get_sawtooth_dataset(amount_interval=1000),
+        dataset=get_sawtooth_dataset(amount_intervals=1000),
         dataloader_parameters=transformer.interface.get_influx_dataloader_parameters(
             max_prediction_length=150
         ),
@@ -43,6 +49,10 @@ def sawtooth_transformer():
 
 
 def tutorial_transformer():
+    """
+    Trains and evaluates a transformer model using the dataset from the pytorch_forecasting tutorial.
+    (https://pytorch-forecasting.readthedocs.io/en/stable/tutorials/stallion.html)
+    """
     train_and_evaluate_transformer(
         dataset=get_stallion_dataset(),
         dataloader_parameters=transformer.interface.get_stallion_dataset_parameters(),
@@ -52,6 +62,13 @@ def tutorial_transformer():
 
 
 def evaluate_saved_transformer(dataset: DataFrame, model_path: ModelPath = None):
+    """
+    Evaluates a saved transformer model.
+    Args:
+        dataset (DataFrame): The dataset to evaluate the model on.
+        model_path (ModelPath, optional): The path to the saved model. Defaults to None.
+            If none is given, the path in transformer/best_model_path.txt is used.
+    """
     dataloaders = transformer.data.create_dataloaders(dataset)
     transformer.evaluation.make_prediction(
         model=transformer.model.load_model(model_path),
@@ -61,6 +78,9 @@ def evaluate_saved_transformer(dataset: DataFrame, model_path: ModelPath = None)
 
 # ARIMA
 def influx_arima():
+    """
+    Trains and evaluates an ARIMA model using the real life InfluxDB dataset.
+    """
     resolution = "8h"
     train_and_evaluate_arima(
         dataset=get_influx_dataset(resolution=resolution)["value"],
@@ -70,14 +90,23 @@ def influx_arima():
 
 
 def sawtooth_arima():
+    """
+    Trains and evaluates an ARIMA model using a sawtooth function dataset.
+    """
     train_and_evaluate_arima(
-        dataset=get_sawtooth_dataset(amount_interval=1000)["value"],
+        dataset=get_sawtooth_dataset(amount_intervals=1000)["value"],
         arima_order=get_sawtooth_order(),
         log_label="Sawtooth",
+        should_show_plot=True,
+        should_find_best_order=True,
     )
 
 
 def run_arima_comparison():
+    """
+    Trains and evaluates ARIMA models using the real life InfluxDB dataset with different resolutions.
+    Logs all results.
+    """
     resolutions = ["24h", "12h", "8h", "6h"]
     for resolution in resolutions:
         dataset = get_influx_dataset(resolution=resolution)["value"]
@@ -99,4 +128,4 @@ def fetch_data_from_db():
     data.from_db.fetch(resolution)
 
 
-influx_transformer()
+sawtooth_arima()
