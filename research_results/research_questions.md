@@ -10,5 +10,7 @@
 
 # Experiment Results
 ## ARIMA
-### Sawtooth 1000 intervals
+### Sawtooth 1000 intervals in (0,1)
+Best model:  ARIMA(4,0,1)(2,0,0)[9]          
+Total fit time: 1876.938 seconds
 

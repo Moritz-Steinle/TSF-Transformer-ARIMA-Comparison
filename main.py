@@ -9,7 +9,7 @@ import transformer.evaluation
 import transformer.interface
 import transformer.model
 from arima.controller import train_and_evaluate_arima
-from arima.interface import get_sawtooth_order
+from arima.interface import ArimaOrder, get_sawtooth_order
 from data.process import get_influx_dataset, get_sawtooth_dataset, get_stallion_dataset
 from transformer.controller import train_and_evaluate_transformer
 from transformer.interface import (
@@ -96,8 +96,8 @@ def sawtooth_arima():
     train_and_evaluate_arima(
         dataset=get_sawtooth_dataset(amount_intervals=1000)["value"],
         log_label="Sawtooth",
-        should_show_plot=True,
-        should_find_best_order=True,
+        should_save_plot=True,
+        arima_order=ArimaOrder(order=(4, 0, 1), seasonal_order=(2, 0, 0, 9)),
     )
 
 

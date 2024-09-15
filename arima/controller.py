@@ -15,7 +15,7 @@ def train_and_evaluate_arima(
     arima_order: ArimaOrder = None,
     log_label: str = None,
     should_find_best_order: bool = False,
-    should_show_plot: bool = False,
+    should_save_plot: bool = False,
     should_save_model: bool = False,
 ) -> None:
     """
@@ -44,13 +44,13 @@ def train_and_evaluate_arima(
     )
     runtime = time.time() - start_time
     arima.evaluation.predict(
-        should_show_plot=should_show_plot,
+        should_show_plot=should_save_plot,
         model=trained_model,
         arima_order=arima_order,
         arima_datasets=arima_datasets,
         log_label=log_label,
         runtime=runtime,
-        find_order_runtime=find_order_runtime,
+        find_order_runtime=find_order_runtime if should_find_best_order else None,
     )
 
 

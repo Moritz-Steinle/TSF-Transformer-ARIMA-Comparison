@@ -64,8 +64,10 @@ def log_prediction(
 ) -> None:
     order = arima_order.order if arima_order else "missing"
     seasonal_order = arima_order.seasonal_order if arima_order else "missing"
-    runtime = runtime if runtime else "missing"
-    find_order_runtime = find_order_runtime if find_order_runtime else "missing"
+    total_runtime = (
+        runtime if runtime else "missing",
+        find_order_runtime if find_order_runtime else "missing",
+    )
     current_time = datetime.now()
     log_dataframe = DataFrame(
         {
@@ -73,7 +75,7 @@ def log_prediction(
             "order": [order],
             "seasonal_order": [seasonal_order],
             "mean_squared_error": [mean_squared_error],
-            "runtime": [runtime, find_order_runtime],
+            "runtime": [total_runtime],
             "length_train_dataset": [len(arima_datasets.train_dataset)],
             "length_test_dataset": [len(arima_datasets.test_dataset)],
             "prediction": [prediction.to_json()],
