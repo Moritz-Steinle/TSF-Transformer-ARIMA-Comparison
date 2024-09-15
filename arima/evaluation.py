@@ -19,6 +19,8 @@ def predict(
     log_label=None,
     should_print_predictions: bool = False,
     should_show_plot: bool = False,
+    runtime: int = None,
+    find_order_runtime: int = None,
 ):
     train_dataset = arima_datasets.train_dataset
     test_dataset = arima_datasets.test_dataset
@@ -45,6 +47,8 @@ def predict(
             prediction=prediction,
             label=log_label,
             mean_squared_error=error,
+            runtime=runtime,
+            find_order_runtime=find_order_runtime,
         )
     return prediction
 
@@ -55,9 +59,13 @@ def log_prediction(
     arima_datasets: ArimaDatasets = None,
     arima_order: ArimaOrder = None,
     label: str = None,
+    runtime: int = None,
+    find_order_runtime: int = None,
 ) -> None:
     order = arima_order.order if arima_order else "missing"
     seasonal_order = arima_order.seasonal_order if arima_order else "missing"
+    runtime = runtime if runtime else "missing"
+    find_order_runtime = find_order_runtime if find_order_runtime else "missing"
     current_time = datetime.now()
     log_dataframe = DataFrame(
         {
@@ -65,6 +73,7 @@ def log_prediction(
             "order": [order],
             "seasonal_order": [seasonal_order],
             "mean_squared_error": [mean_squared_error],
+            "runtime": [runtime, find_order_runtime],
             "length_train_dataset": [len(arima_datasets.train_dataset)],
             "length_test_dataset": [len(arima_datasets.test_dataset)],
             "prediction": [prediction.to_json()],

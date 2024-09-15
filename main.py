@@ -95,7 +95,6 @@ def sawtooth_arima():
     """
     train_and_evaluate_arima(
         dataset=get_sawtooth_dataset(amount_intervals=1000)["value"],
-        arima_order=get_sawtooth_order(),
         log_label="Sawtooth",
         should_show_plot=True,
         should_find_best_order=True,

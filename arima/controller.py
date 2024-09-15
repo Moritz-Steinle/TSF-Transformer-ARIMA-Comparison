@@ -1,3 +1,5 @@
+import time
+
 from pandas import Series
 
 import arima.data
@@ -28,7 +30,10 @@ def train_and_evaluate_arima(
         None
     """
     if should_find_best_order:
+        start_time = time.time()
         arima_order = arima.data.find_best_order(dataset)
+        find_order_runtime = time.time() - start_time
+    start_time = time.time()
     arima_datasets = arima.data.train_test_split_dataset(
         dataset=dataset, max_prediction_length=max_prediction_length
     )
@@ -37,12 +42,15 @@ def train_and_evaluate_arima(
         arima_order=arima_order,
         should_save_model=should_save_model,
     )
+    runtime = time.time() - start_time
     arima.evaluation.predict(
         should_show_plot=should_show_plot,
         model=trained_model,
         arima_order=arima_order,
         arima_datasets=arima_datasets,
         log_label=log_label,
+        runtime=runtime,
+        find_order_runtime=find_order_runtime,
     )
 
 

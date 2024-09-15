@@ -7,3 +7,8 @@
 - Runtime of hyperparameter calculation (`transformer.data.run_hyperparameter_study`)
 - Training runtime
 - Prediction accuracy
+
+# Experiment Results
+## ARIMA
+### Sawtooth 1000 intervals
+
