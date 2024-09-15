@@ -44,7 +44,7 @@ def get_sawtooth_dataset(amount_interval: int, length_interval: int = 10) -> Dat
     - DataFrame: The generated sawtooth dataset.
     """
     max_range = amount_interval * length_interval
-    sawtooth_values = [(i % length_interval) for i in range(1, max_range)]
+    sawtooth_values = Series([(i % length_interval) for i in range(1, max_range)])
     return DataFrame(
         dict(value=sawtooth_values, group=0, time_idx=range(len(sawtooth_values)))
     )

@@ -144,8 +144,9 @@ def get_stallion_dataset_parameters() -> DataloaderParameters:
     )
 
 
-def get_influx_dataloader_parameters() -> DataloaderParameters:
-    max_prediction_length = 150
+def get_influx_dataloader_parameters(
+    max_prediction_length: int,
+) -> DataloaderParameters:
     return DataloaderParameters(
         time_idx="time_idx",
         target="value",

@@ -23,16 +23,22 @@ from transformer.interface import (
 def influx_transformer():
     train_and_evaluate_transformer(
         dataset=get_influx_dataset(resolution="8h", should_normalize=False),
-        dataloader_parameters=transformer.interface.get_influx_dataloader_parameters(),
+        dataloader_parameters=transformer.interface.get_influx_dataloader_parameters(
+            max_prediction_length=6
+        ),
         hyperparameters=get_influx_hyperparameters(),
+        fast_dev_run=True,
     )
 
 
 def sawtooth_transformer():
     train_and_evaluate_transformer(
         dataset=get_sawtooth_dataset(amount_interval=1000),
-        dataloader_parameters=transformer.interface.get_influx_dataloader_parameters(),
+        dataloader_parameters=transformer.interface.get_influx_dataloader_parameters(
+            max_prediction_length=150
+        ),
         hyperparameters=get_sawtooth_hyperparameters(),
+        fast_dev_run=True,
     )
 
 
@@ -41,6 +47,7 @@ def tutorial_transformer():
         dataset=get_stallion_dataset(),
         dataloader_parameters=transformer.interface.get_stallion_dataset_parameters(),
         hyperparameters=transformer.interface.get_stallion_hyperparameters(),
+        fast_dev_run=True,
     )
 
 
