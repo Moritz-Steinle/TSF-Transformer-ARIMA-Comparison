@@ -18,6 +18,11 @@ from transformer.interface import (
     get_sawtooth_hyperparameters,
 )
 
+# TODO save plot to file
+# TODO add runtime to transfomer
+# TODO fix arimawarnings
+# TODO remove prediction length from config
+
 
 # Transformer
 def influx_transformer():
@@ -25,12 +30,11 @@ def influx_transformer():
     Trains and evaluates a transformer model using the real life InfluxDB dataset.
     """
     train_and_evaluate_transformer(
-        dataset=get_influx_dataset(resolution="8h"),
+        dataset=get_influx_dataset(resolution="6h"),
         dataloader_parameters=transformer.interface.get_influx_dataloader_parameters(
-            max_prediction_length=6
+            max_prediction_length=20
         ),
-        hyperparameters=get_influx_hyperparameters(),
-        fast_dev_run=True,
+        should_run_hyperparameter_study=True,
     )
 
 
@@ -94,9 +98,8 @@ def sawtooth_arima():
     Trains and evaluates an ARIMA model using a sawtooth function dataset.
     """
     train_and_evaluate_arima(
-        dataset=get_sawtooth_dataset(amount_intervals=1000)["value"],
+        dataset=get_sawtooth_dataset(amount_intervals=10)["value"],
         log_label="Sawtooth",
-        should_save_plot=True,
         arima_order=ArimaOrder(order=(4, 0, 1), seasonal_order=(2, 0, 0, 9)),
     )
 

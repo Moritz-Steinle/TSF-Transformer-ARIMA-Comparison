@@ -1,4 +1,3 @@
-import os
 from datetime import datetime
 
 import pandas as pd
@@ -17,6 +16,7 @@ from transformer.interface import (
     HyperparameterRanges,
     Hyperparamters,
 )
+from util import get_path_with_timestamp
 
 
 def create_dataloaders(
@@ -31,7 +31,7 @@ def create_dataloaders(
     Returns:
         Dataloaders: Train and validation dataloaders.
     """
-    training_cutoff = (
+    training_cutoff = (  # TODO Check that not negative
         dataset[dataloader_parameters.time_idx].max()
         - dataloader_parameters.max_prediction_length
     )
@@ -59,7 +59,6 @@ def run_hyperparameter_study(
     val_dataloader,
     amount_trials: int = 50,
     hyperparameter_ranges: HyperparameterRanges = HyperparameterRanges(),
-    study_filename: str = datetime.now(),
 ) -> Hyperparamters:
     """
     Runs a hyperparameter study using Optuna to optimize the model's hyperparameters.
@@ -79,29 +78,24 @@ def run_hyperparameter_study(
         n_trials=amount_trials,
         **hyperparameter_ranges.none_filtered_dict(),
     )
-    save_hyperparameter_study(study, study_filename)
+    save_hyperparameter_study(study)
     return Hyperparamters(**study.best_trial.params)
 
 
-def save_hyperparameter_study(study: Study, filename: str = None) -> None:
+def save_hyperparameter_study(study: Study) -> None:
     """
     Save the hyperparameter study results to a JSON file.
     Parameters:
         study (Study): The hyperparameter study object.
-        filename (str, optional):
-            The name of the file to save the study results.
-            If not provided, a timestamp will be used as the filename.
     Returns:
         None
     """
-    if filename is None:
-        filename = _get_timestamp()
     trials_list = study.trials
     all_trials_df = pd.concat(
         [_trial_to_dataframe(trial) for trial in trials_list], ignore_index=True
     )
     all_trials_df = all_trials_df.sort_values(by="value")
-    full_path = os.path.join(config.hyperparameter_study_path, f"{filename}.json")
+    full_path = get_path_with_timestamp(config.hyperparameter_study_path, "json")
     all_trials_df.to_json(full_path, orient="records", lines=True)
 
 
@@ -124,11 +118,3 @@ def _trial_to_dataframe(trial: FrozenTrial) -> DataFrame:
     data.update(trial.params)
     df = DataFrame([data])
     return df
-
-
-def _get_timestamp() -> str:
-    """Helper function that returns timestamp in the format of dd-mm-yy_HH:MM:SS to avoid whitespaces
-    Returns:
-        str: Current timestamp
-    """
-    return datetime.now().strftime("%d-%m-%y_%H:%M:%S")

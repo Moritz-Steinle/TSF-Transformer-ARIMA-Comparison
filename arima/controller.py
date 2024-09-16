@@ -15,7 +15,6 @@ def train_and_evaluate_arima(
     arima_order: ArimaOrder = None,
     log_label: str = None,
     should_find_best_order: bool = False,
-    should_save_plot: bool = False,
     should_save_model: bool = False,
 ) -> None:
     """
@@ -33,6 +32,8 @@ def train_and_evaluate_arima(
         start_time = time.time()
         arima_order = arima.data.find_best_order(dataset)
         find_order_runtime = time.time() - start_time
+    else:
+        find_order_runtime = None
     start_time = time.time()
     arima_datasets = arima.data.train_test_split_dataset(
         dataset=dataset, max_prediction_length=max_prediction_length
@@ -42,15 +43,18 @@ def train_and_evaluate_arima(
         arima_order=arima_order,
         should_save_model=should_save_model,
     )
-    runtime = time.time() - start_time
-    arima.evaluation.predict(
-        should_show_plot=should_save_plot,
+    training_runtime = time.time() - start_time
+    prediction = arima.evaluation.predict(
         model=trained_model,
-        arima_order=arima_order,
+        arima_datasets=arima_datasets,
+    )
+    arima.evaluation.log(
+        order=arima_order,
+        prediction=prediction,
         arima_datasets=arima_datasets,
         log_label=log_label,
-        runtime=runtime,
-        find_order_runtime=find_order_runtime if should_find_best_order else None,
+        training_runtime=training_runtime,
+        find_order_runtime=find_order_runtime,
     )
 
 
