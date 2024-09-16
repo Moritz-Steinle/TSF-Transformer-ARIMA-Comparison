@@ -18,9 +18,11 @@ from transformer.interface import (
     get_sawtooth_hyperparameters,
 )
 
-# TODO add runtime to transfomer
-# TODO fix arima warnings
-# TODO remove prediction length from config
+# TODO
+# add runtime to transfomer
+# Add max epochs to transformer log
+# fix arima warnings
+# remove max epochs from config, add separate max epoch variable to hyperparameter study
 
 
 # Transformer
@@ -47,7 +49,6 @@ def sawtooth_transformer():
             max_prediction_length=150
         ),
         hyperparameters=get_sawtooth_hyperparameters(),
-        fast_dev_run=True,
     )
 
 
@@ -129,4 +130,4 @@ def fetch_data_from_db():
     data.from_db.fetch(resolution)
 
 
-sawtooth_arima()
+sawtooth_transformer()

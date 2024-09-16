@@ -51,10 +51,16 @@ def train_and_evaluate_transformer(
     )
     if fast_dev_run:
         return
-    transformer.evaluation.make_prediction(
+    prediction = transformer.evaluation.make_prediction(
         result.model, result.dataloaders.val_dataloader
     )
-    print(hyperparameters)
+    transformer.evaluation.log(
+        model=result.model,
+        prediction=prediction,
+        hyperparameters=_hyperparameters,
+        log_label="Transformer",
+        training_runtime=-1,
+    )
 
 
 def run_hyperparameter_study(

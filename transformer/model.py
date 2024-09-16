@@ -45,7 +45,11 @@ def train_model(
     best_model_path = trainer.checkpoint_callback.best_model_path
     save_best_model_path(best_model_path)
     best_model = TemporalFusionTransformer.load_from_checkpoint(best_model_path)
-    return DatalaodersAndModel(dataloaders, best_model)
+    #
+    return DatalaodersAndModel(
+        dataloaders=dataloaders,
+        model=best_model,
+    )
 
 
 def create_trainer(

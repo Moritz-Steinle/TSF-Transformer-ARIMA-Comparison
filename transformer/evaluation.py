@@ -1,11 +1,12 @@
 from pytorch_forecasting import TemporalFusionTransformer
+from pytorch_forecasting.models.base_model import Prediction
 
 from util import log_prediction
 
 from .interface import Hyperparamters
 
 
-def make_prediction(model: TemporalFusionTransformer, val_dataloader):
+def make_prediction(model: TemporalFusionTransformer, val_dataloader) -> Prediction:
     return model.predict(
         val_dataloader,
         return_x=True,
@@ -15,7 +16,7 @@ def make_prediction(model: TemporalFusionTransformer, val_dataloader):
 
 def log(
     model: TemporalFusionTransformer,
-    predictions,
+    prediction: Prediction,
     hyperparameters: Hyperparamters,
     training_runtime: float,
     hyperparameter_study_runtime: float = None,
@@ -27,10 +28,11 @@ def log(
             f" , hyperparameter study: {hyperparameter_study_runtime:.2f} seconds)"
         )
     parameters = f"Hyperparameters: {hyperparameters}"
-    plot = _create_plot(model, predictions)
+    plot = _create_plot(model, prediction)
+    prediction_string = str(prediction)
     log_prediction(
         model="Transformer",
-        prediction=predictions,
+        prediction=prediction_string,
         plot=plot,
         label=log_label,
         runtimes=runtimes,

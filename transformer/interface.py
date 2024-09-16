@@ -35,7 +35,8 @@ class Dataloaders:
 
 
 @dataclass
-class DatalaodersAndModel(Dataloaders):
+class DatalaodersAndModel:
+    dataloaders: Dataloaders
     model: TemporalFusionTransformer
 
 

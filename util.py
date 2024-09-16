@@ -10,7 +10,7 @@ from config import config
 
 def log_prediction(
     model: Literal["ARIMA", "Transformer"],
-    prediction,
+    prediction: str,
     plot: plt.Figure = None,
     mean_squared_error: float = -1,
     length_test_dataset: int = -1,
@@ -28,7 +28,7 @@ def log_prediction(
             "length_train_dataset": [length_train_dataset],
             "length_test_dataset": [length_test_dataset],
             "parameters": [parameters],
-            "prediction": [prediction.to_json()],
+            "prediction": [prediction],
         },
         index=[current_time],
     )
@@ -37,7 +37,7 @@ def log_prediction(
         plot.savefig(log_folder + "/plot.png")
     log_path = f"{log_folder}/log.json"
     log_dataframe.to_json(log_path, mode="a", orient="records", lines=True)
-    print(f"{model} prediction logged to {config.arima_prediction_log_path}")
+    print(f"{model} prediction logged to {log_folder}")
 
 
 def get_path_with_timestamp(path: str, extension: str = None) -> str:

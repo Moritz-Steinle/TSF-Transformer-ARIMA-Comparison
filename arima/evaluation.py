@@ -57,9 +57,10 @@ def log(
     plot = _create_plot(prediction, arima_datasets, error)
     length_test_dataset = len(arima_datasets.test_dataset)
     length_train_dataset = len(arima_datasets.train_dataset)
+    prediction_string = prediction.to_json()
     log_prediction(
         model="ARIMA",
-        prediction=prediction,
+        prediction=prediction_string,
         mean_squared_error=error,
         length_test_dataset=length_test_dataset,
         length_train_dataset=length_train_dataset,
