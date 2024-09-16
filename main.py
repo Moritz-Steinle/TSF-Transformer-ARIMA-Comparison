@@ -18,9 +18,8 @@ from transformer.interface import (
     get_sawtooth_hyperparameters,
 )
 
-# TODO save plot to file
 # TODO add runtime to transfomer
-# TODO fix arimawarnings
+# TODO fix arima warnings
 # TODO remove prediction length from config
 
 

@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import Literal
 
 import matplotlib.pyplot as plt
-from pandas import DataFrame, Series
+from pandas import DataFrame
 
 from config import config
 
@@ -11,9 +11,10 @@ from config import config
 def log_prediction(
     model: Literal["ARIMA", "Transformer"],
     prediction,
-    mean_squared_error: float,
-    test_dataset: DataFrame | Series,
-    train_dataset: DataFrame | Series,
+    plot: plt.Figure = None,
+    mean_squared_error: float = -1,
+    length_test_dataset: int = -1,
+    length_train_dataset: int = -1,
     label: str = "None",
     runtimes: str = "None",
     parameters: str = "None",
@@ -24,40 +25,19 @@ def log_prediction(
             "label": [label],
             "mean_squared_error": [mean_squared_error],
             "runtimes": [runtimes],
-            "length_train_dataset": [len(train_dataset)],
-            "length_test_dataset": [len(test_dataset)],
+            "length_train_dataset": [length_train_dataset],
+            "length_test_dataset": [length_test_dataset],
             "parameters": [parameters],
             "prediction": [prediction.to_json()],
         },
         index=[current_time],
     )
     log_folder = _create_log_folder(model)
+    if plot is not None:
+        plot.savefig(log_folder + "/plot.png")
     log_path = f"{log_folder}/log.json"
     log_dataframe.to_json(log_path, mode="a", orient="records", lines=True)
-    gen_and_save_plot(
-        log_folder=log_folder,
-        prediction=prediction,
-        test_dataset=test_dataset,
-        train_dataset=train_dataset,
-        error=mean_squared_error,
-    )
     print(f"{model} prediction logged to {config.arima_prediction_log_path}")
-
-
-def gen_and_save_plot(
-    log_folder: str,
-    prediction,
-    test_dataset: DataFrame | Series,
-    train_dataset: DataFrame | Series,
-    error: float,
-) -> None:
-    prediction.plot(legend=True, linewidth=2)
-    prediction_length = len(test_dataset)
-    train_plot_length = prediction_length * 2
-    train_dataset[:train_plot_length].plot(legend=True, label="Training")
-    test_dataset.plot(legend=True, label="Actual", linestyle="--")
-    plt.title(f"\n MAE={error}")
-    plt.savefig(log_folder + "/plot.png")
 
 
 def get_path_with_timestamp(path: str, extension: str = None) -> str:
