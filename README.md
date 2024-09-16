@@ -19,6 +19,7 @@ This results in a one-dimensional, seasonal dataset.
 # Main File Usage
 
 This README section provides an overview of the main file in our Python project, which contains several functions for training and evaluating time series models.
+Results and plots are saved in {model}/results. 
 
 ## Available Functions
 
