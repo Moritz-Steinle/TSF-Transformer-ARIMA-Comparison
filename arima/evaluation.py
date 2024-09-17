@@ -81,7 +81,7 @@ def _create_plot(
     prediction.plot(ax=ax, legend=True, linewidth=2, label="Prediction")
     prediction_length = len(arima_datasets.test_dataset)
     train_plot_length = prediction_length * 2
-    arima_datasets.train_dataset[:train_plot_length].plot(
+    arima_datasets.train_dataset.tail(train_plot_length).plot(
         ax=ax, legend=True, label="Training"
     )
     arima_datasets.test_dataset.plot(ax=ax, legend=True, label="Actual", linestyle="--")

@@ -132,4 +132,4 @@ def fetch_data_from_db():
     data.from_db.fetch(resolution)
 
 
-sawtooth_transformer()
+sawtooth_arima()

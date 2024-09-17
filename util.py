@@ -7,6 +7,8 @@ from pandas import DataFrame
 
 from config import config
 
+# TODO rename to logging and move to separate folder
+
 
 def log_prediction(
     model: Literal["ARIMA", "Transformer"],
