@@ -18,13 +18,19 @@ warnings.filterwarnings("ignore", category=Warning, module="sklearn")
 
 def train_model(
     dataloaders: Dataloaders,
+    max_epochs: int,
     hyperparameters: Hyperparamters = Hyperparamters(),
     fast_dev_run: bool = False,
 ) -> DatalaodersAndModel | None:
-    trainer = create_trainer(hyperparameters, fast_dev_run)
+    trainer = create_trainer(
+        max_epochs=max_epochs,
+        hyperparameters=hyperparameters,
+        fast_dev_run=fast_dev_run,
+    )
     _hyperparameters = hyperparameters.function_none_filtered_dict(
         function=TemporalFusionTransformer.from_dataset
     )
+    # TODO IMPORTANT Fix hidden size bug
     tft = TemporalFusionTransformer.from_dataset(
         dataset=dataloaders.training_dataset,
         **_hyperparameters,
@@ -53,6 +59,7 @@ def train_model(
 
 
 def create_trainer(
+    max_epochs: int,
     hyperparameters: Hyperparamters = Hyperparamters(),
     fast_dev_run: bool = False,
 ) -> pl.Trainer:
@@ -64,6 +71,7 @@ def create_trainer(
     _hyperparameters = hyperparameters.function_none_filtered_dict(function=pl.Trainer)
     return pl.Trainer(
         **_hyperparameters,
+        max_epochs=max_epochs,
         enable_model_summary=True,
         limit_train_batches=50,
         callbacks=[lr_logger, early_stop_callback],

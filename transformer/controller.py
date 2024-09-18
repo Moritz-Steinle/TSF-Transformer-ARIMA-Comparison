@@ -15,6 +15,7 @@ from transformer.interface import (
 
 def train_and_evaluate_transformer(
     dataset: DataFrame,
+    max_epochs: int,
     dataloader_parameters: DataloaderParameters = None,
     hyperparameters: Hyperparamters = None,
     should_run_hyperparameter_study: bool = False,
@@ -24,6 +25,7 @@ def train_and_evaluate_transformer(
     Trains and evaluates a transformer model.
     Args:
         dataset (DataFrame): The dataset to train and evaluate the transformer model on.
+        max_epochs (int): The maximum number of epochs to train the model.
         dataloader_parameters (DataloaderParameters, optional):
             Optimizing parameters specific to the data like learning rate etc.  Defaults to None.
         hyperparameters (Hyperparamters, optional): The hyperparameters for training the model. Defaults to None.
@@ -39,6 +41,7 @@ def train_and_evaluate_transformer(
         dataset, dataloader_parameters=dataloader_parameters
     )
     hyperparameters_study_runtime = None
+    # TODO move to separate function
     if should_run_hyperparameter_study:
         start_time = time.time()
         hyperparameters = run_hyperparameter_study(dataloaders)
@@ -52,6 +55,7 @@ def train_and_evaluate_transformer(
     start_time = time.time()
     result = transformer.model.train_model(
         dataloaders=dataloaders,
+        max_epochs=max_epochs,
         hyperparameters=_hyperparameters,
         fast_dev_run=fast_dev_run,
     )

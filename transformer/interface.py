@@ -58,7 +58,6 @@ class Hyperparamters(PurgeNone):
     attention_head_size: Optional[int] = None
     learning_rate: Optional[float] = None
     accelerator: str = "auto"
-    max_epochs: int = config.max_epochs
     hidden_size: Optional[int] = None
 
 

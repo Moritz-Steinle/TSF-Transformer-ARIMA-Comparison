@@ -21,10 +21,10 @@ from transformer.interface import (
 # TODO
 # Add max epochs to transformer log
 # fix arima warnings
-# remove max epochs from config, add separate max epoch variable to hyperparameter study
+# remove max epochs from config
+# add separate max epoch variable to hyperparameter study
 # add logging to loaded models
 # limit transformer output nodes to 1
-# prediction length limit guard
 
 
 # Transformer
@@ -37,6 +37,7 @@ def influx_transformer():
         dataloader_parameters=transformer.interface.get_influx_dataloader_parameters(
             max_prediction_length=20
         ),
+        max_epochs=1,
         should_run_hyperparameter_study=True,
     )
 
@@ -50,6 +51,7 @@ def sawtooth_transformer():
         dataloader_parameters=transformer.interface.get_influx_dataloader_parameters(
             max_prediction_length=15
         ),
+        max_epochs=1,
         hyperparameters=get_sawtooth_hyperparameters(),
     )
 
@@ -62,6 +64,7 @@ def tutorial_transformer():
     train_and_evaluate_transformer(
         dataset=get_stallion_dataset(),
         dataloader_parameters=transformer.interface.get_stallion_dataset_parameters(),
+        max_epochs=1,
         hyperparameters=transformer.interface.get_stallion_hyperparameters(),
         fast_dev_run=True,
     )
