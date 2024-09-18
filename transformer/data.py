@@ -31,10 +31,14 @@ def create_dataloaders(
     Returns:
         Dataloaders: Train and validation dataloaders.
     """
-    training_cutoff = (  # TODO Check that not negative
+    training_cutoff = (
         dataset[dataloader_parameters.time_idx].max()
         - dataloader_parameters.max_prediction_length
     )
+    if training_cutoff <= 0:
+        raise ValueError(
+            f"Max prediction length {dataloader_parameters.max_prediction_length} is too large for dataset"
+        )
     _parameters = dataloader_parameters.function_none_filtered_dict(
         function=TimeSeriesDataSet
     )

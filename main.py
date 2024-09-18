@@ -19,7 +19,6 @@ from transformer.interface import (
 )
 
 # TODO
-# add runtime to transfomer
 # Add max epochs to transformer log
 # fix arima warnings
 # remove max epochs from config, add separate max epoch variable to hyperparameter study
