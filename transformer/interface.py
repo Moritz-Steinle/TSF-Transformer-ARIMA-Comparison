@@ -172,8 +172,9 @@ def get_sawtooth_hyperparameters() -> Hyperparamters:
         gradient_clip_val=0.5286525368230415,
         dropout=0.28145444638341954,
         hidden_continuous_size=18,
-        attention_head_size=3,
+        attention_head_size=55,
         learning_rate=0.572695014452453,
+        hidden_size=55,
     )
 
 

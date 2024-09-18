@@ -30,7 +30,6 @@ def train_model(
     _hyperparameters = hyperparameters.function_none_filtered_dict(
         function=TemporalFusionTransformer.from_dataset
     )
-    # TODO IMPORTANT Fix hidden size bug
     tft = TemporalFusionTransformer.from_dataset(
         dataset=dataloaders.training_dataset,
         **_hyperparameters,
@@ -38,7 +37,7 @@ def train_model(
         log_interval=10,
         optimizer="Ranger",
         reduce_on_plateau_patience=4,
-        output_size=1,  # TODO No classification problem so i want just one output, not probability of each class
+        # output_size=1,  # TODO No classification problem so i want just one output, not probability of each class
     )
     trainer.fit(
         tft,

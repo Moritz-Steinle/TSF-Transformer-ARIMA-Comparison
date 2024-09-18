@@ -13,6 +13,7 @@ from arima.interface import ArimaOrder, get_sawtooth_order
 from data.process import get_influx_dataset, get_sawtooth_dataset, get_stallion_dataset
 from transformer.controller import train_and_evaluate_transformer
 from transformer.interface import (
+    Hyperparamters,
     ModelPath,
     get_influx_hyperparameters,
     get_sawtooth_hyperparameters,
@@ -24,6 +25,7 @@ from transformer.interface import (
 # add separate max epoch variable to hyperparameter study
 # add logging to loaded models
 # limit transformer output nodes to 1
+# Update hyperparameters with study results
 
 
 # Transformer
@@ -37,7 +39,6 @@ def influx_transformer():
             max_prediction_length=20
         ),
         max_epochs=1,
-        should_run_hyperparameter_study=True,
     )
 
 
@@ -46,12 +47,19 @@ def sawtooth_transformer():
     Trains and evaluates a transformer model using a sawtooth function dataset.
     """
     train_and_evaluate_transformer(
-        dataset=get_sawtooth_dataset(amount_intervals=100),
+        dataset=get_sawtooth_dataset(amount_intervals=1000),
         dataloader_parameters=transformer.interface.get_influx_dataloader_parameters(
             max_prediction_length=15
         ),
-        max_epochs=1,
-        hyperparameters=get_sawtooth_hyperparameters(),
+        max_epochs=100,
+        hyperparameters=Hyperparamters(
+            gradient_clip_val=5.567624753786564,
+            hidden_size=104,
+            dropout=0.15965296238642823,
+            hidden_continuous_size=41,
+            attention_head_size=1,
+            learning_rate=0.0031622776601683794,
+        ),
     )
 
 

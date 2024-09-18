@@ -18,7 +18,7 @@ def train_and_evaluate_transformer(
     max_epochs: int,
     dataloader_parameters: DataloaderParameters = None,
     hyperparameters: Hyperparamters = None,
-    should_run_hyperparameter_study: bool = False,
+    hyperparameters_study_trials: int = 0,
     fast_dev_run: bool = False,
 ):
     """
@@ -40,23 +40,16 @@ def train_and_evaluate_transformer(
     dataloaders = transformer.data.create_dataloaders(
         dataset, dataloader_parameters=dataloader_parameters
     )
-    hyperparameters_study_runtime = None
-    # TODO move to separate function
-    if should_run_hyperparameter_study:
-        start_time = time.time()
-        hyperparameters = run_hyperparameter_study(dataloaders)
-        hyperparameters_study_runtime = time.time() - start_time
-    elif hyperparameters is not None:
-        _hyperparameters = hyperparameters
-    else:
-        raise ValueError(
-            "Either provide hyperparameters or set should_run_hyperparameter_study to True"
-        )
+    hyperparameters, hyperparameters_study_runtime = run_hyperparameter_study(
+        dataloaders=dataloaders,
+        hyperparameters=hyperparameters,
+        hyperparameters_study_trials=hyperparameters_study_trials,
+    )
     start_time = time.time()
     result = transformer.model.train_model(
         dataloaders=dataloaders,
         max_epochs=max_epochs,
-        hyperparameters=_hyperparameters,
+        hyperparameters=hyperparameters,
         fast_dev_run=fast_dev_run,
     )
     training_runtime = time.time() - start_time
@@ -69,7 +62,7 @@ def train_and_evaluate_transformer(
         model=result.model,
         prediction=prediction,
         dataloaders=dataloaders,
-        hyperparameters=_hyperparameters,
+        hyperparameters=hyperparameters,
         log_label="Transformer",
         training_runtime=training_runtime,
         hyperparameters_study_runtime=hyperparameters_study_runtime,
@@ -78,22 +71,37 @@ def train_and_evaluate_transformer(
 
 def run_hyperparameter_study(
     dataloaders: Dataloaders,
+    hyperparameters: Hyperparamters = None,
+    hyperparameters_study_trials: int = 1,
     hyperparameter_ranges: HyperparameterRanges = None,
-) -> Hyperparamters:
+) -> tuple[Hyperparamters, float]:
     """
-    Run a hyperparameter study using the given dataloaders and hyperparameter ranges.
+    Either returns given hyperparameters or runs a hyperparameter study.
     Args:
         dataloaders (Dataloaders): The dataloaders containing the train and validation dataloaders.
+        hyperparameters (Hyperparamters, optional): The hyperparameters to use instead of ding a study.
+            Defaults to None.
+        hyperparameters_study_trials (int, optional): The number of trials to run in the hyperparameter study.
+            Defaults to 1.
         hyperparameter_ranges (HyperparameterRanges, optional):
             In what range to test the hyperparameters. Can make search more efficient. Defaults to an empty class.
     Returns:
-        Hyperparamters: The hyperparameters obtained from the study.
+        tuple[Hyperparamters, float]: The hyperparameters and the runtime of the hyperparameter study.
     """
-    if hyperparameter_ranges is None:
-        hyperparameter_ranges = HyperparameterRanges()
-    return transformer.data.run_hyperparameter_study(
-        dataloaders.train_dataloader,
-        dataloaders.val_dataloader,
-        amount_trials=1,
-        hyperparameter_ranges=hyperparameter_ranges,
-    )
+    if hyperparameters is not None:
+        return hyperparameters, None
+    elif hyperparameters_study_trials > 0:
+        start_time = time.time()
+        hyperparameter_ranges = hyperparameter_ranges or HyperparameterRanges()
+        hyperparameters = transformer.data.run_hyperparameter_study(
+            dataloaders.train_dataloader,
+            dataloaders.val_dataloader,
+            hyperparameters_study_trials=hyperparameters_study_trials,
+            hyperparameter_ranges=hyperparameter_ranges,
+        )
+        hyperparameters_study_runtime = time.time() - start_time
+        return hyperparameters, hyperparameters_study_runtime
+    else:
+        raise ValueError(
+            "Either provide hyperparameters or set hyperparameters_study_trials to a value greater than 0."
+        )

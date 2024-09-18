@@ -61,7 +61,7 @@ def create_dataloaders(
 def run_hyperparameter_study(
     train_dataloader,
     val_dataloader,
-    amount_trials: int = 50,
+    hyperparameters_study_trials: int = 50,
     hyperparameter_ranges: HyperparameterRanges = HyperparameterRanges(),
 ) -> Hyperparamters:
     """
@@ -79,7 +79,7 @@ def run_hyperparameter_study(
         train_dataloader,
         val_dataloader,
         model_path="optuna_test",
-        n_trials=amount_trials,
+        n_trials=hyperparameters_study_trials,
         **hyperparameter_ranges.none_filtered_dict(),
     )
     save_hyperparameter_study(study)
