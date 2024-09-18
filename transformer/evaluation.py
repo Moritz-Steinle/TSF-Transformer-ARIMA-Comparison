@@ -19,13 +19,13 @@ def log(
     prediction: Prediction,
     hyperparameters: Hyperparamters,
     training_runtime: float,
-    hyperparameter_study_runtime: float = None,
+    hyperparameters_study_runtime: float = None,
     log_label: str = None,
 ) -> None:
     runtimes = f"Training: {training_runtime:.2f} seconds"
-    if hyperparameter_study_runtime is not None:
+    if hyperparameters_study_runtime is not None:
         runtimes += (
-            f" , hyperparameter study: {hyperparameter_study_runtime:.2f} seconds)"
+            f" , hyperparameter study: {hyperparameters_study_runtime:.2f} seconds)"
         )
     parameters = f"Hyperparameters: {hyperparameters}"
     plot = _create_plot(model, prediction)

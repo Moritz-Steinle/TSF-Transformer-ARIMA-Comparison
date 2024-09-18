@@ -25,6 +25,7 @@ from transformer.interface import (
 # remove max epochs from config, add separate max epoch variable to hyperparameter study
 # add logging to loaded models
 # limit transformer output nodes to 1
+# prediction length limit guard
 
 
 # Transformer
@@ -46,9 +47,9 @@ def sawtooth_transformer():
     Trains and evaluates a transformer model using a sawtooth function dataset.
     """
     train_and_evaluate_transformer(
-        dataset=get_sawtooth_dataset(amount_intervals=1000),
+        dataset=get_sawtooth_dataset(amount_intervals=100),
         dataloader_parameters=transformer.interface.get_influx_dataloader_parameters(
-            max_prediction_length=150
+            max_prediction_length=15
         ),
         hyperparameters=get_sawtooth_hyperparameters(),
     )
@@ -132,4 +133,4 @@ def fetch_data_from_db():
     data.from_db.fetch(resolution)
 
 
-sawtooth_arima()
+sawtooth_transformer()

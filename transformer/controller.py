@@ -1,3 +1,5 @@
+import time
+
 from pandas import DataFrame
 
 import transformer.data
@@ -36,19 +38,24 @@ def train_and_evaluate_transformer(
     dataloaders = transformer.data.create_dataloaders(
         dataset, dataloader_parameters=dataloader_parameters
     )
+    hyperparameters_study_runtime = None
     if should_run_hyperparameter_study:
-        _hyperparameters = run_hyperparameter_study(dataloaders)
+        start_time = time.time()
+        hyperparameters = run_hyperparameter_study(dataloaders)
+        hyperparameters_study_runtime = time.time() - start_time
     elif hyperparameters is not None:
         _hyperparameters = hyperparameters
     else:
         raise ValueError(
             "Either provide hyperparameters or set should_run_hyperparameter_study to True"
         )
+    start_time = time.time()
     result = transformer.model.train_model(
         dataloaders=dataloaders,
         hyperparameters=_hyperparameters,
         fast_dev_run=fast_dev_run,
     )
+    training_runtime = time.time() - start_time
     if fast_dev_run:
         return
     prediction = transformer.evaluation.make_prediction(
@@ -59,7 +66,8 @@ def train_and_evaluate_transformer(
         prediction=prediction,
         hyperparameters=_hyperparameters,
         log_label="Transformer",
-        training_runtime=-1,
+        training_runtime=training_runtime,
+        hyperparameters_study_runtime=hyperparameters_study_runtime,
     )
 
 
