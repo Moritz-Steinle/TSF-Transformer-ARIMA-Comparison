@@ -38,7 +38,7 @@ def train_model(
         log_interval=10,
         optimizer="Ranger",
         reduce_on_plateau_patience=4,
-        # output_size=1,  # TODO No classification problem so i want just one output, not probability of each class
+        output_size=1,  # TODO No classification problem so i want just one output, not probability of each class
     )
     trainer.fit(
         tft,
