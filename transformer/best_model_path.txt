@@ -1,1 +1,1 @@
-lightning_logs/version_138/checkpoints/epoch=2-step=150.ckpt
+lightning_logs/version_156/checkpoints/epoch=57-step=2494.ckpt

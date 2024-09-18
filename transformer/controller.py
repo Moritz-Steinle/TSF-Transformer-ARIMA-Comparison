@@ -19,6 +19,7 @@ def train_and_evaluate_transformer(
     dataloader_parameters: DataloaderParameters = None,
     hyperparameters: Hyperparamters = None,
     hyperparameters_study_trials: int = 0,
+    log_label: str = "",
     fast_dev_run: bool = False,
 ):
     """
@@ -64,7 +65,7 @@ def train_and_evaluate_transformer(
         dataloaders=dataloaders,
         max_epochs=max_epochs,
         hyperparameters=hyperparameters,
-        log_label="Transformer",
+        log_label=log_label,
         training_runtime=training_runtime,
         hyperparameters_study_runtime=hyperparameters_study_runtime,
     )

@@ -1,3 +1,4 @@
+import pandas
 from pandas import DataFrame
 
 import arima.data
@@ -20,6 +21,7 @@ from transformer.interface import (
 )
 
 # TODO
+# Set influxdb normalisation to interval (1,10)
 # Add max epochs to transformer log
 # fix arima warnings
 # add logging to loaded models
@@ -32,12 +34,18 @@ def influx_transformer():
     """
     Trains and evaluates a transformer model using the real life InfluxDB dataset.
     """
+    resolution = "6h"
+    max_epochs = 1
+    prediction_length = 6
+    log_label = f"InfluxDB_r={resolution}_e={max_epochs}_pl={prediction_length}"
     train_and_evaluate_transformer(
-        dataset=get_influx_dataset(resolution="6h"),
+        dataset=get_influx_dataset(resolution=resolution),
         dataloader_parameters=transformer.interface.get_influx_dataloader_parameters(
-            max_prediction_length=20
+            max_prediction_length=prediction_length
         ),
-        max_epochs=1,
+        max_epochs=max_epochs,
+        log_label=log_label,
+        hyperparameters=get_influx_hyperparameters(),
     )
 
 
@@ -45,12 +53,16 @@ def sawtooth_transformer():
     """
     Trains and evaluates a transformer model using a sawtooth function dataset.
     """
+    amount_intervals = 312
+    max_epochs = 100
+    prediction_length = 15
+    log_label = f"Sawtooth_i={amount_intervals}_e={max_epochs}_pl={prediction_length}"
     train_and_evaluate_transformer(
-        dataset=get_sawtooth_dataset(amount_intervals=1000),
+        dataset=get_sawtooth_dataset(amount_intervals=amount_intervals),
         dataloader_parameters=transformer.interface.get_influx_dataloader_parameters(
-            max_prediction_length=15
+            max_prediction_length=prediction_length
         ),
-        max_epochs=100,
+        max_epochs=max_epochs,
         hyperparameters=Hyperparamters(
             gradient_clip_val=5.567624753786564,
             hidden_size=104,
@@ -59,6 +71,7 @@ def sawtooth_transformer():
             attention_head_size=1,
             learning_rate=0.0031622776601683794,
         ),
+        log_label=log_label,
     )
 
 
@@ -141,4 +154,5 @@ def fetch_data_from_db():
     data.from_db.fetch(resolution)
 
 
-sawtooth_transformer()
+pandas.set_option("display.max_rows", None)
+print(get_influx_dataset(resolution="6h")["value"][:100])

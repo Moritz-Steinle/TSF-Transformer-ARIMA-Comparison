@@ -1,5 +1,3 @@
-from datetime import datetime
-
 import pandas as pd
 from optuna import Study
 from optuna.trial import FrozenTrial

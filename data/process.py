@@ -106,13 +106,18 @@ def get_influx_chained_seasons_dataset(resolution: str) -> DataFrame:
 
 def _normalize_dataset(dataseries: Series) -> Series:
     """
-    Normalizes a data series via min-max scaling.
+    Normalizes a data series via min-max scaling to a range of 1 to 10.
+
     Parameters:
-        dataseries (pandas.Series): The dataset to be normalized.
+    dataseries (pandas.Series): The dataset to be normalized.
+
     Returns:
-        pandas.Series: The normalized dataseries.
+    pandas.Series: The normalized dataseries with values between 1 and 10.
     """
-    return (dataseries - dataseries.min()) / (dataseries.max() - dataseries.min())
+    min_val = dataseries.min()
+    max_val = dataseries.max()
+
+    return 1 + 9 * (dataseries - min_val) / (max_val - min_val)
 
 
 def _linear_fill_missing(

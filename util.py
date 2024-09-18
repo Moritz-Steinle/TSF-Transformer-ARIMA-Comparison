@@ -34,7 +34,7 @@ def log_prediction(
         },
         index=[current_time],
     )
-    log_folder = _create_log_folder(model)
+    log_folder = _create_log_folder(model, log_label=label)
     if plot is not None:
         plot.savefig(log_folder + "/plot.png")
     log_path = f"{log_folder}/log.json"
@@ -64,7 +64,9 @@ def _get_timestamp() -> str:
     return datetime.now().strftime("%d-%m-%y_%H:%M:%S")
 
 
-def _create_log_folder(model: Literal["ARIMA", "Transformer"]) -> str:
+def _create_log_folder(
+    model: Literal["ARIMA", "Transformer"], log_label: str = ""
+) -> str:
     """
     Creates a log folder for the specified model type with a timestamp.
     Args:
@@ -75,13 +77,13 @@ def _create_log_folder(model: Literal["ARIMA", "Transformer"]) -> str:
     Raises:
         OSError: If the directory creation fails.
     """
-
     timestamp = _get_timestamp()
     model_path = (
         config.arima_prediction_log_path
         if model == "ARIMA"
         else config.transformer_prediction_log_path
     )
-    log_folder = f"{model_path}/{timestamp}"
+    folder_name = f"{log_label}_{timestamp}" if log_label else timestamp
+    log_folder = f"{model_path}/{folder_name}"
     os.makedirs(log_folder)
     return log_folder
