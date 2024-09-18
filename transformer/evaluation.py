@@ -18,6 +18,7 @@ def log(
     model: TemporalFusionTransformer,
     prediction: Prediction,
     dataloaders: Dataloaders,
+    max_epochs: int,
     hyperparameters: Hyperparamters,
     training_runtime: float,
     hyperparameters_study_runtime: float = None,
@@ -28,7 +29,7 @@ def log(
         runtimes += (
             f" , hyperparameter study: {hyperparameters_study_runtime:.2f} seconds)"
         )
-    parameters = f"Hyperparameters: {hyperparameters}"
+    parameters = f"Epochs: {max_epochs}, hyperparameters: {hyperparameters}"
     plot = _create_plot(model, prediction)
     prediction_string = str(prediction)
     log_prediction(

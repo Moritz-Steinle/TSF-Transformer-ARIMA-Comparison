@@ -62,6 +62,7 @@ def train_and_evaluate_transformer(
         model=result.model,
         prediction=prediction,
         dataloaders=dataloaders,
+        max_epochs=max_epochs,
         hyperparameters=hyperparameters,
         log_label="Transformer",
         training_runtime=training_runtime,

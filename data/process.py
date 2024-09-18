@@ -45,7 +45,7 @@ def get_sawtooth_dataset(
     Returns:
     - DataFrame: The generated sawtooth dataset.
     """
-    sawtooth_values = Series(np.tile(np.arange(0.1, 1.0, 0.1), amount_intervals))
+    sawtooth_values = Series(np.tile(np.arange(1, 10, 1), amount_intervals))
     return DataFrame(
         dict(value=sawtooth_values, group=0, time_idx=range(len(sawtooth_values)))
     )
