@@ -21,7 +21,6 @@ from transformer.interface import (
 # TODO
 # Add max epochs to transformer log
 # fix arima warnings
-# remove max epochs from config
 # add separate max epoch variable to hyperparameter study
 # add logging to loaded models
 # limit transformer output nodes to 1

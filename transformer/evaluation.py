@@ -3,7 +3,7 @@ from pytorch_forecasting.models.base_model import Prediction
 
 from util import log_prediction
 
-from .interface import Hyperparamters
+from .interface import Dataloaders, Hyperparamters
 
 
 def make_prediction(model: TemporalFusionTransformer, val_dataloader) -> Prediction:
@@ -17,6 +17,7 @@ def make_prediction(model: TemporalFusionTransformer, val_dataloader) -> Predict
 def log(
     model: TemporalFusionTransformer,
     prediction: Prediction,
+    dataloaders: Dataloaders,
     hyperparameters: Hyperparamters,
     training_runtime: float,
     hyperparameters_study_runtime: float = None,
@@ -33,6 +34,8 @@ def log(
     log_prediction(
         model="Transformer",
         prediction=prediction_string,
+        length_test_dataset=len(dataloaders.val_dataloader.dataset),
+        length_train_dataset=len(dataloaders.train_dataloader.dataset),
         plot=plot,
         label=log_label,
         runtimes=runtimes,
