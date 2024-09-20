@@ -15,7 +15,8 @@ def analyse_dataset(dataset, filled_dataset=[]):
     print(f"Raw dataset length: {length_dataset}")
     missing_value_percentage = get_missing_value_percentage(dataset)
     print(f"Percentage of missing values: {missing_value_percentage}")
-    if not filled_dataset.empty:
+    print(f"Min value = {dataset['value'].min()}, max value = {dataset['value'].max()}")
+    if len(filled_dataset) > 0:
         length_filled_dataset = filled_dataset.shape[0]
         count_dropped_rows = length_dataset - length_filled_dataset
         print(f"Dropped datapoints: {count_dropped_rows}")

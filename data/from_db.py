@@ -17,7 +17,6 @@ def fetch(resolution: str = config.row_sample_interval):
         |> range(start: {config.range_start}, stop: {config.range_stop})
         |> filter(fn: (r) => r["_measurement"] == "ESP32_DEVKIT_V1_S001")
         |> filter(fn: (r) => r["_field"] == "moisture")
-        |> aggregateWindow(every: {resolution}, fn: last)
         |> keep(columns: ["_time", "_value", "_field"])
         |> pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")
         |> keep(columns: ["_time", "moisture"])

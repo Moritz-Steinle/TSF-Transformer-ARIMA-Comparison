@@ -5,6 +5,8 @@ ba-env/
 *.pkl
 credentials.ini
 .lr_*
+influxdb-10s.csv
+notes.txt
 
 # Created by https://www.toptal.com/developers/gitignore/api/python,linux,venv
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,linux,venv

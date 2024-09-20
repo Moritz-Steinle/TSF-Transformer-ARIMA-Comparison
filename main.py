@@ -1,10 +1,10 @@
-import pandas
 from pandas import DataFrame
 
 import arima.data
 import arima.interface
 import data.analyse
 import data.from_db
+import data.process
 import transformer.data
 import transformer.evaluation
 import transformer.interface
@@ -21,8 +21,9 @@ from transformer.interface import (
 )
 
 # TODO
-# Set influxdb normalisation to interval (1,10)
-# Add max epochs to transformer log
+# Add prediction directly after drop
+# TODO(Optional)
+# Add hyperparameter study to logging folder
 # fix arima warnings
 # add logging to loaded models
 # limit transformer output nodes to 1
@@ -34,10 +35,11 @@ def influx_transformer():
     """
     Trains and evaluates a transformer model using the real life InfluxDB dataset.
     """
-    resolution = "6h"
-    max_epochs = 1
-    prediction_length = 6
-    log_label = f"InfluxDB_r={resolution}_e={max_epochs}_pl={prediction_length}"
+    resolution = "2h-chained_atDrop_XXL"
+    max_epochs = 1000
+    prediction_length = 20
+    hyperparameters_study_trials = 0
+    log_label = f"InfluxDB_r={resolution}_e={max_epochs}_pl={prediction_length}_hst={hyperparameters_study_trials}"
     train_and_evaluate_transformer(
         dataset=get_influx_dataset(resolution=resolution),
         dataloader_parameters=transformer.interface.get_influx_dataloader_parameters(
@@ -45,7 +47,14 @@ def influx_transformer():
         ),
         max_epochs=max_epochs,
         log_label=log_label,
-        hyperparameters=get_influx_hyperparameters(),
+        hyperparameters=Hyperparamters(
+            gradient_clip_val=6.9953515571,
+            hidden_size=70,
+            dropout=0.1558743686,
+            hidden_continuous_size=40,
+            attention_head_size=3,
+            learning_rate=0.0039810717,
+        ),
     )
 
 
@@ -109,11 +118,13 @@ def influx_arima():
     """
     Trains and evaluates an ARIMA model using the real life InfluxDB dataset.
     """
-    resolution = "8h"
+    resolution = "12h_chained"
+    log_label = f"InfluxDB_r={resolution}"
     train_and_evaluate_arima(
         dataset=get_influx_dataset(resolution=resolution)["value"],
-        arima_order=arima.interface.get_influx_order(resolution),
-        log_label="InfluxDB",
+        max_prediction_length=80,
+        log_label=log_label,
+        should_find_best_order=True,
     )
 
 
@@ -150,9 +161,25 @@ def fetch_data_from_db():
     Fetches data from the database.
     Resolution sets the time interval of the data.
     """
-    resolution = "24h"
+    resolution = "10s"
     data.from_db.fetch(resolution)
 
 
-pandas.set_option("display.max_rows", None)
-print(get_influx_dataset(resolution="6h")["value"][:100])
+def plot_dataset():
+    """
+    Plots the "value" column of a dataset.
+    """
+    dataset = get_influx_dataset(resolution="2h", should_normalize=False)
+    data.analyse.plot_dataset(dataset=dataset)
+
+
+def analyse_dataset():
+    """
+    Analyses the "value" column of a dataset.
+    """
+    dataset = get_influx_dataset(resolution="2h", should_normalize=False)
+    data.analyse.analyse_dataset(dataset=dataset)
+
+
+fetch_data_from_db()
+# plot_dataset()

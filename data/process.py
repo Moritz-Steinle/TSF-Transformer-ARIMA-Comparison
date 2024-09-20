@@ -2,12 +2,13 @@ import numpy as np
 from pandas import DataFrame, Series
 from pytorch_forecasting.data.examples import get_stallion_data
 
-from data.analyse import calculate_season_length
 from data.from_db import read_file
 
 
 def get_influx_dataset(
-    resolution: str, should_fill_missing: bool = True, should_normalize: bool = True
+    resolution: str,
+    should_fill_missing: bool = True,
+    should_normalize: bool = True,
 ) -> DataFrame:
     """
     Retrieves a dataset from InfluxDB with the specified resolution.
@@ -96,12 +97,6 @@ def get_stallion_dataset() -> DataFrame:
     )
     dataset.sample(10, random_state=521)
     return dataset
-
-
-# TODO implement
-def get_influx_chained_seasons_dataset(resolution: str) -> DataFrame:
-    file_dataset = read_file(resolution)
-    season_length = calculate_season_length(file_dataset)
 
 
 def _normalize_dataset(dataseries: Series) -> Series:

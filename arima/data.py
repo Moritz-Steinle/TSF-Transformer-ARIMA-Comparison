@@ -1,6 +1,9 @@
+import os
+
 from pandas import Series
 from pmdarima import auto_arima
 from pmdarima.arima import ARIMA as pmdARIMA
+from threadpoolctl import threadpool_limits
 
 from data.analyse import calculate_season_length
 
@@ -18,7 +21,6 @@ def train_test_split_dataset(
     Returns:
         ArimaDatasets: An object containing the training and testing datasets.
     """
-
     train_dataset = dataset.head(-max_prediction_length)
     test_dataset = dataset.tail(max_prediction_length)
     return ArimaDatasets(train_dataset=train_dataset, test_dataset=test_dataset)
@@ -38,14 +40,17 @@ def find_best_order(
     """
     if should_calculate_season_length:
         season_length = calculate_season_length(dataset)
-    stepwise_model: pmdARIMA = auto_arima(
-        dataset,
-        seasonal_test="ch",  # Default OCSB throws ValueError: All lag values up to 'maxlag' produced singular matrices.
-        trace=quiet,
-        seasonal=True,
-        m=season_length,
-        suppress_warnings=True,
-    )
+    with threadpool_limits(
+        limits=1, user_api="blas"
+    ):  # Limits CPU Usage to 1 cores to prevent killing the process
+        stepwise_model: pmdARIMA = auto_arima(
+            dataset,
+            seasonal_test="ch",  # Default OCSB throws ValueError: All lag values up to 'maxlag' produced singular matrices.
+            trace=quiet,
+            seasonal=True,
+            m=season_length,
+            suppress_warnings=True,
+        )
     if not quiet:
         stepwise_model.summary()
     return ArimaOrder(stepwise_model.order, stepwise_model.seasonal_order)
