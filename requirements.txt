@@ -12,3 +12,4 @@ tensorboard
 requests
 pyarrow
 optuna==3.4.0
+yfinance

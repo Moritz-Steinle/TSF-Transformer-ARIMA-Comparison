@@ -1,4 +1,5 @@
 import numpy as np
+import yfinance
 from pandas import DataFrame, Series
 from pytorch_forecasting.data.examples import get_stallion_data
 
@@ -97,6 +98,16 @@ def get_stallion_dataset() -> DataFrame:
     )
     dataset.sample(10, random_state=521)
     return dataset
+
+
+def get_stock_price_dataset(
+    stock_name: str = "AAPL",
+    start_date: str = "2010-01-01",
+    end_date: str = "2023-01-01",
+) -> DataFrame:
+    stock_prices = yfinance.download(stock_name, start=start_date, end=end_date)["High"]
+    stock_prices = stock_prices.reset_index(drop=True)
+    return _normalize_dataset(stock_prices)
 
 
 def _normalize_dataset(dataseries: Series) -> Series:

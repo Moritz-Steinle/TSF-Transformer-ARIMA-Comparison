@@ -22,8 +22,8 @@ def analyse_dataset(dataset, filled_dataset=[]):
         print(f"Dropped datapoints: {count_dropped_rows}")
 
 
-def plot_dataset(dataset):
-    moisture_values = dataset["value"].tolist()
+def plot_dataset(dataset, key="value"):
+    moisture_values = dataset[key].tolist()
     _, axes = plt.subplots()
     axes.plot(moisture_values, color="blue")
     plt.show()
@@ -42,6 +42,9 @@ def calculate_season_length(dataset: Series) -> int:
 
     peaks, _ = find_peaks(lag_acf)
 
+    if len(peaks) == 0:
+        print("No seasonal period detected")
+        return 1
     # The first peak after lag 0 is likely to be the seasonal period
     seasonal_period = peaks[peaks > 0][0]
     print(f"Detected seasonal period: {seasonal_period}")
