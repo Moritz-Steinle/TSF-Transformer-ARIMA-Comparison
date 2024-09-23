@@ -12,6 +12,7 @@ from .interface import ArimaOrder
 def train_model(
     train_dataset: Series,
     arima_order: ArimaOrder = None,
+    optimization_method: str = None,
     should_save_model: bool = True,
 ) -> SARIMAX:
     """
@@ -27,12 +28,13 @@ def train_model(
         ARIMA: The trained ARIMA model.
     """
     arima_order = arima_order or ArimaOrder()
+    optimization_method = optimization_method or "lbfgs"
     model = SARIMAX(
         train_dataset,
         order=arima_order.order,
         seasonal_order=arima_order.seasonal_order,
     )
-    fit_model = model.fit()
+    fit_model = model.fit(method=optimization_method)
     if should_save_model:
         save_model(fit_model)
     return fit_model

@@ -75,15 +75,19 @@ def _create_plot(
     prediction,
     arima_datasets: ArimaDatasets,
     error: float,
+    show_full_training_data: bool = True,
 ) -> Figure:
     fig, ax = pyplot.subplots(figsize=(12, 6))
 
     prediction.plot(ax=ax, legend=True, linewidth=2, label="Prediction")
-    prediction_length = len(arima_datasets.test_dataset)
-    train_plot_length = prediction_length * 2
-    arima_datasets.train_dataset.tail(train_plot_length).plot(
-        ax=ax, legend=True, label="Training"
-    )
+    if show_full_training_data:
+        arima_datasets.train_dataset.plot(ax=ax, legend=True, label="Training")
+    else:
+        prediction_length = len(arima_datasets.test_dataset)
+        train_plot_length = prediction_length * 2
+        arima_datasets.train_dataset.tail(train_plot_length).plot(
+            ax=ax, legend=True, label="Training"
+        )
     arima_datasets.test_dataset.plot(ax=ax, legend=True, label="Actual", linestyle="--")
 
     ax.set_title(f"MAE={error}")

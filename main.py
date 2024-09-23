@@ -1,7 +1,5 @@
 from pandas import DataFrame
 
-import arima.data
-import arima.interface
 import data.analyse
 import data.from_db
 import data.process
@@ -10,7 +8,13 @@ import transformer.evaluation
 import transformer.interface
 import transformer.model
 from arima.controller import train_and_evaluate_arima
-from arima.interface import ArimaOrder, get_sawtooth_order
+from arima.interface import (
+    ArimaOrder,
+    OptimizationMethod,
+    Resolution,
+    get_influx_order,
+    get_sawtooth_order,
+)
 from data.process import (
     get_influx_dataset,
     get_sawtooth_dataset,
@@ -129,7 +133,8 @@ def influx_arima():
         dataset=get_influx_dataset(resolution=resolution)["value"],
         max_prediction_length=80,
         log_label=log_label,
-        should_find_best_order=True,
+        arima_order=get_influx_order(resolution),
+        optimization_method=OptimizationMethod.CG.value,
     )
 
 
@@ -157,20 +162,41 @@ def stock_price_arima():
     )
 
 
-def run_arima_comparison():
+def arima_method_resolution_comparison():
     """
-    Trains and evaluates ARIMA models using the real life InfluxDB dataset with different resolutions.
+    Trains and evaluates ARIMA models using the Influx data with different optimization methods and resolutions.
     Logs all results.
     """
-    resolutions = ["24h", "12h", "8h", "6h"]
-    for resolution in resolutions:
-        dataset = get_influx_dataset(resolution=resolution)["value"]
-        train_and_evaluate_arima(
-            dataset=dataset,
-            log_label=f"FluxDB_{resolution}",
-            max_prediction_length=6,
-            arima_order=arima.interface.get_influx_order(resolution=resolution),
-        )
+    optimization_methods = [
+        # OptimizationMethod.BFGS.value,
+        # OptimizationMethod.L_BFGS.value,
+        # OptimizationMethod.CG.value,
+        # OptimizationMethod.NCG.value,
+        OptimizationMethod.POWELL.value,
+    ]
+    resolutions = [
+        Resolution.H24.value,
+        Resolution.H12.value,
+        Resolution.H8.value,
+        Resolution.H6.value,
+        Resolution.H4.value,
+        Resolution.H3.value,
+        # Resolution.H2.value,
+        Resolution.H12_CHAINED.value,
+    ]
+    for optimization_method in optimization_methods:
+        for resolution in resolutions:
+            print(
+                f"Optimization method: {optimization_method}, Resolution: {resolution}"
+            )
+            dataset = get_influx_dataset(resolution=resolution)["value"]
+            train_and_evaluate_arima(
+                dataset=dataset,
+                log_label=f"InfluxDB_r={resolution}_om={optimization_method}",
+                max_prediction_length=6,
+                optimization_method=optimization_method,
+                arima_order=get_influx_order(resolution),
+            )
 
 
 # Util
@@ -187,8 +213,8 @@ def plot_dataset():
     """
     Plots the "value" column of a dataset.
     """
-    dataset = get_stock_price_dataset()
-    data.analyse.plot_dataset(dataset=dataset, key="High")
+    dataset = get_sawtooth_dataset(amount_intervals=10)
+    data.analyse.plot_dataset(dataset=dataset)
 
 
 def analyse_dataset():
@@ -199,4 +225,4 @@ def analyse_dataset():
     data.analyse.analyse_dataset(dataset=dataset)
 
 
-stock_price_arima()
+arima_method_resolution_comparison()

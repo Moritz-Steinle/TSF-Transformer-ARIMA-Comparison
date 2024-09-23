@@ -14,6 +14,7 @@ def train_and_evaluate_arima(
     max_prediction_length: int = config.arima_max_prediction_length,
     arima_order: ArimaOrder = None,
     log_label: str = None,
+    optimization_method: str = None,
     should_find_best_order: bool = False,
     should_save_model: bool = False,
 ) -> None:
@@ -42,6 +43,7 @@ def train_and_evaluate_arima(
         train_dataset=arima_datasets.train_dataset,
         arima_order=arima_order,
         should_save_model=should_save_model,
+        optimization_method=optimization_method,
     )
     training_runtime = time.time() - start_time
     prediction = arima.evaluation.predict(
