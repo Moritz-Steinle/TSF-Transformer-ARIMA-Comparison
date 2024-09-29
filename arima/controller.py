@@ -17,6 +17,7 @@ def train_and_evaluate_arima(
     optimization_method: str = None,
     should_find_best_order: bool = False,
     should_save_model: bool = False,
+    season_length: int = None,
 ) -> None:
     """
     Trains and evaluates an ARIMA model using the given dataset.
@@ -31,7 +32,7 @@ def train_and_evaluate_arima(
     """
     if should_find_best_order:
         start_time = time.time()
-        arima_order = arima.data.find_best_order(dataset)
+        arima_order = arima.data.find_best_order(dataset, season_length=season_length)
         find_order_runtime = time.time() - start_time
     else:
         find_order_runtime = None

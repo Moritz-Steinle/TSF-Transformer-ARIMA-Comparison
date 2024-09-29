@@ -26,9 +26,8 @@ def train_test_split_dataset(
 
 def find_best_order(
     dataset: Series,
-    should_calculate_season_length=True,
-    season_length=None,
-    quiet=True,
+    season_length: int = None,
+    quiet: bool = True,
 ) -> ArimaOrder:
     """Runs autoarima that tries out different pdq values and prints the best ones
 
@@ -36,7 +35,7 @@ def find_best_order(
         dataset Series: dataset to run autoarima on
         season_length int: season length for the dataset
     """
-    if should_calculate_season_length:
+    if season_length is None:
         season_length = calculate_season_length(dataset)
     with threadpool_limits(
         limits=1, user_api="blas"

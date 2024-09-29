@@ -131,12 +131,17 @@ def influx_arima():
     optimization_method = OptimizationMethod.L_BFGS.value
     arima_order = ArimaOrder(order=(0, 0, 2), seasonal_order=(2, 0, 2, 84))
     log_label = f"InfluxDB_r={resolution}_om={optimization_method}_order={arima_order}"
+    # log_label = f"InfluxDB_r={resolution}_om={optimization_method}"
     train_and_evaluate_arima(
-        dataset=get_influx_dataset(resolution=resolution)["value"],
+        dataset=get_influx_dataset(
+            resolution=resolution,
+            should_normalize=False,
+        )["value"],
         max_prediction_length=200,
         log_label=log_label,
         optimization_method=optimization_method,
         arima_order=arima_order,
+        # should_find_best_order=True,
     )
 
 
