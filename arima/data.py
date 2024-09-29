@@ -1,5 +1,3 @@
-import os
-
 from pandas import Series
 from pmdarima import auto_arima
 from pmdarima.arima import ARIMA as pmdARIMA

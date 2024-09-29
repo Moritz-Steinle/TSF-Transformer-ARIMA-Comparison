@@ -30,7 +30,7 @@ def train_model(
     _hyperparameters = hyperparameters.function_none_filtered_dict(
         function=TemporalFusionTransformer.from_dataset
     )
-    tft = TemporalFusionTransformer.from_dataset(
+    temporalFusionTransformer = TemporalFusionTransformer.from_dataset(
         dataset=dataloaders.training_dataset,
         **_hyperparameters,
         loss=QuantileLoss(),
@@ -40,7 +40,7 @@ def train_model(
         # output_size=1,  # TODO No classification problem so i want just one output, not probability of each class
     )
     trainer.fit(
-        tft,
+        temporalFusionTransformer,
         dataloaders.train_dataloader,
         dataloaders.val_dataloader,
     )

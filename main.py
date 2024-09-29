@@ -127,14 +127,16 @@ def influx_arima():
     """
     Trains and evaluates an ARIMA model using the real life InfluxDB dataset.
     """
-    resolution = "12h_chained"
-    log_label = f"InfluxDB_r={resolution}"
+    resolution = "4h"
+    optimization_method = OptimizationMethod.L_BFGS.value
+    arima_order = ArimaOrder(order=(0, 0, 2), seasonal_order=(2, 0, 2, 84))
+    log_label = f"InfluxDB_r={resolution}_om={optimization_method}_order={arima_order}"
     train_and_evaluate_arima(
         dataset=get_influx_dataset(resolution=resolution)["value"],
-        max_prediction_length=80,
+        max_prediction_length=200,
         log_label=log_label,
-        arima_order=get_influx_order(resolution),
-        optimization_method=OptimizationMethod.CG.value,
+        optimization_method=optimization_method,
+        arima_order=arima_order,
     )
 
 
@@ -225,4 +227,4 @@ def analyse_dataset():
     data.analyse.analyse_dataset(dataset=dataset)
 
 
-arima_method_resolution_comparison()
+influx_arima()
