@@ -6,7 +6,7 @@ import lightning.pytorch as pl
 from lightning.pytorch.callbacks import EarlyStopping, LearningRateMonitor
 from lightning.pytorch.loggers import TensorBoardLogger
 from pytorch_forecasting import TemporalFusionTransformer
-from pytorch_forecasting.metrics import QuantileLoss
+from pytorch_forecasting.metrics.point import RMSE
 
 from config import config, project_root_path
 
@@ -30,17 +30,17 @@ def train_model(
     _hyperparameters = hyperparameters.function_none_filtered_dict(
         function=TemporalFusionTransformer.from_dataset
     )
-    temporalFusionTransformer = TemporalFusionTransformer.from_dataset(
+    temporal_fusion_transformer = TemporalFusionTransformer.from_dataset(
         dataset=dataloaders.training_dataset,
         **_hyperparameters,
-        loss=QuantileLoss(),
+        loss=RMSE(),
         log_interval=10,
         optimizer="Ranger",
         reduce_on_plateau_patience=4,
-        # output_size=1,  # TODO No classification problem so i want just one output, not probability of each class
+        output_size=1,  # TODO No classification problem so i want just one output, not probability of each class
     )
     trainer.fit(
-        temporalFusionTransformer,
+        temporal_fusion_transformer,
         dataloaders.train_dataloader,
         dataloaders.val_dataloader,
     )

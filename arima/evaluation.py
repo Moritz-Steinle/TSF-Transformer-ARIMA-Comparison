@@ -1,7 +1,7 @@
-import numpy as np
 from matplotlib import pyplot
 from matplotlib.figure import Figure
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import root_mean_squared_error
+from sktime.performance_metrics.forecasting import mean_absolute_scaled_error
 from statsmodels.tsa.statespace.sarimax import SARIMAX
 
 from util import log_prediction
@@ -33,7 +33,7 @@ def log(
     order: ArimaOrder,
     prediction,
     arima_datasets: ArimaDatasets,
-    training_runtime,
+    training_runtime: float,
     log_label: str = None,
     find_order_runtime=None,
 ):
@@ -49,19 +49,23 @@ def log(
     Returns:
         None
     """
-    error = np.sqrt(mean_squared_error(arima_datasets.test_dataset, prediction))
     parameters = f"order={order.order}, seasonal_order={order.seasonal_order}"
     runtime_string = f"Training: {training_runtime:.2f} seconds"
     if find_order_runtime is not None:
         runtime_string += f" , order study: {find_order_runtime:.2f} seconds)"
-    plot = _create_plot(prediction, arima_datasets, error)
+    plot = _create_plot(
+        prediction=prediction, arima_datasets=arima_datasets, log_label=log_label
+    )
+    error_metrics = _calculate_error_metrics(
+        arima_datasets, prediction, order.seasonal_order[3]
+    )
     length_test_dataset = len(arima_datasets.test_dataset)
     length_train_dataset = len(arima_datasets.train_dataset)
     prediction_string = prediction.to_json()
     log_prediction(
         model="ARIMA",
         prediction=prediction_string,
-        mean_squared_error=error,
+        error_metrics=error_metrics,
         length_test_dataset=length_test_dataset,
         length_train_dataset=length_train_dataset,
         plot=plot,
@@ -71,10 +75,23 @@ def log(
     )
 
 
+def _calculate_error_metrics(
+    arima_datasets: ArimaDatasets, prediction, season_length: int = 1
+) -> str:
+    rsme = root_mean_squared_error(arima_datasets.test_dataset, prediction)
+    mase = mean_absolute_scaled_error(
+        y_true=arima_datasets.test_dataset,
+        y_pred=prediction,
+        y_train=arima_datasets.train_dataset,
+        season_length=season_length,
+    )
+    return f"RSME: {rsme}, MASE: {mase}"
+
+
 def _create_plot(
     prediction,
     arima_datasets: ArimaDatasets,
-    error: float,
+    log_label: str = "",
     training_data_plot_extension: int = 200,
 ) -> Figure:
     fig, ax = pyplot.subplots(figsize=(12, 6))
@@ -87,7 +104,7 @@ def _create_plot(
     )
     arima_datasets.test_dataset.plot(ax=ax, legend=True, label="Actual", linestyle="--")
 
-    ax.set_title(f"MAE={error}")
+    ax.set_title(f"{log_label}")
     ax.legend()
 
     return fig

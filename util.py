@@ -14,7 +14,7 @@ def log_prediction(
     model: Literal["ARIMA", "Transformer"],
     prediction: str,
     plot: plt.Figure = None,
-    mean_squared_error: float = -1,
+    error_metrics: str = "None",
     length_test_dataset: int = -1,
     length_train_dataset: int = -1,
     label: str = "None",
@@ -25,7 +25,7 @@ def log_prediction(
     log_dataframe = DataFrame(
         {
             "label": [label],
-            "mean_squared_error": [mean_squared_error],
+            "error_metrics": [error_metrics],
             "runtimes": [runtimes],
             "length_train_dataset": [length_train_dataset],
             "length_test_dataset": [length_test_dataset],

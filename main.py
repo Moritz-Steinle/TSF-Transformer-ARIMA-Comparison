@@ -44,8 +44,8 @@ def influx_transformer():
     """
     Trains and evaluates a transformer model using the real life InfluxDB dataset.
     """
-    resolution = "2h-chained_atDrop_XXL"
-    max_epochs = 100
+    resolution = "8h"
+    max_epochs = 1
     prediction_length = 20
     hyperparameters_study_trials = 0
     log_label = f"InfluxDB_r={resolution}_e={max_epochs}_pl={prediction_length}_hst={hyperparameters_study_trials}"
@@ -56,14 +56,18 @@ def influx_transformer():
         ),
         max_epochs=max_epochs,
         log_label=log_label,
-        hyperparameters=Hyperparamters(
-            gradient_clip_val=6.9953515571,
-            hidden_size=70,
-            dropout=0.1558743686,
-            hidden_continuous_size=40,
-            attention_head_size=3,
-            learning_rate=0.0039810717,
-        ),
+        hyperparameters=get_influx_hyperparameters(),
+    )
+
+
+def fast_dev_transformer():
+    """
+    Trains and evaluates a transformer model using the real life InfluxDB dataset.
+    """
+    train_and_evaluate_transformer(
+        dataset=get_sawtooth_dataset(amount_intervals=10),
+        max_epochs=1,
+        fast_dev_run=True,
     )
 
 
@@ -71,8 +75,8 @@ def sawtooth_transformer():
     """
     Trains and evaluates a transformer model using a sawtooth function dataset.
     """
-    amount_intervals = 312
-    max_epochs = 100
+    amount_intervals = 375
+    max_epochs = 1
     prediction_length = 15
     log_label = f"Sawtooth_i={amount_intervals}_e={max_epochs}_pl={prediction_length}"
     train_and_evaluate_transformer(
@@ -127,15 +131,15 @@ def influx_arima():
     """
     Trains and evaluates an ARIMA model using the real life InfluxDB dataset.
     """
-    resolution = "4h"
+    resolution = "4h-1_season_chained"
     optimization_method = OptimizationMethod.L_BFGS.value
-    arima_order = ArimaOrder(order=(0, 0, 2), seasonal_order=(2, 0, 2, 84))
-    log_label = f"InfluxDB_r={resolution}_om={optimization_method}_order={arima_order}"
-    # log_label = f"InfluxDB_r={resolution}_om={optimization_method}"
+    # arima_order = ArimaOrder(order=(0, 0, 2), seasonal_order=(2, 0, 2, 84))
+    arima_order = ArimaOrder(order=(0, 1, 0), seasonal_order=(0, 0, 0, 43))
+    # log_label = f"InfluxDB_r={resolution}_om={optimization_method}_order={arima_order}"
+    log_label = f"InfluxDB_r={resolution}_om={optimization_method}"
     train_and_evaluate_arima(
         dataset=get_influx_dataset(
             resolution=resolution,
-            should_normalize=False,
         )["value"],
         max_prediction_length=200,
         log_label=log_label,
@@ -156,6 +160,7 @@ def sawtooth_arima():
     )
 
 
+# TODO remove
 def stock_price_arima():
     """
     Trains and evaluates an ARIMA model using the stock price dataset.
@@ -232,4 +237,4 @@ def analyse_dataset():
     data.analyse.analyse_dataset(dataset=dataset)
 
 
-influx_arima()
+sawtooth_transformer()
