@@ -44,11 +44,11 @@ def create_dataloaders(
         dataset[lambda x: x.time_idx <= training_cutoff],
         **_parameters,
     )
-    validation = TimeSeriesDataSet.from_dataset(
-        training_dataset, dataset, predict=True, stop_randomization=True
-    )
     train_dataloader = training_dataset.to_dataloader(
         train=True, batch_size=dataloader_parameters.batch_size, num_workers=11
+    )
+    validation = TimeSeriesDataSet.from_dataset(
+        training_dataset, dataset, predict=True, stop_randomization=True
     )
     val_dataloader = validation.to_dataloader(
         train=False, batch_size=dataloader_parameters.batch_size * 10, num_workers=11

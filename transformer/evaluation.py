@@ -1,10 +1,7 @@
-import itertools
-
-from pandas import DataFrame
 from pytorch_forecasting import TemporalFusionTransformer
+from pytorch_forecasting.metrics.point import RMSE, SMAPE
 from pytorch_forecasting.models.base_model import Prediction
-from sklearn.metrics import root_mean_squared_error
-from sktime.performance_metrics.forecasting import mean_absolute_scaled_error
+from torch.utils.data import DataLoader
 
 from util import log_prediction
 
@@ -26,6 +23,7 @@ def log(
     max_epochs: int,
     hyperparameters: Hyperparamters,
     training_runtime: float,
+    target_col: str = "value",
     hyperparameters_study_runtime: float = None,
     log_label: str = None,
 ) -> None:
@@ -36,20 +34,14 @@ def log(
         )
     parameters = f"Epochs: {max_epochs}, hyperparameters: {hyperparameters}"
     plot = _create_plot(model, prediction)
-    prediction_string = "".join(
-        list(itertools.chain.from_iterable(prediction.output.prediction))
-    )
-
-    # error_metrics = _calculate_error_metrics(
-    #     dataloaders.training_dataset, dataloaders.val_dataloader.dataset, prediction
-    # )
+    prediction_values = _prediction_to_list(prediction)
+    error_metrics = _calculate_error_metrics(model, dataloaders.val_dataloader)
     log_prediction(
         model="Transformer",
-        prediction=prediction_string,
-        # error_metrics=error_metrics,
-        length_test_dataset=len(dataloaders.val_dataloader.dataset),
-        length_train_dataset=len(dataloaders.train_dataloader.dataset),
+        prediction=prediction_values,
         plot=plot,
+        error_metrics=error_metrics,
+        # TODO fix dataset length
         label=log_label,
         runtimes=runtimes,
         parameters=parameters,
@@ -57,19 +49,13 @@ def log(
 
 
 def _calculate_error_metrics(
-    train_dataset: DataFrame,
-    test_dataset: DataFrame,
-    prediction,
-    season_length: int = 1,
+    model: TemporalFusionTransformer,
+    val_dataloader: DataLoader,
 ) -> str:
-    rsme = root_mean_squared_error(test_dataset, prediction)
-    mase = mean_absolute_scaled_error(
-        y_true=test_dataset,
-        y_pred=prediction,
-        y_train=train_dataset,
-        season_length=season_length,
-    )
-    return f"RSME: {rsme}, MASE: {mase}"
+    prediction = model.predict(val_dataloader, return_x=True, return_y=True)
+    rsme = RMSE()(prediction.output, prediction.y)
+    smape = SMAPE()(prediction.output, prediction.y)
+    return f"RMSE: {rsme}, SMAPE: {smape}"
 
 
 def _create_plot(model: TemporalFusionTransformer, predictions):
@@ -78,3 +64,8 @@ def _create_plot(model: TemporalFusionTransformer, predictions):
     return model.plot_prediction(
         network_input, network_output, idx=0, add_loss_to_title=True
     )
+
+
+def _prediction_to_list(prediction: Prediction) -> list:
+    tensor_data = prediction.output.prediction
+    return tensor_data.squeeze().tolist()

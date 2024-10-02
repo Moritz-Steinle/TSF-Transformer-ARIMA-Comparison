@@ -30,7 +30,7 @@ from transformer.interface import (
 )
 
 # TODO
-# Add prediction directly after drop
+# Rename arima test dataset to validation dataset
 # TODO(Optional)
 # Add hyperparameter study to logging folder
 # fix arima warnings
@@ -237,4 +237,4 @@ def analyse_dataset():
     data.analyse.analyse_dataset(dataset=dataset)
 
 
-sawtooth_transformer()
+influx_transformer()

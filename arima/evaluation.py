@@ -1,7 +1,11 @@
 from matplotlib import pyplot
 from matplotlib.figure import Figure
+from pandas import Series
 from sklearn.metrics import root_mean_squared_error
-from sktime.performance_metrics.forecasting import mean_absolute_scaled_error
+from sktime.performance_metrics.forecasting import (
+    mean_absolute_percentage_error,
+    mean_absolute_scaled_error,
+)
 from statsmodels.tsa.statespace.sarimax import SARIMAX
 
 from util import log_prediction
@@ -12,7 +16,7 @@ from .interface import ArimaDatasets, ArimaOrder
 def predict(
     model: SARIMAX,
     arima_datasets: ArimaDatasets,
-):
+) -> Series:
     """
     Generate predictions using a SARIMAX model on provided ARIMA datasets.
     Args:
@@ -26,12 +30,12 @@ def predict(
     start = len(train_dataset)
     end = len(train_dataset) + len(test_dataset) - 1
     prediction = model.predict(start=start, end=end, typ="linear")
-    return prediction
+    return Series(prediction)
 
 
 def log(
     order: ArimaOrder,
-    prediction,
+    prediction: Series,
     arima_datasets: ArimaDatasets,
     training_runtime: float,
     log_label: str = None,
@@ -76,20 +80,23 @@ def log(
 
 
 def _calculate_error_metrics(
-    arima_datasets: ArimaDatasets, prediction, season_length: int = 1
+    arima_datasets: ArimaDatasets, prediction: Series, season_length: int = 1
 ) -> str:
     rsme = root_mean_squared_error(arima_datasets.test_dataset, prediction)
+    smape = mean_absolute_percentage_error(
+        y_true=arima_datasets.test_dataset, y_pred=prediction, symmetric=True
+    )
     mase = mean_absolute_scaled_error(
         y_true=arima_datasets.test_dataset,
         y_pred=prediction,
         y_train=arima_datasets.train_dataset,
         season_length=season_length,
     )
-    return f"RSME: {rsme}, MASE: {mase}"
+    return f"RSME: {rsme}, SMAPE: {smape}, MASE: {mase}"
 
 
 def _create_plot(
-    prediction,
+    prediction: Series,
     arima_datasets: ArimaDatasets,
     log_label: str = "",
     training_data_plot_extension: int = 200,
