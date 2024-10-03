@@ -29,13 +29,10 @@ from transformer.interface import (
 )
 
 # TODO
-# Rename arima test dataset to validation dataset
 # TODO(Optional)
 # Add hyperparameter study to logging folder
 # fix arima warnings
 # add logging to loaded models
-# limit transformer output nodes to 1
-# Update interface hyperparameters with study results
 
 
 # Transformer
@@ -43,9 +40,9 @@ def influx_transformer():
     """
     Trains and evaluates a transformer model using the real life InfluxDB dataset.
     """
-    resolution = "8h"
-    max_epochs = 1
-    prediction_length = 20
+    resolution = "4h-1_season_chained_large"
+    max_epochs = 20
+    prediction_length = 100
     hyperparameters_study_trials = 0
     log_label = f"InfluxDB_r={resolution}_e={max_epochs}_pl={prediction_length}_hst={hyperparameters_study_trials}"
     train_and_evaluate_transformer(
@@ -222,4 +219,4 @@ def analyse_dataset():
     data.analyse.analyse_dataset(dataset=dataset)
 
 
-influx_arima()
+influx_transformer()

@@ -1,9 +1,0 @@
-{
-    "label": "Sawtooth_i=375_e=1_pl=15",
-    "error_metrics": "None",
-    "runtimes": "Training: 6.33 seconds",
-    "length_train_dataset": 3374,
-    "length_test_dataset": 1,
-    "parameters": "Epochs: 1, hyperparameters: Hyperparamters(gradient_clip_val=5.567624753786564, hidden_continuous_size=41, dropout=0.15965296238642823, attention_head_size=1, learning_rate=0.0031622776601683794, accelerator='auto', hidden_size=104)",
-    "prediction": "tensor([[[ 0.0741],\n         [ 0.0963],\n         [ 0.1059],\n         [-0.0694],\n         [-0.0687],\n         [-0.0707],\n         [-0.0743],\n         [-0.0787],\n         [-0.0836],\n         [-0.0885],\n         [-0.0933],\n         [-0.0978],\n         [-0.1021],\n         [-0.1060],\n         [-0.1097]]], device='cuda:0')"
-}

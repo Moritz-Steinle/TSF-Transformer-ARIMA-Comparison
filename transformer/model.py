@@ -1,4 +1,3 @@
-# From https://pytorch-forecasting.readthedocs.io/en/stable/tutorials/stallion.html
 import os
 import warnings
 
@@ -8,11 +7,10 @@ from lightning.pytorch.loggers import TensorBoardLogger
 from pytorch_forecasting import TemporalFusionTransformer
 from pytorch_forecasting.metrics.point import RMSE
 
-from config import config, project_root_path
+from config import project_root_path
 
 from .interface import DatalaodersAndModel, Dataloaders, Hyperparamters, ModelPath
 
-# TODO: fix UserWarning: X does not have valid feature names, but StandardScaler was fitted with feature names
 warnings.filterwarnings("ignore", category=Warning, module="sklearn")
 
 
@@ -37,7 +35,7 @@ def train_model(
         log_interval=10,
         optimizer="Ranger",
         reduce_on_plateau_patience=4,
-        output_size=1,  # TODO No classification problem so i want just one output, not probability of each class
+        output_size=1,
     )
     trainer.fit(
         temporal_fusion_transformer,
@@ -46,14 +44,9 @@ def train_model(
     )
     if fast_dev_run:
         return
-    # TODO use trainer instead of saving and loading model
-    best_model_path = trainer.checkpoint_callback.best_model_path
-    save_best_model_path(best_model_path)
-    best_model = TemporalFusionTransformer.load_from_checkpoint(best_model_path)
-    #
     return DatalaodersAndModel(
         dataloaders=dataloaders,
-        model=best_model,
+        model=temporal_fusion_transformer,
     )
 
 
@@ -79,19 +72,7 @@ def create_trainer(
     )
 
 
-def save_best_model_path(best_model_path: str) -> None:
-    path = os.path.join(project_root_path, config.best_model_path)
-    with open(path, "w") as f:
-        f.write(best_model_path)
-
-
 def load_model(model_path: ModelPath = None) -> TemporalFusionTransformer:
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    default_path = os.path.join(current_dir, "best_model_path.txt")
-    if model_path:
-        path = model_path.get_path()
-    else:
-        with open(default_path) as f:
-            path = f.readline()
+    path = model_path.get_path()
     lightning_logs_path = os.path.join(project_root_path, path)
     return TemporalFusionTransformer.load_from_checkpoint(lightning_logs_path)

@@ -1,0 +1,30 @@
+{
+    "label": "InfluxDB_r=4h-1_season_chained_e=20_pl=20_hst=0",
+    "error_metrics": "RMSE: 4.525143623352051, SMAPE: 0.7282112836837769",
+    "runtimes": "Training: 25.80 seconds",
+    "length_train_dataset": -1,
+    "length_validation_dataset": -1,
+    "parameters": "Epochs: 20, hyperparameters: Hyperparamters(gradient_clip_val=0.09050490030726796, hidden_continuous_size=12, dropout=0.22288661702971777, attention_head_size=2, learning_rate=0.6336776189720053, accelerator='auto', hidden_size=None)",
+    "prediction": [
+        3.7269411087,
+        3.9183750153,
+        4.0151600838,
+        4.0666508675,
+        4.0938959122,
+        4.1079707146,
+        4.1149730682,
+        4.1181902885,
+        4.1193213463,
+        4.1192202568,
+        4.1183104515,
+        4.1168074608,
+        4.1148252487,
+        4.1124229431,
+        4.1096405983,
+        4.1065063477,
+        4.103041172,
+        4.0992650986,
+        4.0951948166,
+        4.090845108
+    ]
+}

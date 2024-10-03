@@ -1,9 +1,0 @@
-{
-    "label": "Sawtooth_i=375_e=1_pl=15",
-    "error_metrics": "RMSE: 4.890559673309326, SMAPE: 1.6981981992721558",
-    "runtimes": "Training: 6.05 seconds",
-    "length_train_dataset": 3374,
-    "length_test_dataset": 1,
-    "parameters": "Epochs: 1, hyperparameters: Hyperparamters(gradient_clip_val=5.567624753786564, hidden_continuous_size=41, dropout=0.15965296238642823, attention_head_size=1, learning_rate=0.0031622776601683794, accelerator='auto', hidden_size=104)",
-    "prediction": "[0.3040705621242523, 0.29898548126220703, 0.2976844012737274, 0.3004351556301117, 0.3053946793079376, 0.3115169405937195, 0.3182462751865387, 0.3252773582935333, 0.33243849873542786, 0.3396325409412384, 0.34680986404418945, 0.3539390563964844, 0.3610016405582428, 0.36798688769340515, 0.37488898634910583]"
-}
