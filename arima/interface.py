@@ -8,7 +8,7 @@ from pandas import Series
 @dataclass
 class ArimaDatasets:
     train_dataset: Series
-    test_dataset: Series
+    validation_dataset: Series
 
 
 @dataclass

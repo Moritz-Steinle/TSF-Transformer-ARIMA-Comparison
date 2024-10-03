@@ -20,8 +20,10 @@ def train_test_split_dataset(
         ArimaDatasets: An object containing the training and testing datasets.
     """
     train_dataset = dataset.head(-max_prediction_length)
-    test_dataset = dataset.tail(max_prediction_length)
-    return ArimaDatasets(train_dataset=train_dataset, test_dataset=test_dataset)
+    validation_dataset = dataset.tail(max_prediction_length)
+    return ArimaDatasets(
+        train_dataset=train_dataset, validation_dataset=validation_dataset
+    )
 
 
 def find_best_order(

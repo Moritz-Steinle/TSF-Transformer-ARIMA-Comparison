@@ -26,9 +26,8 @@ def predict(
         pandas.Series: The predicted values for the test dataset.
     """
     train_dataset = arima_datasets.train_dataset
-    test_dataset = arima_datasets.test_dataset
     start = len(train_dataset)
-    end = len(train_dataset) + len(test_dataset) - 1
+    end = len(train_dataset) + len(arima_datasets.validation_dataset) - 1
     prediction = model.predict(start=start, end=end, typ="linear")
     return Series(prediction)
 
@@ -63,14 +62,14 @@ def log(
     error_metrics = _calculate_error_metrics(
         arima_datasets, prediction, order.seasonal_order[3]
     )
-    length_test_dataset = len(arima_datasets.test_dataset)
+    length_validation_dataset = len(arima_datasets.validation_dataset)
     length_train_dataset = len(arima_datasets.train_dataset)
     prediction_string = prediction.to_json()
     log_prediction(
         model="ARIMA",
         prediction=prediction_string,
         error_metrics=error_metrics,
-        length_test_dataset=length_test_dataset,
+        length_validation_dataset=length_validation_dataset,
         length_train_dataset=length_train_dataset,
         plot=plot,
         label=log_label,
@@ -82,12 +81,12 @@ def log(
 def _calculate_error_metrics(
     arima_datasets: ArimaDatasets, prediction: Series, season_length: int = 1
 ) -> str:
-    rsme = root_mean_squared_error(arima_datasets.test_dataset, prediction)
+    rsme = root_mean_squared_error(arima_datasets.validation_dataset, prediction)
     smape = mean_absolute_percentage_error(
-        y_true=arima_datasets.test_dataset, y_pred=prediction, symmetric=True
+        y_true=arima_datasets.validation_dataset, y_pred=prediction, symmetric=True
     )
     mase = mean_absolute_scaled_error(
-        y_true=arima_datasets.test_dataset,
+        y_true=arima_datasets.validation_dataset,
         y_pred=prediction,
         y_train=arima_datasets.train_dataset,
         season_length=season_length,
@@ -104,12 +103,14 @@ def _create_plot(
     fig, ax = pyplot.subplots(figsize=(12, 6))
 
     prediction.plot(ax=ax, legend=True, linewidth=2, label="Prediction")
-    prediction_length = len(arima_datasets.test_dataset)
+    prediction_length = len(arima_datasets.validation_dataset)
     train_plot_length = prediction_length * 2 + training_data_plot_extension
     arima_datasets.train_dataset.tail(train_plot_length).plot(
         ax=ax, legend=True, label="Training"
     )
-    arima_datasets.test_dataset.plot(ax=ax, legend=True, label="Actual", linestyle="--")
+    arima_datasets.validation_dataset.plot(
+        ax=ax, legend=True, label="Actual", linestyle="--"
+    )
 
     ax.set_title(f"{log_label}")
     ax.legend()
