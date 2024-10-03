@@ -19,7 +19,6 @@ from data.process import (
     get_influx_dataset,
     get_sawtooth_dataset,
     get_stallion_dataset,
-    get_stock_price_dataset,
 )
 from transformer.controller import train_and_evaluate_transformer
 from transformer.interface import (
@@ -157,20 +156,6 @@ def sawtooth_arima():
         dataset=get_sawtooth_dataset(amount_intervals=100)["value"],
         log_label="Sawtooth",
         arima_order=ArimaOrder(order=(4, 0, 1), seasonal_order=(2, 0, 0, 9)),
-    )
-
-
-# TODO remove
-def stock_price_arima():
-    """
-    Trains and evaluates an ARIMA model using the stock price dataset.
-    """
-    train_and_evaluate_arima(
-        dataset=get_stock_price_dataset(),
-        log_label="StockPrice",
-        max_prediction_length=20,
-        should_find_best_order=True,
-        # arima_order=ArimaOrder(order=(1, 1, 2), seasonal_order=(0, 0, 0, 0)),
     )
 
 
