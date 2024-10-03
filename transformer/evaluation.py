@@ -3,7 +3,7 @@ from pytorch_forecasting.metrics.point import RMSE, SMAPE
 from pytorch_forecasting.models.base_model import Prediction
 from torch.utils.data import DataLoader
 
-from util import log_prediction
+from log.log import log_prediction
 
 from .interface import Dataloaders, Hyperparamters
 

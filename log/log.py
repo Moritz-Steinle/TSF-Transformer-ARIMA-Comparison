@@ -7,8 +7,6 @@ from pandas import DataFrame
 
 from config import config
 
-# TODO rename to logging and move to separate folder
-
 
 def log_prediction(
     model: Literal["ARIMA", "Transformer"],
@@ -42,28 +40,6 @@ def log_prediction(
     print(f"{model} prediction logged to {log_folder}")
 
 
-def get_path_with_timestamp(path: str, extension: str = None) -> str:
-    """Helper function that returns a path with a timestamp to avoid overwriting files
-    Args:
-        path (str): The path to the file.
-        extension (str, optional): The extension of the file. Defaults to None.
-    Returns:
-        str: The path with the timestamp.
-    """
-    full_path = os.path.join(path, _get_timestamp())
-    if extension:
-        return f"{full_path}.{extension}"
-    return full_path
-
-
-def _get_timestamp() -> str:
-    """Helper function that returns timestamp in the format of dd-mm-yy_HH:MM:SS to avoid whitespaces
-    Returns:
-        str: Current timestamp
-    """
-    return datetime.now().strftime("%d-%m-%y_%H:%M:%S")
-
-
 def _create_log_folder(
     model: Literal["ARIMA", "Transformer"], log_label: str = ""
 ) -> str:
@@ -87,3 +63,25 @@ def _create_log_folder(
     log_folder = f"{model_path}/{folder_name}"
     os.makedirs(log_folder)
     return log_folder
+
+
+def _get_timestamp() -> str:
+    """Helper function that returns timestamp in the format of dd-mm-yy_HH:MM:SS to avoid whitespaces
+    Returns:
+        str: Current timestamp
+    """
+    return datetime.now().strftime("%d-%m-%y_%H:%M:%S")
+
+
+def get_path_with_timestamp(path: str, extension: str = None) -> str:
+    """Helper function that returns a path with a timestamp to avoid overwriting files
+    Args:
+        path (str): The path to the file.
+        extension (str, optional): The extension of the file. Defaults to None.
+    Returns:
+        str: The path with the timestamp.
+    """
+    full_path = os.path.join(path, _get_timestamp())
+    if extension:
+        return f"{full_path}.{extension}"
+    return full_path

@@ -8,13 +8,13 @@ from pytorch_forecasting.models.temporal_fusion_transformer.tuning import (
 )
 
 from config import config
+from log.log import get_path_with_timestamp
 from transformer.interface import (
     DataloaderParameters,
     Dataloaders,
     HyperparameterRanges,
     Hyperparamters,
 )
-from util import get_path_with_timestamp
 
 
 def create_dataloaders(

@@ -1,5 +1,4 @@
 import numpy as np
-import yfinance
 from pandas import DataFrame, Series
 from pytorch_forecasting.data.examples import get_stallion_data
 

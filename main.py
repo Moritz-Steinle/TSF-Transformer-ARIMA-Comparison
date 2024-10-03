@@ -222,4 +222,4 @@ def analyse_dataset():
     data.analyse.analyse_dataset(dataset=dataset)
 
 
-influx_transformer()
+influx_arima()

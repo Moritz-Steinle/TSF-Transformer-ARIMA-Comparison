@@ -8,7 +8,7 @@ from sktime.performance_metrics.forecasting import (
 )
 from statsmodels.tsa.statespace.sarimax import SARIMAX
 
-from util import log_prediction
+from log.log import log_prediction
 
 from .interface import ArimaDatasets, ArimaOrder
 
