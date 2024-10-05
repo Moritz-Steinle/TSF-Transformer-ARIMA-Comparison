@@ -17,7 +17,7 @@ class ArimaOrder:
     seasonal_order: Optional[tuple[int, int, int, int]] = (0, 0, 0, 0)
 
 
-class OptimizationMethod(Enum):
+class OptimisationMethod(Enum):
     BFGS = "bfgs"
     L_BFGS = "lbfgs"
     CG = "cg"

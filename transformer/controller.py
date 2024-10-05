@@ -1,6 +1,7 @@
 import time
 
 from pandas import DataFrame
+from pytorch_forecasting.models.baseline import Baseline
 
 import transformer.data
 import transformer.evaluation
@@ -41,6 +42,7 @@ def train_and_evaluate_transformer(
     dataloaders = transformer.data.create_dataloaders(
         dataset, dataloader_parameters=dataloader_parameters
     )
+    naive_prediction = Baseline().predict(dataloaders.val_dataloader, return_y=True)
     hyperparameters, hyperparameters_study_runtime = run_hyperparameter_study(
         dataloaders=dataloaders,
         hyperparameters=hyperparameters,

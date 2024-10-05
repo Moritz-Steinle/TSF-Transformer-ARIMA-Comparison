@@ -1,5 +1,7 @@
-from pytorch_forecasting import TemporalFusionTransformer
-from pytorch_forecasting.metrics.point import RMSE, SMAPE
+import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
+from pytorch_forecasting import Baseline, TemporalFusionTransformer
+from pytorch_forecasting.metrics.point import MAE, RMSE, SMAPE
 from pytorch_forecasting.models.base_model import Prediction
 from torch.utils.data import DataLoader
 
@@ -23,7 +25,6 @@ def log(
     max_epochs: int,
     hyperparameters: Hyperparamters,
     training_runtime: float,
-    target_col: str = "value",
     hyperparameters_study_runtime: float = None,
     log_label: str = None,
 ) -> None:
@@ -33,9 +34,10 @@ def log(
             f" , hyperparameter study: {hyperparameters_study_runtime:.2f} seconds)"
         )
     parameters = f"Epochs: {max_epochs}, hyperparameters: {hyperparameters}"
-    plot = _create_plot(model, prediction)
-    prediction_values = _prediction_to_list(prediction)
     error_metrics = _calculate_error_metrics(model, dataloaders.val_dataloader)
+    plot_title = f"{log_label}\n{error_metrics}"
+    plot = _create_plot(model, prediction, plot_title)
+    prediction_values = _prediction_to_list(prediction)
     log_prediction(
         model="Transformer",
         prediction=prediction_values,
@@ -53,17 +55,31 @@ def _calculate_error_metrics(
     val_dataloader: DataLoader,
 ) -> str:
     prediction = model.predict(val_dataloader, return_x=True, return_y=True)
-    rsme = RMSE()(prediction.output, prediction.y)
+    mae = MAE()(prediction.output, prediction.y)
     smape = SMAPE()(prediction.output, prediction.y)
-    return f"RMSE: {rsme}, SMAPE: {smape}"
+    mase = _calculate_mase_error(val_dataloader=val_dataloader, model_mae=mae)
+    return f"MAE: {mae}, SMAPE: {smape}, MASE: {mase}"
 
 
-def _create_plot(model: TemporalFusionTransformer, predictions):
+def _calculate_mase_error(
+    val_dataloader: DataLoader,
+    model_mae: float,
+) -> float:
+    naive_prediction = Baseline().predict(val_dataloader, return_y=True)
+    naive_mae = MAE()(naive_prediction.output, naive_prediction.y)
+    return model_mae / naive_mae
+
+
+def _create_plot(
+    model: TemporalFusionTransformer, predictions, title: str = ""
+) -> Figure:
+    fig, ax = plt.subplots(figsize=(12, 6))
     network_input = predictions.x
     network_output = predictions.output
-    return model.plot_prediction(
-        network_input, network_output, idx=0, add_loss_to_title=True
-    )
+    model.plot_prediction(network_input, network_output, idx=0, ax=ax)
+    fig.suptitle(title)
+    plt.tight_layout()
+    return fig
 
 
 def _prediction_to_list(prediction: Prediction) -> list:

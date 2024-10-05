@@ -37,16 +37,22 @@ def get_influx_dataset(
 
 def get_sawtooth_dataset(
     amount_intervals: int,
+    steps_per_interval: int = 10,
+    interval_length: int = 10,
 ) -> DataFrame:
     """
-    Generates a dataset conatining a sawtooth function in range (0,1).
+    Generate a sawtooth dataset in range [1, interval_length].
     Parameters:
-    - amount_interval (int): The number of intervals to generate.
-    - length_interval (int): The length of each interval. Default is 10.
+        amount_intervals (int): Number of intervals to generate.
+        steps_per_interval (int, optional): Number of data points per interval. Default is 10.
+        interval_length (int, optional): Length of each interval. Default is 10.
     Returns:
-    - DataFrame: The generated sawtooth dataset.
+        DataFrame: A DataFrame containing the sawtooth values, group, and time index.
     """
-    sawtooth_values = Series(np.tile(np.arange(1, 10, 1), amount_intervals))
+    increment = interval_length / steps_per_interval
+    sawtooth_values = Series(
+        np.tile(np.arange(1, interval_length, increment), amount_intervals)
+    )
     return DataFrame(
         dict(value=sawtooth_values, group=0, time_idx=range(len(sawtooth_values)))
     )

@@ -49,6 +49,10 @@ def find_best_order(
             seasonal=True,
             m=season_length,
             suppress_warnings=True,
+            max_p=3,
+            D=0,
+            d=0,
+            max_q=3,
         )
     if not quiet:
         stepwise_model.summary()

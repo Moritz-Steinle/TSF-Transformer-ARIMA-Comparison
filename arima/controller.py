@@ -5,7 +5,7 @@ from pandas import Series
 import arima.data
 import arima.evaluation
 import arima.model
-from arima.interface import ArimaOrder
+from arima.interface import ArimaOrder, OptimisationMethod
 from config import config
 
 
@@ -14,7 +14,7 @@ def train_and_evaluate_arima(
     max_prediction_length: int = config.arima_max_prediction_length,
     arima_order: ArimaOrder = None,
     log_label: str = None,
-    optimization_method: str = None,
+    optimisation_method: str = OptimisationMethod.L_BFGS.value,
     should_find_best_order: bool = False,
     should_save_model: bool = False,
     season_length: int = None,
@@ -44,7 +44,7 @@ def train_and_evaluate_arima(
         train_dataset=arima_datasets.train_dataset,
         arima_order=arima_order,
         should_save_model=should_save_model,
-        optimization_method=optimization_method,
+        optimization_method=optimisation_method,
     )
     training_runtime = time.time() - start_time
     prediction = arima.evaluation.predict(

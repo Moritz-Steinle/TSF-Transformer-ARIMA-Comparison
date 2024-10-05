@@ -56,11 +56,14 @@ def log(
     runtime_string = f"Training: {training_runtime:.2f} seconds"
     if find_order_runtime is not None:
         runtime_string += f" , order study: {find_order_runtime:.2f} seconds)"
-    plot = _create_plot(
-        prediction=prediction, arima_datasets=arima_datasets, log_label=log_label
-    )
     error_metrics = _calculate_error_metrics(
         arima_datasets, prediction, order.seasonal_order[3]
+    )
+    plot = _create_plot(
+        prediction=prediction,
+        arima_datasets=arima_datasets,
+        log_label=log_label,
+        error_metrics=error_metrics,
     )
     length_validation_dataset = len(arima_datasets.validation_dataset)
     length_train_dataset = len(arima_datasets.train_dataset)
@@ -98,6 +101,7 @@ def _create_plot(
     prediction: Series,
     arima_datasets: ArimaDatasets,
     log_label: str = "",
+    error_metrics: str = "",
     training_data_plot_extension: int = 200,
 ) -> Figure:
     fig, ax = pyplot.subplots(figsize=(12, 6))
@@ -112,7 +116,7 @@ def _create_plot(
         ax=ax, legend=True, label="Actual", linestyle="--"
     )
 
-    ax.set_title(f"{log_label}")
+    ax.set_title(f"{log_label}\n{error_metrics}")
     ax.legend()
 
     return fig
