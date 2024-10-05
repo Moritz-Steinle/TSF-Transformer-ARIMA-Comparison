@@ -1,11 +1,6 @@
 from matplotlib import pyplot
 from matplotlib.figure import Figure
 from pandas import Series
-from sklearn.metrics import root_mean_squared_error
-from sktime.performance_metrics.forecasting import (
-    mean_absolute_percentage_error,
-    mean_absolute_scaled_error,
-)
 from statsmodels.tsa.statespace.sarimax import SARIMAX
 
 from log.log import log_prediction
@@ -56,45 +51,21 @@ def log(
     runtime_string = f"Training: {training_runtime:.2f} seconds"
     if find_order_runtime is not None:
         runtime_string += f" , order study: {find_order_runtime:.2f} seconds)"
-    error_metrics = _calculate_error_metrics(
-        arima_datasets, prediction, order.seasonal_order[3]
-    )
     plot = _create_plot(
         prediction=prediction,
         arima_datasets=arima_datasets,
         log_label=log_label,
-        error_metrics=error_metrics,
     )
-    length_validation_dataset = len(arima_datasets.validation_dataset)
-    length_train_dataset = len(arima_datasets.train_dataset)
-    prediction_string = prediction.to_json()
     log_prediction(
         model="ARIMA",
-        prediction=prediction_string,
-        error_metrics=error_metrics,
-        length_validation_dataset=length_validation_dataset,
-        length_train_dataset=length_train_dataset,
+        prediction=prediction,
+        training_dataset=arima_datasets.train_dataset,
+        validation_dataset=arima_datasets.validation_dataset,
         plot=plot,
         label=log_label,
         runtimes=runtime_string,
         parameters=parameters,
     )
-
-
-def _calculate_error_metrics(
-    arima_datasets: ArimaDatasets, prediction: Series, season_length: int = 1
-) -> str:
-    rsme = root_mean_squared_error(arima_datasets.validation_dataset, prediction)
-    smape = mean_absolute_percentage_error(
-        y_true=arima_datasets.validation_dataset, y_pred=prediction, symmetric=True
-    )
-    mase = mean_absolute_scaled_error(
-        y_true=arima_datasets.validation_dataset,
-        y_pred=prediction,
-        y_train=arima_datasets.train_dataset,
-        season_length=season_length,
-    )
-    return f"RSME: {rsme}, SMAPE: {smape}, MASE: {mase}"
 
 
 def _create_plot(

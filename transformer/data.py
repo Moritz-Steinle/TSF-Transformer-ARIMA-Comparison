@@ -33,6 +33,8 @@ def create_dataloaders(
         dataset[dataloader_parameters.time_idx].max()
         - dataloader_parameters.max_prediction_length
     )
+    training_dataset = dataset[lambda x: x.time_idx <= training_cutoff]
+    validation_dataset = dataset[lambda x: x.time_idx > training_cutoff]
     if training_cutoff <= 0:
         raise ValueError(
             f"Max prediction length {dataloader_parameters.max_prediction_length} is too large for dataset"
@@ -40,20 +42,26 @@ def create_dataloaders(
     _parameters = dataloader_parameters.function_none_filtered_dict(
         function=TimeSeriesDataSet
     )
-    training_dataset = TimeSeriesDataSet(
-        dataset[lambda x: x.time_idx <= training_cutoff],
+    training_timeseries = TimeSeriesDataSet(
+        training_dataset,
         **_parameters,
     )
-    train_dataloader = training_dataset.to_dataloader(
+    train_dataloader = training_timeseries.to_dataloader(
         train=True, batch_size=dataloader_parameters.batch_size, num_workers=11
     )
     validation = TimeSeriesDataSet.from_dataset(
-        training_dataset, dataset, predict=True, stop_randomization=True
+        training_timeseries, dataset, predict=True, stop_randomization=True
     )
     val_dataloader = validation.to_dataloader(
         train=False, batch_size=dataloader_parameters.batch_size * 10, num_workers=11
     )
-    return Dataloaders(train_dataloader, val_dataloader, training_dataset)
+    return Dataloaders(
+        train_dataloader=train_dataloader,
+        val_dataloader=val_dataloader,
+        training_timeseries=training_timeseries,
+        training_dataset=training_dataset,
+        validation_dataset=validation_dataset,
+    )
 
 
 def run_hyperparameter_study(

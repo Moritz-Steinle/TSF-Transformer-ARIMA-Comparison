@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from inspect import signature
 from typing import Dict, List, Optional, Tuple
 
+from pandas import Series
 from pytorch_forecasting import TemporalFusionTransformer, TimeSeriesDataSet
 from pytorch_forecasting.data import GroupNormalizer
 from torch.utils.data import DataLoader
@@ -31,7 +32,9 @@ class PurgeNone:
 class Dataloaders:
     train_dataloader: DataLoader
     val_dataloader: DataLoader
-    training_dataset: TimeSeriesDataSet
+    training_timeseries: TimeSeriesDataSet
+    training_dataset: Series
+    validation_dataset: Series
 
 
 @dataclass

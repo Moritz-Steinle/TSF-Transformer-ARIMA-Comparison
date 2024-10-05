@@ -179,7 +179,6 @@ def arima_method_resolution_comparison():
     """
     amounts_interval = [3, 5, 10, 20, 40, 70, 100]
     optimisation_method = OptimisationMethod.L_BFGS.value
-    interval_length = 6
     dataset = get_sawtooth_dataset(
         amount_intervals=10, steps_per_interval=36, interval_length=6
     )["value"]
@@ -224,4 +223,4 @@ def analyse_dataset():
     data.analyse.analyse_dataset(dataset=dataset)
 
 
-sawtooth_transformer()
+influx_arima()

@@ -29,7 +29,7 @@ def train_model(
         function=TemporalFusionTransformer.from_dataset
     )
     temporal_fusion_transformer = TemporalFusionTransformer.from_dataset(
-        dataset=dataloaders.training_dataset,
+        dataset=dataloaders.training_timeseries,
         **_hyperparameters,
         loss=RMSE(),
         log_interval=10,

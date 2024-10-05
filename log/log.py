@@ -3,23 +3,34 @@ from datetime import datetime
 from typing import Literal
 
 import matplotlib.pyplot as plt
-from pandas import DataFrame
+from pandas import DataFrame, Series
+from sktime.performance_metrics.forecasting import (
+    mean_absolute_error,
+    mean_absolute_percentage_error,
+    mean_absolute_scaled_error,
+)
 
 from config import config
 
 
 def log_prediction(
     model: Literal["ARIMA", "Transformer"],
-    prediction: str,
+    prediction: Series,
+    training_dataset: Series,
+    validation_dataset: Series,
     plot: plt.Figure = None,
-    error_metrics: str = "None",
-    length_validation_dataset: int = -1,
-    length_train_dataset: int = -1,
     label: str = "None",
     runtimes: str = "None",
     parameters: str = "None",
 ) -> None:
     current_time = datetime.now()
+    length_train_dataset = len(training_dataset)
+    length_validation_dataset = len(validation_dataset)
+    error_metrics = _calculate_error_metrics(
+        validation_dataset=validation_dataset,
+        trainig_dataset=training_dataset,
+        prediction=prediction,
+    )
     log_dataframe = DataFrame(
         {
             "label": [label],
@@ -32,12 +43,31 @@ def log_prediction(
         },
         index=[current_time],
     )
+    plot.suptitle(f"{label}\n{error_metrics}")
     log_folder = _create_log_folder(model, log_label=label)
     if plot is not None:
         plot.savefig(log_folder + "/plot.png")
     log_path = f"{log_folder}/log.json"
     log_dataframe.to_json(log_path, mode="a", orient="records", lines=True)
     print(f"{model} prediction logged to {log_folder}")
+
+
+def _calculate_error_metrics(
+    validation_dataset: Series, trainig_dataset: Series, prediction: Series | list
+) -> str:
+    mae = mean_absolute_error(
+        y_true=validation_dataset,
+        y_pred=prediction,
+    )
+    smape = mean_absolute_percentage_error(
+        y_true=validation_dataset, y_pred=prediction, symmetric=True
+    )
+    mase = mean_absolute_scaled_error(
+        y_true=validation_dataset,
+        y_pred=prediction,
+        y_train=trainig_dataset,
+    )
+    return f"MAE: {mae}, SMAPE: {smape}, MASE: {mase}"
 
 
 def _create_log_folder(
