@@ -61,7 +61,6 @@ def train_and_evaluate_transformer(
         result.model, result.dataloaders.val_dataloader
     )
     transformer.evaluation.log(
-        model=result.model,
         prediction=prediction,
         dataloaders=dataloaders,
         max_epochs=max_epochs,

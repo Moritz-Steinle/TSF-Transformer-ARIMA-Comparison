@@ -18,7 +18,6 @@ def make_prediction(model: TemporalFusionTransformer, val_dataloader) -> Predict
 
 
 def log(
-    model: TemporalFusionTransformer,
     prediction: Prediction,
     dataloaders: Dataloaders,
     max_epochs: int,
@@ -33,29 +32,21 @@ def log(
             f" , hyperparameter study: {hyperparameters_study_runtime:.2f} seconds)"
         )
     parameters = f"Epochs: {max_epochs}, hyperparameters: {hyperparameters}"
-    prediction_values = _prediction_to_list(prediction)
-    plot = _create_plot(model, prediction)
+    validation_dataset = dataloaders.validation_dataset["value"]
+    prediction_values = _prediction_to_list(prediction, validation_dataset)
     log_prediction(
         model="Transformer",
         prediction=prediction_values,
-        plot=plot,
         training_dataset=dataloaders.training_dataset["value"],
-        validation_dataset=dataloaders.validation_dataset["value"],
+        validation_dataset=validation_dataset,
         label=log_label,
         runtimes=runtimes,
         parameters=parameters,
     )
 
 
-def _create_plot(model: TemporalFusionTransformer, predictions) -> Figure:
-    fig, ax = plt.subplots(figsize=(12, 6))
-    network_input = predictions.x
-    network_output = predictions.output
-    model.plot_prediction(network_input, network_output, idx=0, ax=ax)
-    plt.tight_layout()
-    return fig
-
-
-def _prediction_to_list(prediction: Prediction) -> Series:
+def _prediction_to_list(prediction: Prediction, validation_dataset: Series) -> Series:
     tensor_data = prediction.output.prediction
-    return Series(tensor_data.squeeze().tolist())
+    prediction_series = Series(tensor_data.squeeze().tolist())
+    prediction_series.index = validation_dataset.index
+    return prediction_series

@@ -4,6 +4,7 @@ from datetime import datetime
 from typing import Literal
 
 import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
 from pandas import DataFrame, Series
 from sktime.performance_metrics.forecasting import (
     mean_absolute_error,
@@ -21,7 +22,6 @@ def log_prediction(
     prediction: Series,
     training_dataset: Series,
     validation_dataset: Series,
-    plot: plt.Figure = None,
     label: str = "None",
     runtimes: str = "None",
     parameters: str = "None",
@@ -31,7 +31,7 @@ def log_prediction(
     length_validation_dataset = len(validation_dataset)
     error_metrics = _calculate_error_metrics(
         validation_dataset=validation_dataset,
-        trainig_dataset=training_dataset,
+        training_dataset=training_dataset,
         prediction=prediction,
     )
     log_dataframe = DataFrame(
@@ -46,18 +46,22 @@ def log_prediction(
         },
         index=[current_time],
     )
-    plot.suptitle(f"{label}\n{error_metrics}")
+    plot = _create_plot(
+        validation_dataset=validation_dataset,
+        training_dataset=training_dataset,
+        prediction=prediction,
+        log_label=label,
+    )
     log_folder = _create_log_folder(model, log_label=label)
-    if plot is not None:
-        plot.savefig(log_folder + "/plot.png")
+    plot.savefig(f"{log_folder}/plot.png")
     log_path = f"{log_folder}/log.json"
     log_dataframe.to_json(log_path, mode="a", orient="records", lines=True)
     print(f"{model} prediction logged to {log_folder}")
 
 
 def _calculate_error_metrics(
-    validation_dataset: Series, trainig_dataset: Series, prediction: Series | list
-) -> str:
+    validation_dataset: Series, training_dataset: Series, prediction: Series | list
+):
     mae = mean_absolute_error(
         y_true=validation_dataset,
         y_pred=prediction,
@@ -77,11 +81,34 @@ def _calculate_error_metrics(
     mase = mean_absolute_scaled_error(
         y_true=validation_dataset,
         y_pred=prediction,
-        y_train=trainig_dataset,
+        y_train=training_dataset,
     )
-    return json.dumps(
-        {"MAE": mae, "MedianAE": median_ae, "SMAPE": smape, "RSME": rsme, "MASE": mase}
-    )
+    error_metrics = {
+        "mae": mae,
+        "median_ae": median_ae,
+        "smape": smape,
+        "rsme": rsme,
+        "mase": mase,
+    }
+    return error_metrics
+
+
+def _create_plot(
+    validation_dataset: Series,
+    training_dataset: Series,
+    prediction: Series | list,
+    log_label: str = "",
+    training_data_plot_extension: int = 200,
+) -> Figure:
+    fig, ax = plt.subplots(figsize=(12, 6))
+    prediction.plot(ax=ax, legend=True, linewidth=2, label="Prediction")
+    prediction_length = len(validation_dataset)
+    train_plot_length = prediction_length * 2 + training_data_plot_extension
+    training_dataset.tail(train_plot_length).plot(ax=ax, legend=True, label="Training")
+    validation_dataset.plot(ax=ax, legend=True, label="Actual", linestyle="--")
+    ax.set_title(log_label)
+    ax.legend()
+    return fig
 
 
 def _create_log_folder(
