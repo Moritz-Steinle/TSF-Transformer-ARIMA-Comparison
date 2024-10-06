@@ -1,3 +1,4 @@
+import json
 import os
 from datetime import datetime
 from typing import Literal
@@ -8,6 +9,8 @@ from sktime.performance_metrics.forecasting import (
     mean_absolute_error,
     mean_absolute_percentage_error,
     mean_absolute_scaled_error,
+    mean_squared_error,
+    median_absolute_error,
 )
 
 from config import config
@@ -59,15 +62,26 @@ def _calculate_error_metrics(
         y_true=validation_dataset,
         y_pred=prediction,
     )
+    median_ae = median_absolute_error(
+        y_true=validation_dataset,
+        y_pred=prediction,
+    )
     smape = mean_absolute_percentage_error(
         y_true=validation_dataset, y_pred=prediction, symmetric=True
+    )
+    rsme = mean_squared_error(
+        y_true=validation_dataset,
+        y_pred=prediction,
+        square_root=True,
     )
     mase = mean_absolute_scaled_error(
         y_true=validation_dataset,
         y_pred=prediction,
         y_train=trainig_dataset,
     )
-    return f"MAE: {mae}, SMAPE: {smape}, MASE: {mase}"
+    return json.dumps(
+        {"MAE": mae, "MedianAE": median_ae, "SMAPE": smape, "RSME": rsme, "MASE": mase}
+    )
 
 
 def _create_log_folder(

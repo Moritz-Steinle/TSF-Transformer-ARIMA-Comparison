@@ -40,19 +40,18 @@ def find_best_order(
     if season_length is None:
         season_length = calculate_season_length(dataset)
     with threadpool_limits(
-        limits=1, user_api="blas"
+        limits=3, user_api="blas"
     ):  # Limits CPU Usage to 1 cores to prevent killing the process
         stepwise_model: pmdARIMA = auto_arima(
             dataset,
-            seasonal_test="ch",  # Default OCSB throws ValueError: All lag values up to 'maxlag' produced singular matrices.
             trace=quiet,
             seasonal=True,
             m=season_length,
             suppress_warnings=True,
-            max_p=3,
+            max_p=2,
             D=0,
             d=0,
-            max_q=3,
+            max_q=2,
         )
     if not quiet:
         stepwise_model.summary()

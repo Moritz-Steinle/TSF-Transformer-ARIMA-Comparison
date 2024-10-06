@@ -158,16 +158,18 @@ def sawtooth_arima():
     """
     Trains and evaluates an ARIMA model using a sawtooth function dataset.
     """
-    arima_order = ArimaOrder(order=(0, 0, 2), seasonal_order=(2, 0, 2, 30))
-    amount_intervals = 10
+    amount_intervals = 100
     dataset = get_sawtooth_dataset(
         amount_intervals=amount_intervals, steps_per_interval=36, interval_length=6
     )["value"]
+    season_length = 30
+    # arima_order = ArimaOrder(order=(4, 0, 1), seasonal_order=(2, 0, 0, season_length))
+    arima_order = ArimaOrder(order=(2, 0, 0), seasonal_order=(2, 0, 2, season_length))
     train_and_evaluate_arima(
         dataset=dataset,
         log_label=f"Sawtooth_i={amount_intervals}",
         # arima_order=arima_order,
-        max_prediction_length=50,
+        max_prediction_length=35,
         arima_order=arima_order,
     )
 
@@ -182,7 +184,7 @@ def arima_method_resolution_comparison():
     dataset = get_sawtooth_dataset(
         amount_intervals=10, steps_per_interval=36, interval_length=6
     )["value"]
-    # arima_order = ArimaOrder(order=(4, 0, 1), seasonal_order=(2, 0, 0, interval_length))
+    arima_order = ArimaOrder(order=(4, 0, 1), seasonal_order=(2, 0, 0, 30))
 
     for amount_interval in amounts_interval:
         train_and_evaluate_arima(
@@ -190,8 +192,7 @@ def arima_method_resolution_comparison():
             log_label=f"Sawtooth_i={amount_interval}_om={optimisation_method}",
             max_prediction_length=25,
             optimisation_method=optimisation_method,
-            # arima_order=arima_order,
-            should_find_best_order=True,
+            arima_order=arima_order,
         )
 
 
@@ -212,6 +213,7 @@ def plot_dataset():
     dataset = get_sawtooth_dataset(
         amount_intervals=10, steps_per_interval=36, interval_length=6
     )
+    print(dataset)
     data.analyse.plot_dataset(dataset=dataset)
 
 
@@ -223,4 +225,4 @@ def analyse_dataset():
     data.analyse.analyse_dataset(dataset=dataset)
 
 
-influx_arima()
+sawtooth_arima()

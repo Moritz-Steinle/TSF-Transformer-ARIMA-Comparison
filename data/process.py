@@ -49,10 +49,11 @@ def get_sawtooth_dataset(
     Returns:
         DataFrame: A DataFrame containing the sawtooth values, group, and time index.
     """
-    increment = interval_length / steps_per_interval
+    increment = round(number=interval_length / steps_per_interval, ndigits=3)
     sawtooth_values = Series(
         np.tile(np.arange(1, interval_length, increment), amount_intervals)
     )
+    sawtooth_values = _normalize_dataset(sawtooth_values)
     return DataFrame(
         dict(value=sawtooth_values, group=0, time_idx=range(len(sawtooth_values)))
     )
