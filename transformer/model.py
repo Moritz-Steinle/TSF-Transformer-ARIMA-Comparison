@@ -5,7 +5,7 @@ import lightning.pytorch as pl
 from lightning.pytorch.callbacks import EarlyStopping, LearningRateMonitor
 from lightning.pytorch.loggers import TensorBoardLogger
 from pytorch_forecasting import TemporalFusionTransformer
-from pytorch_forecasting.metrics.point import RMSE
+from pytorch_forecasting.metrics.point import MAE
 
 from config import project_root_path
 
@@ -31,7 +31,7 @@ def train_model(
     temporal_fusion_transformer = TemporalFusionTransformer.from_dataset(
         dataset=dataloaders.training_timeseries,
         **_hyperparameters,
-        loss=RMSE(),
+        loss=MAE(),
         log_interval=10,
         optimizer="Ranger",
         reduce_on_plateau_patience=4,

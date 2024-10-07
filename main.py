@@ -39,9 +39,9 @@ def influx_transformer():
     """
     Trains and evaluates a transformer model using the real life InfluxDB dataset.
     """
-    resolution = "4h-1_season_chained_large"
-    max_epochs = 50
-    prediction_length = 25
+    resolution = "4h"
+    max_epochs = 100
+    prediction_length = 20
     hyperparameters_study_trials = 0
     log_label = f"InfluxDB_r={resolution}_e={max_epochs}_pl={prediction_length}_hst={hyperparameters_study_trials}"
     train_and_evaluate_transformer(
@@ -52,42 +52,58 @@ def influx_transformer():
         max_epochs=max_epochs,
         log_label=log_label,
         hyperparameters=Hyperparamters(
-            gradient_clip_val=17.149865385362546,
-            hidden_size=42,
-            dropout=0.22085830299991055,
-            hidden_continuous_size=24,
-            attention_head_size=1,
-            learning_rate=0.019952623149688802,
+            gradient_clip_val=6.9953515571,
+            hidden_size=70,
+            dropout=0.1558743686,
+            hidden_continuous_size=40,
+            attention_head_size=3,
+            learning_rate=0.0039810717,
         ),
     )
 
 
-def fast_dev_transformer():
-    """
-    Trains and evaluates a transformer model using the real life InfluxDB dataset.
-    """
-    train_and_evaluate_transformer(
-        dataset=get_sawtooth_dataset(amount_intervals=10),
-        max_epochs=1,
-        fast_dev_run=True,
-    )
-
-
-def sawtooth_transformer():
+def sawtooth_transformer_1_10():
     """
     Trains and evaluates a transformer model using a sawtooth function dataset.
     """
-    amount_intervals = 1000
+    amount_intervals = 500
     max_epochs = 100
-    prediction_length = 36
-    dataset = get_sawtooth_dataset(
-        amount_intervals=amount_intervals, steps_per_interval=36, interval_length=6
-    )
-    log_label = f"Sawtooth_i={amount_intervals}_e={max_epochs}_pl={prediction_length}"
     train_and_evaluate_transformer(
-        dataset=dataset,
+        dataset=get_sawtooth_dataset(
+            amount_intervals=amount_intervals,
+            steps_per_interval=10,
+            interval_length=10,
+        ),
         dataloader_parameters=transformer.interface.get_influx_dataloader_parameters(
-            max_prediction_length=prediction_length
+            max_prediction_length=36
+        ),
+        max_epochs=max_epochs,
+        hyperparameters=Hyperparamters(
+            gradient_clip_val=5.567624753786564,
+            hidden_size=104,
+            dropout=0.15965296238642823,
+            hidden_continuous_size=41,
+            attention_head_size=1,
+            learning_rate=0.0031622776601683794,
+        ),
+        log_label=f"Sawtooth_[1,10,10]_i={amount_intervals}",
+    )
+
+
+def sawtooth_transformer_1_36():
+    """
+    Trains and evaluates a transformer model using a sawtooth function dataset.
+    """
+    amount_intervals = 30
+    max_epochs = 100
+    train_and_evaluate_transformer(
+        dataset=get_sawtooth_dataset(
+            amount_intervals=amount_intervals,
+            steps_per_interval=36,
+            interval_length=6,
+        ),
+        dataloader_parameters=transformer.interface.get_influx_dataloader_parameters(
+            max_prediction_length=36
         ),
         max_epochs=max_epochs,
         hyperparameters=Hyperparamters(
@@ -98,8 +114,29 @@ def sawtooth_transformer():
             attention_head_size=1,
             learning_rate=0.005623413251903493,
         ),
-        log_label=log_label,
+        log_label=f"Sawtooth_[1,6,36]_i={amount_intervals}",
     )
+
+
+def transformer_influx_resolution_comparison():
+    """
+    Trains and evaluates ARIMA models using the Influx data with different optimization methods and resolutions.
+    Logs all results.
+    """
+    resolutions = ["12h", "8h", "6h", "5h", "4h", "3h", "2h"]
+    max_epochs = 100
+    prediction_length = 35
+    for resolution in resolutions:
+        train_and_evaluate_transformer(
+            dataset=get_influx_dataset(resolution=resolution),
+            dataloader_parameters=transformer.interface.get_influx_dataloader_parameters(
+                max_prediction_length=prediction_length
+            ),
+            max_epochs=max_epochs,
+            hyperparameters=get_influx_hyperparameters(),
+            log_label=(f"Influx_i={resolution}"),
+        )
+        time.sleep(60)
 
 
 def tutorial_transformer():
@@ -172,7 +209,7 @@ def sawtooth_arima():
     )
 
 
-def arima_method_resolution_comparison():
+def arima_resolution_comparison():
     """
     Trains and evaluates ARIMA models using the Influx data with different optimization methods and resolutions.
     Logs all results.
@@ -202,18 +239,16 @@ def fetch_data_from_db():
     Fetches data from the database.
     Resolution sets the time interval of the data.
     """
-    resolution = "2h"
-    data.from_db.fetch(resolution)
+    resolutions = ["5m"]
+    for resolution in resolutions:
+        data.from_db.fetch(resolution)
 
 
 def plot_dataset():
     """
     Plots the "value" column of a dataset.
     """
-    dataset = get_sawtooth_dataset(
-        amount_intervals=10, steps_per_interval=36, interval_length=6
-    )
-    print(dataset)
+    dataset = get_influx_dataset(resolution="2h")
     data.analyse.plot_dataset(dataset=dataset)
 
 
@@ -225,4 +260,4 @@ def analyse_dataset():
     data.analyse.analyse_dataset(dataset=dataset)
 
 
-sawtooth_transformer()
+sawtooth_transformer_1_10()
