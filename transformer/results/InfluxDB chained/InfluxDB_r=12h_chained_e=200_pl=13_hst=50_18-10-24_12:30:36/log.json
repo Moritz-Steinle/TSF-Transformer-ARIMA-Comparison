@@ -1,0 +1,29 @@
+{
+    "label": "InfluxDB_r=12h_chained_e=200_pl=13_hst=50",
+    "error_metrics": {
+        "mae": 1.2992228192,
+        "median_ae": 1.2270377174,
+        "smape": 0.4062744709,
+        "rsme": 1.4791742196,
+        "mase": 2.0840472255
+    },
+    "runtimes": "Training: 143.67 seconds",
+    "length_train_dataset": 5033,
+    "length_validation_dataset": 13,
+    "parameters": "Epochs: 200, hyperparameters: Hyperparamters(gradient_clip_val=6.9953515571, hidden_continuous_size=40, dropout=0.1558743686, attention_head_size=3, learning_rate=0.0039810717, accelerator='auto', hidden_size=70)",
+    "prediction": [
+        1.5516321659,
+        1.8074467182,
+        2.043074131,
+        4.098359108,
+        4.2940015793,
+        4.3861985207,
+        4.3473100662,
+        4.3757510185,
+        6.6939582825,
+        5.3157639503,
+        2.7075667381,
+        1.4665892124,
+        1.274490118
+    ]
+}

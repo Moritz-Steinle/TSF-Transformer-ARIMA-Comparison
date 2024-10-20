@@ -8,13 +8,17 @@ from config import config
 org = "uulm"
 
 
-def fetch(resolution: str = config.row_sample_interval):
+def fetch(
+    resolution: str,
+    start_date="2024-06-18T06:00:00Z",
+    end_date="2024-09-24T00:00:00Z",
+):
     client = influxdb_client.InfluxDBClient(
         url=config.influxdb_url, token=config.influxdb_token, org=org
     )
     query_api = client.query_api()
     query = f"""from(bucket: "plant_sensor_data")
-        |> range(start: {config.range_start}, stop: {config.range_stop})
+        |> range(start: {start_date}, stop: {end_date})
         |> filter(fn: (r) => r["_measurement"] == "ESP32_DEVKIT_V1_S001")
         |> filter(fn: (r) => r["_field"] == "moisture")
         |> aggregateWindow(every: {resolution}, fn: last)

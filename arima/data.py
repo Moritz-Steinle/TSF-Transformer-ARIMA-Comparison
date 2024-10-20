@@ -21,6 +21,10 @@ def train_test_split_dataset(
     """
     train_dataset = dataset.head(-max_prediction_length)
     validation_dataset = dataset.tail(max_prediction_length)
+    if len(train_dataset) == 0:
+        raise ValueError(
+            f"Prediction length {max_prediction_length} is too large for dataset of length {len(dataset)}"
+        )
     return ArimaDatasets(
         train_dataset=train_dataset, validation_dataset=validation_dataset
     )
