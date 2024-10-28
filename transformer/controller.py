@@ -1,7 +1,6 @@
 import time
 
 from pandas import DataFrame
-from pytorch_forecasting.models.baseline import Baseline
 
 import transformer.data
 import transformer.evaluation
@@ -33,7 +32,8 @@ def train_and_evaluate_transformer(
         hyperparameters (Hyperparamters, optional): The hyperparameters for training the model. Defaults to None.
         should_run_hyperparameter_study (bool, optional): Whether to run a hyperparameter study. Defaults to False.
         fast_dev_run (bool, optional):
-            Whether to run a fast development run. This runs only 1 training epoch and yields no result. Defaults to False.
+            Whether to run a fast development run. This runs only 1 training epoch and yields no result.
+            Defaults to False.
     Raises:
         ValueError: If neither hyperparameters are provided nor should_run_hyperparameter_study is set to True.
     Returns:

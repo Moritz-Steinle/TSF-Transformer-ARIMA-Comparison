@@ -1,5 +1,3 @@
-import matplotlib.pyplot as plt
-from matplotlib.figure import Figure
 from pandas import Series
 from pytorch_forecasting import TemporalFusionTransformer
 from pytorch_forecasting.models.base_model import Prediction

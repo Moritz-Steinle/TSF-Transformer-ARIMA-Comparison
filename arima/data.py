@@ -14,7 +14,7 @@ def train_test_split_dataset(
     """
     Splits the dataset into training and testing sets for ARIMA model.
     Args:
-        dataset (Series): The inp²ut dataset.
+        dataset (Series): The input dataset.
         max_prediction_length (int): Where to split the input dataset.
     Returns:
         ArimaDatasets: An object containing the training and testing datasets.

@@ -13,7 +13,7 @@ def train_model(
     train_dataset: Series,
     arima_order: ArimaOrder = None,
     optimization_method: str = None,
-    should_save_model: bool = True,
+    should_save_model: bool = False,
 ) -> SARIMAX:
     """
     Train an ARIMA model using the given train_dataset.
@@ -23,7 +23,7 @@ def train_model(
             order (ArimaOrder, optional): The order (p,d,q) of the ARIMA model. Defaults to (1,0,0).
             seasonal_order (ArimaSeasonalOrder, optional): The seasonal order (p,d,q, m) of the ARIMA model.
                 Defaults to (0,0,0,0).
-        should_save_model (bool, optional): Whether to save the trained model. Defaults to True.
+        should_save_model (bool, optional): Whether to save the trained model. Defaults to False.
     Returns:
         ARIMA: The trained ARIMA model.
     """

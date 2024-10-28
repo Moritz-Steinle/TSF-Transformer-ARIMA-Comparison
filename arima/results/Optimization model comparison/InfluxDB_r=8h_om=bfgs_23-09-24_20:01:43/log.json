@@ -1,1 +1,9 @@
-{"label":"InfluxDB_r=8h_om=bfgs","mean_squared_error":0.8388359192,"runtimes":"Training: 0.29 seconds","length_train_dataset":100,"length_test_dataset":6,"parameters":"order=(1, 0, 1), seasonal_order=(0, 0, 1, 18)","prediction":"{\"100\":5.0024296514,\"101\":5.0989017566,\"102\":4.7757197827,\"103\":4.8528099225,\"104\":4.8919731196,\"105\":5.1756599437}"}
+{
+    "label": "InfluxDB_r=8h_om=bfgs",
+    "mean_squared_error": 0.8388359192,
+    "runtimes": "Training: 0.29 seconds",
+    "length_train_dataset": 100,
+    "length_test_dataset": 6,
+    "parameters": "order=(1, 0, 1), seasonal_order=(0, 0, 1, 18)",
+    "prediction": "{\"100\":5.0024296514,\"101\":5.0989017566,\"102\":4.7757197827,\"103\":4.8528099225,\"104\":4.8919731196,\"105\":5.1756599437}"
+}

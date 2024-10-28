@@ -111,6 +111,7 @@ def _create_plot(
     log_label: str = "",
     training_data_plot_extension: int = 200,
 ) -> Figure:
+    plt.tight_layout()
     fig, ax = plt.subplots(figsize=(12, 6))
     prediction.plot(ax=ax, legend=True, linewidth=2, label="Prediction")
     prediction_length = len(validation_dataset)
@@ -126,13 +127,13 @@ def _create_minimal_plot(
     validation_dataset: Series,
     prediction: Series | list,
 ) -> Figure:
+    plt.tight_layout()
     fig, ax = plt.subplots(figsize=(12, 6))
     prediction.plot(
         ax=ax,
         linewidth=2,
     )
     validation_dataset.plot(ax=ax, linestyle="--")
-    plt.tight_layout()
     return fig
 
 

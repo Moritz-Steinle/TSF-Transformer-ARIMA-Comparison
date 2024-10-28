@@ -40,7 +40,7 @@ def influx_transformer():
     """
     Trains and evaluates a transformer model using the real life InfluxDB dataset.
     """
-    resolution = "12h-chained"
+    resolution = "12h_chained"
     max_epochs = 200
     prediction_length = 14
     hyperparameters_study_trials = 50
@@ -59,7 +59,7 @@ def influx_transformer():
             dropout=0.1558743686,
             attention_head_size=3,
             learning_rate=0.0039810717,
-            hidden_size=70,
+            hidden_size=0,
         ),
     )
 
@@ -80,15 +80,6 @@ def sawtooth_transformer_1_10():
             max_prediction_length=36
         ),
         max_epochs=max_epochs,
-        # hyperparameters=Hyperparamters(
-        #     gradient_clip_val=5.567624753786564,
-        #     hidden_size=104,
-        #     dropout=0.15965296238642823,
-        #     hidden_continuous_size=41,
-        #     attention_head_size=1,
-        #     learning_rate=0.0031622776601683794,
-        # ),
-        # {'gradient_clip_val': 33.134465883069915, 'hidden_size': 31, 'dropout': 0.13584274723675938, 'hidden_continuous_size': 20, 'attention_head_size': 2, 'learning_rate': 0.022387211385683406}
         hyperparameters=Hyperparamters(
             gradient_clip_val=33.134465883069915,
             hidden_size=31,
@@ -119,7 +110,7 @@ def sawtooth_transformer_1_36():
         max_epochs=max_epochs,
         hyperparameters=Hyperparamters(
             gradient_clip_val=0.01565726380636608,
-            hidden_size=223,
+            hidden_size=0,
             dropout=0.21608714783830352,
             hidden_continuous_size=10,
             attention_head_size=1,
@@ -184,8 +175,8 @@ def influx_arima():
     """
     Trains and evaluates an ARIMA model using the real life InfluxDB dataset.
     """
-    resolution = "6h"
-    season_length = 28
+    resolution = "4h"
+    season_length = 43
     max_prediction_length = 36
     should_find_best_order = False
     arima_order = ArimaOrder(order=(0, 0, 2), seasonal_order=(2, 0, 2, season_length))
@@ -259,17 +250,16 @@ def arima_influxdb_resolution_comparison():
     Trains and evaluates ARIMA models using the Influx data with different optimization methods and resolutions.
     Logs all results.
     """
-    datasets = [("12h", 21), ("24h", 10)]
+    datasets = [("2h", 43, 20), ("6h", 14, 25), ("12h", 7, 14)]
     optimisation_method = OptimisationMethod.L_BFGS.value
-    max_prediction_length = 200
     for dataset in datasets:
-        resolution, season_length = dataset
+        resolution, season_length, max_prediction_length = dataset
         arima_order = ArimaOrder(
             order=(0, 0, 2), seasonal_order=(2, 0, 2, season_length)
         )
         train_and_evaluate_arima(
             get_influx_dataset(resolution=resolution)["value"],
-            log_label=f"InfluxDB_i={resolution}",
+            log_label=f"InfluxDB_i={resolution}_pl={max_prediction_length}",
             optimisation_method=optimisation_method,
             max_prediction_length=max_prediction_length,
             arima_order=arima_order,
@@ -282,7 +272,7 @@ def fetch_data_from_db():
     Fetches data from the database.
     Resolution sets the time interval of the data.
     """
-    resolutions = ["12h", "2h"]
+    resolutions = ["10s"]
     for resolution in resolutions:
         data.from_db.fetch(resolution)
 
@@ -303,4 +293,4 @@ def analyse_dataset():
     data.analyse.analyse_dataset(dataset=dataset)
 
 
-influx_transformer()
+fetch_data_from_db()
