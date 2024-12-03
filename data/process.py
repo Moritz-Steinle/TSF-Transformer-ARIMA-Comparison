@@ -5,59 +5,37 @@ from pytorch_forecasting.data.examples import get_stallion_data
 from data.from_db import read_file
 
 
-def get_influx_dataset(
-    resolution: str,
+def get_csv_dataset(
+    filename: str,
+    input_values_column_name: str = "moisture",
     should_fill_missing: bool = True,
     should_normalize: bool = True,
 ) -> DataFrame:
     """
-    Retrieves a dataset from InfluxDB with the specified resolution.
+    Reads a dataset from a csv file, processes it, and returns it as a DataFrame.
     Parameters:
-        resolution (str): The resolution of the dataset., p.ex 30m, 6h, 1d
-        fill_missing (bool, optional): Flag indicating whether to fill missing values in the dataset. Defaults to True.
+        filename (str): The path to the file containing the dataset.
+        input_values_column_name (str, optional): The name of the column containing the input values.
+            Default is 'moisture'.
+        should_fill_missing (bool, optional): If missing values in the dataset should be filled using
+            linear interpolation. Default is True.
+        should_normalize (bool, optional): If should be normalized. Default is True.
     Returns:
-        pandas.DataFrame: The retrieved dataset.
+        DataFrame: A DataFrame containing the processed dataset with columns 'value', 'group', and 'time_idx'.
+            These colums are required by pytorch-forecasting.
     """
-
-    file_dataset = read_file(resolution)
-    values = file_dataset["moisture"]
+    file_dataset = read_file(filename)
+    values = file_dataset[input_values_column_name]
+    if should_fill_missing:
+        values = _linear_fill_missing(values)
     if should_normalize:
         values = _normalize_dataset(values)
-    dataframe = DataFrame(
+    return DataFrame(
         dict(
             value=values,
             group=0,
-            time_idx=range(len(values)),  # TODO use actual dates instead of range
+            time_idx=range(len(values)),
         )
-    )
-    if should_fill_missing:
-        dataframe["value"] = _linear_fill_missing(dataframe["value"])
-    return dataframe
-
-
-def get_sawtooth_dataset_old(
-    amount_intervals: int,
-    steps_per_interval: int = 10,
-    interval_length: int = 10,
-    should_normalize: bool = True,
-) -> DataFrame:
-    """
-    Generate a sawtooth dataset in range [1, interval_length].
-    Parameters:
-        amount_intervals (int): Number of intervals to generate.
-        steps_per_interval (int, optional): Number of data points per interval. Default is 10.
-        interval_length (int, optional): Length of each interval. Default is 10.
-    Returns:
-        DataFrame: A DataFrame containing the sawtooth values, group, and time index.
-    """
-    increment = round(number=interval_length / steps_per_interval, ndigits=3)
-    sawtooth_values = Series(
-        np.tile(np.arange(1, interval_length, increment), amount_intervals)
-    )
-    if should_normalize:
-        sawtooth_values = _normalize_dataset(sawtooth_values)
-    return DataFrame(
-        dict(value=sawtooth_values, group=0, time_idx=range(len(sawtooth_values)))
     )
 
 
@@ -73,6 +51,7 @@ def get_sawtooth_dataset(
         amount_intervals (int): Number of intervals to generate.
         steps_per_interval (int, optional): Number of data points per interval. Default is 10.
         max_value (int, optional): Maximum value (inclusive). Default is 10.
+        should_normalize (bool, optional): If should be normalized. Default is True.
     Returns:
         DataFrame: A DataFrame containing the sawtooth values, group, and time index.
     """
@@ -133,31 +112,31 @@ def get_stallion_dataset() -> DataFrame:
     return dataset
 
 
-def _normalize_dataset(dataseries: Series) -> Series:
+def _normalize_dataset(series: Series, target_min: int = 1, target_max=10) -> Series:
     """
     Normalizes a data series via min-max scaling to a range of 1 to 10.
-
     Parameters:
-    dataseries (pandas.Series): The dataset to be normalized.
-
+        series (pandas.Series): The dataset to be normalized.
+        target_min (int, optional): The minimum value of the target range. Default is 1.
+        target_max (int, optional): The maximum value of the target range. Default is 10.
     Returns:
-    pandas.Series: The normalized dataseries with values between 1 and 10.
+        pandas.Series: The normalized dataseries with values between 1 and 10.
     """
-    min_val = dataseries.min()
-    max_val = dataseries.max()
+    min_val = series.min()
+    max_val = series.max()
 
-    return 1 + 9 * (dataseries - min_val) / (max_val - min_val)
+    target_max = target_max - target_min
+    return target_min + target_max * (series - min_val) / (max_val - min_val)
 
 
-def _linear_fill_missing(
-    dataset: Series,
-) -> Series:
+def _linear_fill_missing(series: Series) -> Series:
     """
-    Drops beginning and fills missing values in a dataset.
+    Fills missing values in a series using linear interpolation.
+    Beginning and ending missing values are dropped as they cannot be interpolated.
     Parameters:
-        dataset (pandas.Series): The dataset to be processed.
+        series (pandas.Series): The dataset to be processed.
     Returns:
         pandas.DataFrame: The dataset with missing values filled using linear interpolation.
     """
-    dataset = dataset.interpolate(method="linear")
-    return dataset.dropna()
+    series = series.interpolate(method="linear")
+    return series.dropna()

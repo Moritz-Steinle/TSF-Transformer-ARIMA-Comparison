@@ -13,12 +13,13 @@ from arima.interface import (
     OptimisationMethod,
 )
 from data.process import (
-    get_influx_dataset,
+    get_csv_dataset,
     get_sawtooth_dataset,
 )
 from transformer.controller import train_and_evaluate_transformer
 from transformer.interface import Hyperparamters
 
+# Set seed for reproducibility
 torch.manual_seed(0)
 
 
@@ -30,7 +31,7 @@ def transformer_empirical():
     train_and_evaluate_transformer(
         max_training_epochs=1,
         hyperparameters_study_trials=0,
-        dataset=get_influx_dataset(resolution="12h_chained"),
+        dataset=get_csv_dataset(filename="12h_chained"),
         dataloader_parameters=transformer.interface.get_base_dataloader_parameters(
             max_prediction_length=14
         ),
@@ -83,8 +84,8 @@ def arima_empirical():
     optimization_method = OptimisationMethod.L_BFGS.value
     log_label = f"{resolution}"
     train_and_evaluate_arima(
-        dataset=get_influx_dataset(
-            resolution=resolution,
+        dataset=get_csv_dataset(
+            filename=resolution,
         )["value"],
         max_prediction_length=max_prediction_length,
         log_label=log_label,
@@ -113,32 +114,31 @@ def arima_synthetic():
 
 
 # Util
-def fetch_data_from_db():
+def plot_series():
     """
-    Fetches data from the database.
-    Resolution sets the time interval of the data.
+    Example for plotting a series of data
     """
-    resolutions = ["10s"]
-    for resolution in resolutions:
-        data.from_db.fetch(resolution)
-
-
-def plot_dataset():
-    """
-    Plots the "value" column of a dataset.
-    """
-    dataset = get_influx_dataset(
-        resolution="4h-1-season-chained", should_normalize=False
+    dataset = get_csv_dataset(
+        filename="4h-1-season-chained", should_normalize=False
     ).tail(200)
-    data.analyse.plot_dataset(dataset=dataset["value"])
+    data.analyse.plot_series(series=dataset["value"])
 
 
-def analyse_dataset():
+def analyse_series():
     """
-    Analyses the "value" column of a dataset.
+    Example for analysing a series of data
     """
-    dataset = get_influx_dataset(resolution="2h", should_normalize=False)
-    data.analyse.analyse_dataset(dataset=dataset)
+    dataset = get_csv_dataset(
+        filename="2h",
+        should_fill_missing=False,
+        should_normalize=False,
+    )
+    filled_dataset = get_csv_dataset(
+        filename="2h",
+    )
+    data.analyse.analyse_series(
+        raw_series=dataset["value"], filled_series=filled_dataset["value"]
+    )
 
 
-arima_synthetic()
+analyse_series()
