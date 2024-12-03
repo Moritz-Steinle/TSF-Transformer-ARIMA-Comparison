@@ -10,8 +10,7 @@ from .interface import Dataloaders, Hyperparamters
 def make_prediction(model: TemporalFusionTransformer, val_dataloader) -> Prediction:
     return model.predict(
         val_dataloader,
-        return_x=True,
-        mode="raw",
+        mode="prediction",
     )
 
 
@@ -44,7 +43,7 @@ def log(
 
 
 def _prediction_to_list(prediction: Prediction, validation_dataset: Series) -> Series:
-    tensor_data = prediction.output.prediction
+    tensor_data = prediction.data
     prediction_series = Series(tensor_data.squeeze().tolist())
     prediction_series.index = validation_dataset.index
     return prediction_series

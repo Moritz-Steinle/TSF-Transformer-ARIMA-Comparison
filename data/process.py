@@ -35,10 +35,11 @@ def get_influx_dataset(
     return dataframe
 
 
-def get_sawtooth_dataset(
+def get_sawtooth_dataset_old(
     amount_intervals: int,
     steps_per_interval: int = 10,
     interval_length: int = 10,
+    should_normalize: bool = True,
 ) -> DataFrame:
     """
     Generate a sawtooth dataset in range [1, interval_length].
@@ -53,7 +54,33 @@ def get_sawtooth_dataset(
     sawtooth_values = Series(
         np.tile(np.arange(1, interval_length, increment), amount_intervals)
     )
-    sawtooth_values = _normalize_dataset(sawtooth_values)
+    if should_normalize:
+        sawtooth_values = _normalize_dataset(sawtooth_values)
+    return DataFrame(
+        dict(value=sawtooth_values, group=0, time_idx=range(len(sawtooth_values)))
+    )
+
+
+def get_sawtooth_dataset(
+    amount_intervals: int,
+    steps_per_interval: int = 10,
+    max_value: int = 10,
+    should_normalize: bool = True,
+) -> DataFrame:
+    """
+    Generate a sawtooth dataset in range [1, interval_length].
+    Parameters:
+        amount_intervals (int): Number of intervals to generate.
+        steps_per_interval (int, optional): Number of data points per interval. Default is 10.
+        max_value (int, optional): Maximum value (inclusive). Default is 10.
+    Returns:
+        DataFrame: A DataFrame containing the sawtooth values, group, and time index.
+    """
+    points = np.linspace(1, max_value, steps_per_interval)
+    sawtooth_values = Series(np.tile(points, amount_intervals))
+    if should_normalize:
+        sawtooth_values = _normalize_dataset(sawtooth_values)
+
     return DataFrame(
         dict(value=sawtooth_values, group=0, time_idx=range(len(sawtooth_values)))
     )

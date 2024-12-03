@@ -21,7 +21,7 @@ def predict(
     train_dataset = arima_datasets.train_dataset
     start = len(train_dataset)
     end = len(train_dataset) + len(arima_datasets.validation_dataset) - 1
-    prediction = model.predict(start=start, end=end, typ="linear")
+    prediction = model.predict(start=start, end=end, typ="levels")
     return Series(prediction)
 
 

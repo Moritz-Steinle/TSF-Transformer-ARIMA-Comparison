@@ -8,7 +8,7 @@ def get_missing_value_percentage(dataset):
     length_dataset = dataset.shape[0]
     count_missing_value = dataset["value"].isnull().sum()
     exact_percentage = count_missing_value / length_dataset
-    return round(exact_percentage, 3) * 100
+    return round(exact_percentage, 8) * 100
 
 
 def analyse_dataset(dataset, filled_dataset=[]):
@@ -23,10 +23,12 @@ def analyse_dataset(dataset, filled_dataset=[]):
         print(f"Dropped datapoints: {count_dropped_rows}")
 
 
-def plot_dataset(dataset, key="value"):
-    moisture_values = dataset[key].tolist()
-    _, axes = plt.subplots()
-    axes.plot(moisture_values, color="blue")
+def plot_dataset(dataset: Series, tail: int = 0):
+    if tail > 0:
+        dataset = dataset.tail(tail)
+    _, ax = plt.subplots(figsize=(12, 6))
+    dataset.plot(ax=ax, color="blue")
+    plt.tight_layout()
     plt.show()
 
 
