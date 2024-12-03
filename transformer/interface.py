@@ -147,7 +147,7 @@ def get_stallion_dataset_parameters() -> DataloaderParameters:
     )
 
 
-def get_influx_dataloader_parameters(
+def get_base_dataloader_parameters(
     max_prediction_length: int,
 ) -> DataloaderParameters:
     return DataloaderParameters(

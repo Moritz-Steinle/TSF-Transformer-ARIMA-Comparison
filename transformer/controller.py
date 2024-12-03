@@ -15,7 +15,7 @@ from transformer.interface import (
 
 def train_and_evaluate_transformer(
     dataset: DataFrame,
-    max_epochs: int,
+    max_training_epochs: int,
     dataloader_parameters: DataloaderParameters = None,
     hyperparameters: Hyperparamters = None,
     hyperparameters_study_trials: int = 0,
@@ -50,7 +50,7 @@ def train_and_evaluate_transformer(
     start_time = time.time()
     result = transformer.model.train_model(
         dataloaders=dataloaders,
-        max_epochs=max_epochs,
+        max_epochs=max_training_epochs,
         hyperparameters=hyperparameters,
         fast_dev_run=fast_dev_run,
     )
@@ -63,7 +63,7 @@ def train_and_evaluate_transformer(
     transformer.evaluation.log(
         prediction=prediction,
         dataloaders=dataloaders,
-        max_epochs=max_epochs,
+        max_epochs=max_training_epochs,
         hyperparameters=hyperparameters,
         log_label=log_label,
         training_runtime=training_runtime,

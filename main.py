@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 import torch
 
 import data.analyse
@@ -24,23 +23,17 @@ torch.manual_seed(0)
 
 
 # Transformer
-def trasformer_empirical():
+def transformer_empirical():
     """
-    Trains and evaluates a transformer model using the real life InfluxDB dataset.
+    Trains and evaluates Transformer using an empirical dataset.
     """
-    resolution = "12h_chained"
-    max_epochs = 200
-    prediction_length = 14
-    hyperparameters_study_trials = 50
-    log_label = f"InfluxDB_r={resolution}_e={max_epochs}_pl={prediction_length}_hst={hyperparameters_study_trials}"
     train_and_evaluate_transformer(
-        dataset=get_influx_dataset(resolution=resolution),
-        dataloader_parameters=transformer.interface.get_influx_dataloader_parameters(
-            max_prediction_length=prediction_length
+        max_training_epochs=1,
+        hyperparameters_study_trials=0,
+        dataset=get_influx_dataset(resolution="12h_chained"),
+        dataloader_parameters=transformer.interface.get_base_dataloader_parameters(
+            max_prediction_length=14
         ),
-        max_epochs=max_epochs,
-        log_label=log_label,
-        hyperparameters_study_trials=hyperparameters_study_trials,
         hyperparameters=Hyperparamters(
             gradient_clip_val=6.9953515571,
             hidden_continuous_size=40,
@@ -52,22 +45,20 @@ def trasformer_empirical():
     )
 
 
-def transformer_sawtooth_coarse():
+def transformer_synthetic():
     """
-    Trains and evaluates a transformer model using a sawtooth function dataset.
+    Trains and evaluates Transformer using a synthetic dataset based on a sawtooth function.
     """
-    amount_intervals = 500
-    max_epochs = 50
     train_and_evaluate_transformer(
+        max_training_epochs=1,
         dataset=get_sawtooth_dataset(
-            amount_intervals=amount_intervals,
+            amount_intervals=500,
             steps_per_interval=10,
             max_value=10,
         ),
-        dataloader_parameters=transformer.interface.get_influx_dataloader_parameters(
+        dataloader_parameters=transformer.interface.get_base_dataloader_parameters(
             max_prediction_length=36
         ),
-        max_epochs=max_epochs,
         hyperparameters=Hyperparamters(
             gradient_clip_val=33.134465883069915,
             hidden_size=31,
@@ -76,42 +67,13 @@ def transformer_sawtooth_coarse():
             attention_head_size=2,
             learning_rate=0.022387211385683406,
         ),
-        log_label=f"Sawtooth_[1,10,10]_i={amount_intervals}",
-    )
-
-
-def transformer_sawtooth_fine():
-    """
-    Trains and evaluates a transformer model using a sawtooth function dataset.
-    """
-    amount_intervals = 400
-    max_epochs = 50
-    train_and_evaluate_transformer(
-        dataset=get_sawtooth_dataset(
-            amount_intervals=amount_intervals,
-            steps_per_interval=30,
-            max_value=6,
-        ),
-        dataloader_parameters=transformer.interface.get_influx_dataloader_parameters(
-            max_prediction_length=36
-        ),
-        max_epochs=max_epochs,
-        hyperparameters=Hyperparamters(
-            gradient_clip_val=0.01565726380636608,
-            hidden_size=0,
-            dropout=0.21608714783830352,
-            hidden_continuous_size=10,
-            attention_head_size=1,
-            learning_rate=0.005623413251903493,
-        ),
-        log_label=f"Sawtooth_[1,6,36]_i={amount_intervals}",
     )
 
 
 # ARIMA
 def arima_empirical():
     """
-    Trains and evaluates an ARIMA model using the real life InfluxDB dataset.
+    Trains and evaluates ARIMA using an empirical dataset.
     """
     resolution = "12h"
     season_length = 7
@@ -132,47 +94,21 @@ def arima_empirical():
     )
 
 
-def arima_synthetic_coarse():
+def arima_synthetic():
     """
-    Trains and evaluates an ARIMA model using a coarse sawtooth function dataset.
+    Trains and evaluates ARIMA using a synthetic dataset based on a sawtooth function.
     """
-    amount_intervals = 500
-    max_prediction_length = 36
     season_length = 10
-    max_value = 10
-    dataset = get_sawtooth_dataset(
-        amount_intervals=amount_intervals,
-        steps_per_interval=season_length,
-        max_value=max_value,
-    )["value"]
-    arima_order = ArimaOrder(order=(2, 0, 1), seasonal_order=(2, 0, 2, season_length))
     train_and_evaluate_arima(
-        dataset=dataset,
-        log_label=f"Sawtooth [1,36] i={amount_intervals}",
-        max_prediction_length=max_prediction_length,
-        arima_order=arima_order,
-    )
-
-
-def arima_synthetic_fine():
-    """
-    Trains and evaluates an ARIMA model using a coarse sawtooth function dataset.
-    """
-    amount_intervals = 500
-    max_prediction_length = 36
-    season_length = 30
-    max_value = 6
-    dataset = get_sawtooth_dataset(
-        amount_intervals=amount_intervals,
-        steps_per_interval=season_length,
-        max_value=max_value,
-    )["value"]
-    arima_order = ArimaOrder(order=(2, 0, 1), seasonal_order=(2, 0, 2, season_length))
-    train_and_evaluate_arima(
-        dataset=dataset,
-        log_label=f"Sawtooth [1,36] i={amount_intervals}",
-        max_prediction_length=max_prediction_length,
-        arima_order=arima_order,
+        dataset=get_sawtooth_dataset(
+            amount_intervals=500,
+            steps_per_interval=season_length,
+            max_value=10,
+        )["value"],
+        max_prediction_length=36,
+        arima_order=ArimaOrder(
+            order=(2, 0, 1), seasonal_order=(2, 0, 2, season_length)
+        ),
     )
 
 
@@ -205,4 +141,4 @@ def analyse_dataset():
     data.analyse.analyse_dataset(dataset=dataset)
 
 
-plot_dataset()
+arima_synthetic()
