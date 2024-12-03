@@ -1,8 +1,8 @@
-import numpy as np
-from pandas import DataFrame, Series
-from pytorch_forecasting.data.examples import get_stallion_data
+import os
 
-from data.from_db import read_file
+import numpy as np
+from pandas import DataFrame, Series, read_csv
+from pytorch_forecasting.data.examples import get_stallion_data
 
 
 def get_csv_dataset(
@@ -24,7 +24,7 @@ def get_csv_dataset(
         DataFrame: A DataFrame containing the processed dataset with columns 'value', 'group', and 'time_idx'.
             These colums are required by pytorch-forecasting.
     """
-    file_dataset = read_file(filename)
+    file_dataset = _csv_to_dataframe(filename)
     values = file_dataset[input_values_column_name]
     if should_fill_missing:
         values = _linear_fill_missing(values)
@@ -140,3 +140,16 @@ def _linear_fill_missing(series: Series) -> Series:
     """
     series = series.interpolate(method="linear")
     return series.dropna()
+
+
+def _csv_to_dataframe(filename: str) -> DataFrame:
+    dirname = os.path.dirname(os.path.abspath(__file__))
+    filename_with_path = os.path.join(dirname, "data-files", f"{filename}.csv")
+    dtype = {"result": str, "table": str, "_time": str, "moisture": "float64"}
+    return read_csv(
+        filename_with_path,
+        sep=",",
+        encoding="utf-8",
+        dtype=dtype,
+        parse_dates=["_time"],
+    )

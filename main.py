@@ -31,7 +31,7 @@ def transformer_empirical():
     train_and_evaluate_transformer(
         max_training_epochs=1,
         hyperparameters_study_trials=0,
-        dataset=get_csv_dataset(filename="12h_chained"),
+        dataset=get_csv_dataset(filename="influxdb-2h-chained"),
         dataloader_parameters=transformer.interface.get_base_dataloader_parameters(
             max_prediction_length=14
         ),
@@ -76,19 +76,16 @@ def arima_empirical():
     """
     Trains and evaluates ARIMA using an empirical dataset.
     """
-    resolution = "12h"
     season_length = 7
     max_prediction_length = 14
     should_find_best_order = False
     arima_order = ArimaOrder(order=(0, 0, 2), seasonal_order=(2, 0, 2, season_length))
     optimization_method = OptimisationMethod.L_BFGS.value
-    log_label = f"{resolution}"
     train_and_evaluate_arima(
         dataset=get_csv_dataset(
-            filename=resolution,
+            filename="influxdb-2h-chained",
         )["value"],
         max_prediction_length=max_prediction_length,
-        log_label=log_label,
         optimisation_method=optimization_method,
         arima_order=arima_order,
         should_find_best_order=should_find_best_order,
@@ -118,9 +115,7 @@ def plot_series():
     """
     Example for plotting a series of data
     """
-    dataset = get_csv_dataset(
-        filename="4h-1-season-chained", should_normalize=False
-    ).tail(200)
+    dataset = get_csv_dataset(filename="influxdb-2h", should_normalize=False).tail(200)
     data.analyse.plot_series(series=dataset["value"])
 
 
@@ -129,12 +124,12 @@ def analyse_series():
     Example for analysing a series of data
     """
     dataset = get_csv_dataset(
-        filename="2h",
+        filename="influxdb-2h",
         should_fill_missing=False,
         should_normalize=False,
     )
     filled_dataset = get_csv_dataset(
-        filename="2h",
+        filename="influxdb-2h",
     )
     data.analyse.analyse_series(
         raw_series=dataset["value"], filled_series=filled_dataset["value"]
