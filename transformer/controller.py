@@ -41,14 +41,14 @@ def train_and_evaluate_transformer(
     dataloaders = transformer.data.create_dataloaders(
         dataset, dataloader_parameters=dataloader_parameters
     )
-    hyperparameters, hyperparameters_study_runtime = run_hyperparameter_study(
+    hyperparameters, hyperparameters_study_runtime = determine_hyperparameters(
         dataloaders=dataloaders,
         hyperparameters=hyperparameters,
         hyperparameters_study_trials=hyperparameters_study_trials,
         hyperparameter_ranges=hyperparameter_ranges,
     )
     start_time = time.time()
-    result = transformer.model.train_model(
+    model = transformer.model.train_model(
         dataloaders=dataloaders,
         max_epochs=max_training_epochs,
         hyperparameters=hyperparameters,
@@ -58,7 +58,7 @@ def train_and_evaluate_transformer(
     if fast_dev_run:
         return
     prediction = transformer.evaluation.make_prediction(
-        result.model, result.dataloaders.val_dataloader
+        model=model, val_dataloader=dataloaders.val_dataloader
     )
     transformer.evaluation.log(
         prediction=prediction,
@@ -71,7 +71,7 @@ def train_and_evaluate_transformer(
     )
 
 
-def run_hyperparameter_study(
+def determine_hyperparameters(
     dataloaders: Dataloaders,
     hyperparameters: Hyperparamters = None,
     hyperparameters_study_trials: int = 1,
@@ -89,6 +89,8 @@ def run_hyperparameter_study(
             In what range to test the hyperparameters. Can make search more efficient. Defaults to an empty class.
     Returns:
         tuple[Hyperparamters, float]: The hyperparameters and the runtime of the hyperparameter study.
+    Raises:
+        ValueError: If neither hyperparameters nor hyperparameters_study_trials are provided
     """
     if hyperparameters is not None:
         return hyperparameters, None

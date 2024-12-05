@@ -3,14 +3,19 @@ from inspect import signature
 from typing import Dict, List, Optional, Tuple
 
 from pandas import Series
-from pytorch_forecasting import TemporalFusionTransformer, TimeSeriesDataSet
-from pytorch_forecasting.data import GroupNormalizer
+from pytorch_forecasting import TimeSeriesDataSet
 from torch.utils.data import DataLoader
 
 from config import config
 
 
 class PurgeNone:
+    """
+    The PurgeNone class provides methods to filter out attributes
+    with None values from an instance's dictionary.
+    This is necessay to use unpacking without overwriting default values with None values.
+    """
+
     def none_filtered_dict(self):
         """
         Returns a dictionary of all attributes that are not None.
@@ -38,13 +43,11 @@ class Dataloaders:
 
 
 @dataclass
-class DatalaodersAndModel:
-    dataloaders: Dataloaders
-    model: TemporalFusionTransformer
-
-
-@dataclass
 class ModelPath:
+    """
+    ModelPath stores the path for loading a model
+    """
+
     version: int
     epoch: int
     step: int
@@ -55,6 +58,10 @@ class ModelPath:
 
 @dataclass
 class Hyperparamters(PurgeNone):
+    """
+    Transformer hyperparameters
+    """
+
     gradient_clip_val: Optional[float] = None
     hidden_continuous_size: Optional[int] = None
     dropout: Optional[float] = None
@@ -66,6 +73,10 @@ class Hyperparamters(PurgeNone):
 
 @dataclass
 class HyperparameterRanges(PurgeNone):
+    """
+    HyperparameterRanges defines the ranges for a hyperparameter study.
+    """
+
     gradient_clip_val_range: Optional[Tuple[float, float]] = None
     hidden_size_range: Optional[Tuple[int, int]] = None
     hidden_continuous_size_range: Optional[Tuple[int, int]] = None
@@ -76,6 +87,11 @@ class HyperparameterRanges(PurgeNone):
 
 @dataclass
 class DataloaderParameters(PurgeNone):
+    """
+    DataloaderParameters is a configuration class for setting up parameters for a data loader.
+    The configurations are based on the underlying dataset attributes.
+    """
+
     time_idx: str
     target: str
     group_ids: List[str]
@@ -95,56 +111,6 @@ class DataloaderParameters(PurgeNone):
     add_target_scales: bool = False
     add_encoder_length: str = "auto"
     target_normalizer: str = "auto"
-
-
-def get_stallion_dataset_parameters() -> DataloaderParameters:
-    special_days = [
-        "easter_day",
-        "good_friday",
-        "new_year",
-        "christmas",
-        "labor_day",
-        "independence_day",
-        "revolution_day_memorial",
-        "regional_games",
-        "fifa_u_17_world_cup",
-        "football_gold_cup",
-        "beer_capital",
-        "music_fest",
-    ]
-    max_prediction_length = 6
-    return DataloaderParameters(
-        time_idx="time_idx",
-        target="volume",
-        group_ids=["agency", "sku"],
-        min_encoder_length=max_prediction_length * 2,
-        max_encoder_length=max_prediction_length * 4,
-        min_prediction_length=1,
-        max_prediction_length=max_prediction_length,
-        static_categoricals=["agency", "sku"],
-        static_reals=["avg_population_2017", "avg_yearly_household_income_2017"],
-        time_varying_known_categoricals=["special_days", "month"],
-        variable_groups={
-            "special_days": special_days
-        },  # group of categorical variables can be treated as one variable
-        time_varying_known_reals=["time_idx", "price_regular", "discount_in_percent"],
-        time_varying_unknown_categoricals=[],
-        time_varying_unknown_reals=[
-            "volume",
-            "log_volume",
-            "industry_volume",
-            "soda_volume",
-            "avg_max_temp",
-            "avg_volume_by_agency",
-            "avg_volume_by_sku",
-        ],
-        target_normalizer=GroupNormalizer(
-            groups=["agency", "sku"], transformation="softplus"
-        ),  # use softplus and normalize by group
-        add_relative_time_idx=True,
-        add_target_scales=True,
-        add_encoder_length=True,
-    )
 
 
 def get_base_dataloader_parameters(
@@ -167,35 +133,4 @@ def get_base_dataloader_parameters(
         variable_groups=[],
         static_categoricals=[],
         time_varying_unknown_categoricals=[],
-    )
-
-
-def get_sawtooth_hyperparameters() -> Hyperparamters:
-    return Hyperparamters(
-        gradient_clip_val=0.5286525368230415,
-        dropout=0.28145444638341954,
-        hidden_continuous_size=18,
-        attention_head_size=55,
-        learning_rate=0.572695014452453,
-        hidden_size=55,
-    )
-
-
-def get_influx_hyperparameters() -> Hyperparamters:
-    return Hyperparamters(
-        gradient_clip_val=0.09050490030726796,
-        dropout=0.22288661702971777,
-        hidden_continuous_size=12,
-        attention_head_size=2,
-        learning_rate=0.6336776189720053,
-    )
-
-
-def get_stallion_hyperparameters() -> Hyperparamters:
-    return Hyperparamters(
-        gradient_clip_val=0.09050490030726796,
-        dropout=0.22288661702971777,
-        hidden_continuous_size=12,
-        attention_head_size=2,
-        learning_rate=0.6336776189720053,
     )

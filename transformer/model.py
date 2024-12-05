@@ -1,15 +1,14 @@
 import os
 import warnings
 
-import lightning.pytorch as pl
-from lightning.pytorch.callbacks import EarlyStopping, LearningRateMonitor
-from lightning.pytorch.loggers import TensorBoardLogger
+from lightning.pytorch import LightningModule, Trainer
+from lightning.pytorch.callbacks import EarlyStopping
 from pytorch_forecasting import TemporalFusionTransformer
 from pytorch_forecasting.metrics.point import MAE
 
 from config import project_root_path
 
-from .interface import DatalaodersAndModel, Dataloaders, Hyperparamters, ModelPath
+from .interface import Dataloaders, Hyperparamters, ModelPath
 
 warnings.filterwarnings("ignore", category=Warning, module="sklearn")
 
@@ -17,9 +16,23 @@ warnings.filterwarnings("ignore", category=Warning, module="sklearn")
 def train_model(
     dataloaders: Dataloaders,
     max_epochs: int,
-    hyperparameters: Hyperparamters = Hyperparamters(),
+    hyperparameters: Hyperparamters = None,
     fast_dev_run: bool = False,
-) -> DatalaodersAndModel | None:
+) -> LightningModule | None:
+    """
+    Trains a TemporalFusionTransformer model with Lightning-Trainer using the provided dataloaders and hyperparameters.
+    Args:
+        dataloaders (Dataloaders): Contains the training and validation dataloaders.
+        max_epochs (int): The maximum number of epochs to train the model.
+        hyperparameters (Hyperparamters, optional): Contains the hyperparameters for the model.
+            Defaults to None.
+        fast_dev_run (bool, optional): If True, runs a single batch of training and validation for quick debugging.
+            Defaults to False.
+    Returns:
+        LightningModule | None: The trained TemporalFusionTransformer model, or None if fast_dev_run is True.
+    """
+    if hyperparameters is None:
+        hyperparameters = Hyperparamters()
     trainer = create_trainer(
         max_epochs=max_epochs,
         hyperparameters=hyperparameters,
@@ -44,35 +57,50 @@ def train_model(
     )
     if fast_dev_run:
         return
-    return DatalaodersAndModel(
-        dataloaders=dataloaders,
-        model=temporal_fusion_transformer,
-    )
+    return temporal_fusion_transformer
 
 
 def create_trainer(
     max_epochs: int,
-    hyperparameters: Hyperparamters = Hyperparamters(),
+    hyperparameters: Hyperparamters = None,
     fast_dev_run: bool = False,
-) -> pl.Trainer:
-    lr_logger = LearningRateMonitor()  # log the learning rate
-    logger = TensorBoardLogger("")  # logging results to a tensorboard
+) -> Trainer:
+    """
+    Creates a PyTorch Lightning Trainer from specified configurations.
+    Args:
+        max_epochs (int): The maximum number of epochs to train the model.
+        hyperparameters (Hyperparamters, optional): An instance of Hyperparamters containing training configurations.
+            Defaults to None in which case Trainer defaults are used.
+        fast_dev_run (bool, optional): If True, runs a single batch of training and validation to quickly check
+            for errors. Defaults to False.
+    Returns:
+        Trainer: A configured PyTorch Lightning Trainer instance.
+    """
+    if hyperparameters is None:
+        hyperparameters = Hyperparamters()
     early_stop_callback = EarlyStopping(
         monitor="val_loss", min_delta=1e-4, patience=10, verbose=False, mode="min"
     )
-    _hyperparameters = hyperparameters.function_none_filtered_dict(function=pl.Trainer)
-    return pl.Trainer(
+    _hyperparameters = hyperparameters.function_none_filtered_dict(function=Trainer)
+    return Trainer(
         **_hyperparameters,
         max_epochs=max_epochs,
         enable_model_summary=True,
         limit_train_batches=50,
-        callbacks=[lr_logger, early_stop_callback],
-        logger=logger,
+        callbacks=[early_stop_callback],
         fast_dev_run=fast_dev_run,
     )
 
 
-def load_model(model_path: ModelPath = None) -> TemporalFusionTransformer:
+def load_model(model_path: ModelPath) -> TemporalFusionTransformer:
+    """
+    Loads a TemporalFusionTransformer model from a specified checkpoint path.
+    Args:
+        model_path (ModelPath): An instance of ModelPath that provides the path to the model checkpoint.
+    Returns:
+        TemporalFusionTransformer: The loaded TemporalFusionTransformer model.
+    """
+
     path = model_path.get_path()
     lightning_logs_path = os.path.join(project_root_path, path)
     return TemporalFusionTransformer.load_from_checkpoint(lightning_logs_path)

@@ -29,7 +29,7 @@ def transformer_empirical():
     Trains and evaluates Transformer using an empirical dataset.
     """
     train_and_evaluate_transformer(
-        max_training_epochs=1,
+        max_training_epochs=100,
         hyperparameters_study_trials=50,
         # Contrary to documentation, hidden_size is not needed if all variables are continuous
         hyperparameter_ranges=Hyperparamters(hidden_size=(0, 0)),
@@ -53,9 +53,9 @@ def transformer_synthetic():
     Trains and evaluates Transformer using a synthetic dataset based on a sawtooth function.
     """
     train_and_evaluate_transformer(
-        max_training_epochs=1,
+        max_training_epochs=100,
         dataset=get_sawtooth_dataset(
-            amount_intervals=500,
+            amount_intervals=100,
             steps_per_interval=10,
             max_value=10,
         ),
@@ -64,7 +64,7 @@ def transformer_synthetic():
         ),
         hyperparameters=Hyperparamters(
             gradient_clip_val=33.134465883069915,
-            hidden_size=31,
+            hidden_size=0,
             dropout=0.13584274723675938,
             hidden_continuous_size=20,
             attention_head_size=2,
