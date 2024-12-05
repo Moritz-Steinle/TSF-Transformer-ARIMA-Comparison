@@ -2,7 +2,6 @@ import os
 
 import numpy as np
 from pandas import DataFrame, Series, read_csv
-from pytorch_forecasting.data.examples import get_stallion_data
 
 from config import config
 
@@ -48,14 +47,14 @@ def get_synthetic_dataset(
     should_normalize: bool = True,
 ) -> DataFrame:
     """
-    Generate a sawtooth dataset in range [1, interval_length].
+    Generate a synthetic dataset with a sawtooth function in range [1, interval_length].
     Parameters:
         amount_intervals (int): Number of intervals to generate.
         steps_per_interval (int, optional): Number of data points per interval. Default is 10.
         max_value (int, optional): Maximum value (inclusive). Default is 10.
         should_normalize (bool, optional): If should be normalized. Default is True.
     Returns:
-        DataFrame: A DataFrame containing the sawtooth values, group, and time index.
+        DataFrame: The generated dataset.
     """
     points = np.linspace(1, max_value, steps_per_interval)
     sawtooth_values = Series(np.tile(points, amount_intervals))

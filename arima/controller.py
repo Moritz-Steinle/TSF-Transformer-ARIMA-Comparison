@@ -11,12 +11,12 @@ from arima.interface import ArimaOrder, OptimisationMethod
 def train_and_evaluate_arima(
     dataset: Series,
     prediction_length: int,
-    is_data_stationary: bool = False,
     arima_order: ArimaOrder = None,
     log_label: str = None,
     optimisation_method: str = OptimisationMethod.L_BFGS.value,
-    should_find_best_order: bool = False,
     season_length: int = None,
+    should_find_best_order: bool = False,
+    is_data_stationary: bool = False,
 ) -> None:
     """
     Trains and evaluates an ARIMA model on the given dataset.

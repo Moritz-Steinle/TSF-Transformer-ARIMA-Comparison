@@ -53,7 +53,7 @@ def transformer_synthetic():
     Trains and evaluates Transformer using a synthetic dataset based on a sawtooth function.
     """
     train_and_evaluate_transformer(
-        max_training_epochs=100,
+        max_training_epochs=1,
         dataset=get_synthetic_dataset(
             amount_intervals=100,
             steps_per_interval=10,
@@ -139,4 +139,4 @@ def analyse_series():
     )
 
 
-transformer_empirical()
+transformer_synthetic()

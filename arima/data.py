@@ -19,7 +19,7 @@ def train_test_split_dataset(dataset: Series, prediction_length: int) -> ArimaDa
     """
     train_dataset = dataset.head(-prediction_length)
     validation_dataset = dataset.tail(prediction_length)
-    if not train_dataset:
+    if train_dataset.empty:
         raise ValueError(
             f"Prediction length {prediction_length} is too large for dataset of length {len(dataset)}"
         )
