@@ -1,0 +1,28 @@
+{
+    "number": 1,
+    "value": 0.220209077,
+    "datetime_start": 1733401727488,
+    "datetime_complete": 1733401849700,
+    "duration": 122211,
+    "params_attention_head_size": 3,
+    "params_dropout": 0.2374204721,
+    "params_gradient_clip_val": 1.4684560927,
+    "params_hidden_continuous_size": 27,
+    "params_hidden_size": 38,
+    "params_learning_rate": 0.0251188643,
+    "state": "COMPLETE"
+}
+{
+    "number": 0,
+    "value": 0.380297482,
+    "datetime_start": 1733401611146,
+    "datetime_complete": 1733401727488,
+    "duration": 116341,
+    "params_attention_head_size": 1,
+    "params_dropout": 0.1449137467,
+    "params_gradient_clip_val": 0.0155257435,
+    "params_hidden_continuous_size": 9,
+    "params_hidden_size": 234,
+    "params_learning_rate": 0.01,
+    "state": "COMPLETE"
+}

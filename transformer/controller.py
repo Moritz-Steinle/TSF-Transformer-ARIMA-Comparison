@@ -21,7 +21,7 @@ def train_and_evaluate_transformer(
     hyperparameters_study_trials: int = 0,
     log_label: str = "",
     fast_dev_run: bool = False,
-):
+) -> None:
     """
     Train and evaluate a transformer model on the given dataset.
 
@@ -30,10 +30,10 @@ def train_and_evaluate_transformer(
         max_training_epochs (int): The maximum number of training epochs.
         dataloader_parameters (DataloaderParameters, optional): Parameters for the dataloader. Defaults to None.
         hyperparameters (Hyperparamters, optional): Hyperparameters for the model. Defaults to None.
-        hyperparameters_study_trials (int, optional): Number of trials for hyperparameter study. Defaults to 0.
-        log_label (str, optional): Label for logging. Defaults to "".
-        fast_dev_run (bool, optional): If True, runs a fast development run. Defaults to False.
-
+        hyperparameters_study_trials (int, optional): Number of trials for hyperparameter study.
+            Is ignored when hyperparameters are provided. Defaults to 0.
+        log_label (str, optional): Label for logging in addition to timestamp. Defaults to "".
+        fast_dev_run (bool, optional): If True, runs a fast development run, 1 epoch without return. Defaults to False.
     Returns:
         None
     """

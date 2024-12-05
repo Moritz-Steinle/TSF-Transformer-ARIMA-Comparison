@@ -76,7 +76,8 @@ def run_hyperparameter_study(
         train_dataloader: DataLoader for the training dataset.
         val_dataloader: DataLoader for the validation dataset.
         hyperparameters_study_trials (int, optional): Number of trials for the hyperparameter study. Defaults to 50.
-        hyperparameter_ranges (HyperparameterRanges, optional): Ranges for the hyperparameters to be optimized. Defaults to HyperparameterRanges().
+        hyperparameter_ranges (HyperparameterRanges, optional): Ranges for the hyperparameters to be optimized.
+            Defaults to HyperparameterRanges().
     Returns:
         Hyperparamters: The best hyperparameters found during the study.
     """
@@ -99,31 +100,7 @@ def save_hyperparameter_study(study: Study) -> None:
     Returns:
         None
     """
-    trials_list = study.trials
-    all_trials_df = pd.concat(
-        [_trial_to_dataframe(trial) for trial in trials_list], ignore_index=True
-    )
-    all_trials_df = all_trials_df.sort_values(by="value")
+    study_dataframe = study.trials_dataframe()
+    study_dataframe = study_dataframe.sort_values(by="value")
     full_path = get_path_with_timestamp(config.hyperparameter_study_path, "json")
-    all_trials_df.to_json(full_path, orient="records", lines=True)
-
-
-def _trial_to_dataframe(trial: FrozenTrial) -> DataFrame:
-    """
-    Helper function to filter relevant trial object data into a pandas DataFrame.
-    Parameters:
-        trial (FrozenTrial): The trial object to convert.
-    Returns:
-        DataFrame: A pandas DataFrame containing relevant trial data.
-    """
-
-    data = {
-        "value": trial.values[0] if trial.values else None,
-        "trial_number": trial.number,
-        "duration": (trial.datetime_complete - trial.datetime_start).total_seconds()
-        if trial.datetime_complete
-        else None,
-    }
-    data.update(trial.params)
-    df = DataFrame([data])
-    return df
+    study_dataframe.to_json(full_path, orient="records", lines=True)
