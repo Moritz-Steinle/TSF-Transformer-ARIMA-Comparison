@@ -23,21 +23,19 @@ def train_and_evaluate_transformer(
     fast_dev_run: bool = False,
 ):
     """
-    Trains and evaluates a transformer model.
+    Train and evaluate a transformer model on the given dataset.
+
     Args:
-        dataset (DataFrame): The dataset to train and evaluate the transformer model on.
-        max_epochs (int): The maximum number of epochs to train the model.
-        dataloader_parameters (DataloaderParameters, optional):
-            Optimizing parameters specific to the data like learning rate etc.  Defaults to None.
-        hyperparameters (Hyperparamters, optional): The hyperparameters for training the model. Defaults to None.
-        should_run_hyperparameter_study (bool, optional): Whether to run a hyperparameter study. Defaults to False.
-        fast_dev_run (bool, optional):
-            Whether to run a fast development run. This runs only 1 training epoch and yields no result.
-            Defaults to False.
-    Raises:
-        ValueError: If neither hyperparameters are provided nor should_run_hyperparameter_study is set to True.
+        dataset (DataFrame): The dataset to be used for training and evaluation.
+        max_training_epochs (int): The maximum number of training epochs.
+        dataloader_parameters (DataloaderParameters, optional): Parameters for the dataloader. Defaults to None.
+        hyperparameters (Hyperparamters, optional): Hyperparameters for the model. Defaults to None.
+        hyperparameters_study_trials (int, optional): Number of trials for hyperparameter study. Defaults to 0.
+        log_label (str, optional): Label for logging. Defaults to "".
+        fast_dev_run (bool, optional): If True, runs a fast development run. Defaults to False.
+
     Returns:
-        None: If fast_dev_run is True.
+        None
     """
     dataloaders = transformer.data.create_dataloaders(
         dataset, dataloader_parameters=dataloader_parameters

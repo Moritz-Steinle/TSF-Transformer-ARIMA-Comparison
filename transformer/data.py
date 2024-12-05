@@ -71,13 +71,12 @@ def run_hyperparameter_study(
     hyperparameter_ranges: HyperparameterRanges = HyperparameterRanges(),
 ) -> Hyperparamters:
     """
-    Runs a hyperparameter study using Optuna to optimize the model's hyperparameters.
+    Conducts a hyperparameter study using Optuna to optimize model performance.
     Args:
-        train_dataloader: The dataloader for the training data.
-        val_dataloader: The dataloader for the validation data.
-        amount_trials (int): The number of trials to run for hyperparameter optimization. Default is 50.
-        hyperparameter_ranges (HyperparameterRanges): The ranges to test the hyperparameters in. Default is an empty HyperparameterRanges object.
-        study_filename (str): The filename to save the hyperparameter study. Default is the current datetime.
+        train_dataloader: DataLoader for the training dataset.
+        val_dataloader: DataLoader for the validation dataset.
+        hyperparameters_study_trials (int, optional): Number of trials for the hyperparameter study. Defaults to 50.
+        hyperparameter_ranges (HyperparameterRanges, optional): Ranges for the hyperparameters to be optimized. Defaults to HyperparameterRanges().
     Returns:
         Hyperparamters: The best hyperparameters found during the study.
     """
