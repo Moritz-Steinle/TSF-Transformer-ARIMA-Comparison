@@ -1,9 +1,0 @@
-{
-    "label": "InfluxDB_r=12h_chained_om=bfgs",
-    "mean_squared_error": 1.5720876592,
-    "runtimes": "Training: 1.69 seconds",
-    "length_train_dataset": 809,
-    "length_test_dataset": 6,
-    "parameters": "order=(2, 0, 0), seasonal_order=(0, 0, 1, 12)",
-    "prediction": "{\"809\":7.0077933112,\"810\":6.8647453454,\"811\":5.5586984848,\"812\":5.36289658,\"813\":5.5334285687,\"814\":5.5035415426}"
-}

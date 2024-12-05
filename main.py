@@ -14,7 +14,7 @@ from arima.interface import (
 )
 from data.process import (
     get_csv_dataset,
-    get_sawtooth_dataset,
+    get_synthetic_dataset,
 )
 from transformer.controller import train_and_evaluate_transformer
 from transformer.interface import Hyperparamters
@@ -29,7 +29,7 @@ def transformer_empirical():
     Trains and evaluates Transformer using an empirical dataset.
     """
     train_and_evaluate_transformer(
-        max_training_epochs=100,
+        max_training_epochs=1,
         hyperparameters_study_trials=50,
         # Contrary to documentation, hidden_size is not needed if all variables are continuous
         hyperparameter_ranges=Hyperparamters(hidden_size=(0, 0)),
@@ -54,7 +54,7 @@ def transformer_synthetic():
     """
     train_and_evaluate_transformer(
         max_training_epochs=100,
-        dataset=get_sawtooth_dataset(
+        dataset=get_synthetic_dataset(
             amount_intervals=100,
             steps_per_interval=10,
             max_value=10,
@@ -79,18 +79,17 @@ def arima_empirical():
     Trains and evaluates ARIMA using an empirical dataset.
     """
     season_length = 7
-    max_prediction_length = 14
-    should_find_best_order = False
-    arima_order = ArimaOrder(order=(0, 0, 2), seasonal_order=(2, 0, 2, season_length))
-    optimization_method = OptimisationMethod.L_BFGS.value
     train_and_evaluate_arima(
         dataset=get_csv_dataset(
             filename="influxdb-2h-chained",
         )["value"],
-        max_prediction_length=max_prediction_length,
-        optimisation_method=optimization_method,
-        arima_order=arima_order,
-        should_find_best_order=should_find_best_order,
+        prediction_length=14,
+        optimisation_method=OptimisationMethod.L_BFGS.value,
+        arima_order=ArimaOrder(
+            order=(0, 0, 2), seasonal_order=(2, 0, 2, season_length)
+        ),
+        should_find_best_order=False,
+        is_data_stationary=True,
     )
 
 
@@ -100,15 +99,17 @@ def arima_synthetic():
     """
     season_length = 10
     train_and_evaluate_arima(
-        dataset=get_sawtooth_dataset(
+        dataset=get_synthetic_dataset(
             amount_intervals=500,
             steps_per_interval=season_length,
             max_value=10,
         )["value"],
-        max_prediction_length=36,
+        prediction_length=36,
         arima_order=ArimaOrder(
             order=(2, 0, 1), seasonal_order=(2, 0, 2, season_length)
         ),
+        should_find_best_order=False,
+        is_data_stationary=True,
     )
 
 

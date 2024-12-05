@@ -1,1 +1,0 @@
-{"label":"InfluxDB_r=24h_om=powell","mean_squared_error":1.283935676,"runtimes":"Training: 0.07 seconds","length_train_dataset":30,"length_test_dataset":6,"parameters":"order=(0, 0, 1), seasonal_order=(0, 0, 1, 6)","prediction":"{\"30\":7.3372379586,\"31\":4.8800630548,\"32\":4.3825180138,\"33\":5.019681804,\"34\":4.6692393289,\"35\":6.1403740146}"}

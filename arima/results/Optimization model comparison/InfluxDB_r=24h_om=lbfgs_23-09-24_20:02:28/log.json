@@ -1,1 +1,0 @@
-{"label":"InfluxDB_r=24h_om=lbfgs","mean_squared_error":1.304856939,"runtimes":"Training: 0.06 seconds","length_train_dataset":30,"length_test_dataset":6,"parameters":"order=(0, 0, 1), seasonal_order=(0, 0, 1, 6)","prediction":"{\"30\":7.3987340939,\"31\":4.9413598133,\"32\":4.4177250877,\"33\":5.0654517001,\"34\":4.701361642,\"35\":6.2088718919}"}

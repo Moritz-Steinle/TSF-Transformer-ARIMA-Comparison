@@ -55,5 +55,5 @@ def write_dataframe_to_csv(dataset: DataFrame, target_filename: str) -> None:
     """
     target_filename = f"{target_filename}.csv"
     dirname = os.path.dirname(os.path.abspath(__file__))
-    filename_with_path = os.path.join(dirname, "data-files", target_filename)
+    filename_with_path = os.path.join(dirname, config.data_file_path, target_filename)
     dataset.to_csv(filename_with_path, index=False)

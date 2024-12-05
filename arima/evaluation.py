@@ -26,17 +26,18 @@ def predict(
 
 
 def log(
-    order: ArimaOrder,
     prediction: Series,
+    order: ArimaOrder,
     arima_datasets: ArimaDatasets,
     training_runtime: float,
     log_label: str = None,
     find_order_runtime=None,
-):
+) -> None:
     """
-    Logs the performance and parameters of an ARIMA model.
+    Formats and logs training and prediction data
     Parameters:
         model (SARIMAX): The trained SARIMAX model.
+        order (ArimaOrder): The order of the ARIMA model.
         prediction: The predicted values from the model.
         arima_datasets (ArimaDatasets): The datasets used for training and testing the model.
         training_runtime (float): The time taken to train the model.

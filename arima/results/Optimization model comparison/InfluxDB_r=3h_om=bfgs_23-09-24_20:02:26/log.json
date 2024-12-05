@@ -1,9 +1,0 @@
-{
-    "label": "InfluxDB_r=3h_om=bfgs",
-    "mean_squared_error": 0.2688938853,
-    "runtimes": "Training: 0.01 seconds",
-    "length_train_dataset": 739,
-    "length_test_dataset": 6,
-    "parameters": "order=(0, 1, 0), seasonal_order=(0, 0, 0, 56)",
-    "prediction": "{\"739\":3.7867647059,\"740\":3.7867647059,\"741\":3.7867647059,\"742\":3.7867647059,\"743\":3.7867647059,\"744\":3.7867647059}"
-}

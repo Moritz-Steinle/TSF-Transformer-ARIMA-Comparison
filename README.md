@@ -1,52 +1,104 @@
-# Time Series Forecasting comparsion of AI to classic statistical approaches 
+# **Comparison of ARIMA and Transformer in Time Series Forecasting**
 
-This project compares the relatively new approach of TSF with a transformer model to the prominent ARIMA forecasting.
-The real-world data used is the ground dryness of a potted plant that is watered roughly every 6 days.
-This results in a one-dimensional, seasonal dataset. 
+This project evaluates the time series forecasting capabilities of deep learning-based Transformers against statistical ARIMA models using two types of datasets: empirical and synthetic.
 
-# Dependencies
-- Python <= 3.9: Incompatible due to language features from 3.10
-- Python >= 3.11: Not compatible due to pytorch-forecasting not compatible with > 3.10.
+### **Models Used**
+- **Transformer:** [PyTorch-Forecasting Temporal Fusion Transformer](https://pytorch-forecasting.readthedocs.io/en/stable/api/pytorch_forecasting.models.temporal_fusion_transformer.TemporalFusionTransformer.html)
+- **ARIMA:** [Statsmodels SARIMAX](https://www.statsmodels.org/dev/generated/statsmodels.tsa.statespace.sarimax.SARIMAX.html)
 
-# Installation
-1. Clone the repository
-2. Create venv: `python -m venv <your-venv-name>`
-3. Activate venv: `. <your-venv-name>/bin/activate`
-4. Install dependencies: `pip install -r requirements.txt`
-5. Run the code: `python main.py`
-6. On finish, deactivate `deactivate`
+---
 
-# Main File Usage
+### **Datasets**
+1. **Empirical Data:**  
+   - Collected through an experimental setup monitoring soil dryness levels in a potted plant.  
+   - Contains ~840,000 data points over 97 days.  
 
-This README section provides an overview of the main file in our Python project, which contains several functions for training and evaluating time series models.
-Results and plots are saved in {model}/results. 
+2. **Synthetic Data:**  
+   - Artificially generated to approximate the empirical data using a sawtooth function.
 
-## Available Functions
+---
 
-### Transformer Models
+## **Dependencies**
+- **Python 3.10:** Required due to compatibility constraints.  
+  - Python < 3.10: Incompatible due to missing language features.  
+  - Python > 3.10: Incompatible with `pytorch-forecasting`.
 
-1. `influx_transformer()`: Trains and evaluates a transformer model on our real-life scenario data.
-2. `sawtooth_transformer()`: Trains and evaluates a transformer model on a mock dataset. The contained sawtooth function resembles the real-life data
-3. `tutorial_transformer()`: Trains and evaluates a transformer model based on the [tutorial](https://pytorch-forecasting.readthedocs.io/en/stable/tutorials/stallion.html) for the transformer.
-4. `evaluate_saved_transformer(dataset, model_path)`: Evaluates a saved transformer model on a given dataset.
+---
 
-### ARIMA Models
+## **Installation**
+1. Clone the repository:  
+   ```bash
+   git clone <repository-url>
+   ```
+2. Create a virtual environment:  
+   ```bash
+   python -m venv <your-venv-name>
+   ```
+3. Activate the virtual environment:  
+   - Linux/macOS:  
+     ```bash
+     source <your-venv-name>/bin/activate
+     ```  
+   - Windows:  
+     ```cmd
+     <your-venv-name>\Scripts\activate
+     ```  
+4. Install dependencies:  
+   ```bash
+   pip install -r requirements.txt
+   ```
+5. Run the project:  
+   ```bash
+   python main.py
+   ```
+6. Deactivate the virtual environment when done:  
+   ```bash
+   deactivate
+   ```
 
-1. `influx_arima()`: Trains and evaluates an ARIMA model on the real-life scenario data.
-2. `sawtooth_arima()`: Trains and evaluates an ARIMA model on the mock sawtooth data
-3. `run_arima_comparison()`: Currently only available with database access. Runs ARIMA comparisons on the real-life scenario data with different resolutions.
+---
 
+## **Main File Usage**
 
-## Data
-`Data` provides csv files with different resolutions. Use `fetch_data_from_db()` to fetch different data.
-InfluxDB credentials are required. 
-### InfluxDB credentials
-The credentials can be set by renaming `credentials_EXAMPLE.ini` to `credentials.ini` and adding the credentials to the file.
+The primary script contains functions for training and evaluating models. Results, including plots, are saved in `{model}/results`.
 
-## Notes
+### **Available Functions**
+1. **`transformer_empirical()`**: Train and evaluate the Transformer on empirical data.  
+2. **`transformer_synthetic()`**: Train and evaluate the Transformer on synthetic data.  
+3. **`arima_empirical()`**: Train and evaluate the ARIMA model on empirical data.  
+4. **`arima_synthetic()`**: Train and evaluate the ARIMA model on synthetic data.  
+5. **`plot_series()`**: Visualize a given data series.  
+6. **`analyse_series()`**: Analyze key characteristics of a data series.
 
-- The transformer functions use custom dataloader parameters and hyperparameters specific to the dataset. 
-    It is recommended to set the flag `should_run_hyperparameter_study=True` when using different datasets.
-- The same is true for the ARIMA functions with the flag `should_find_best_order=True` 
+---
 
-For more detailed information about each function's parameters and behavior, please refer to the function docstrings or the project's full documentation.
+## **Modules Overview**
+
+### **Data**
+- Fetch datasets from an `InfluxDB` and save them as CSV files.  
+- Load and preprocess datasets (e.g., normalization, interpolation).  
+- Analyze dataset properties (e.g., stationarity, season length).  
+- Empirical data is stored in `/data-files`.
+
+### **ARIMA**
+- Train and evaluate the ARIMA model, saving results to `./results`.  
+- Determine optimal ARIMA parameters using [`auto_arima`](https://alkaline-ml.com/pmdarima/modules/generated/pmdarima.arima.auto_arima.html).
+
+### **Transformer**
+- Train and evaluate the Transformer model, saving results to `./results`.  
+- Optimize model parameters using [`Optuna`](https://optuna.org/).  
+- Save and load trained models.
+
+### **Log**
+- Log the following:
+  - Model parameters.  
+  - Dataset characteristics.  
+  - Predicted values and error metrics (e.g., MAE, RMSE, MASE, SMAPE).  
+  - Prediction plots.  
+  - Computation times.
+
+---
+
+## **Notes**
+- Configure paths in `config.ini`.  
+- Set InfluxDB credentials by renaming `credentials_EXAMPLE.ini` to `credentials.ini` and updating the file with your credentials.

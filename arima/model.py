@@ -1,10 +1,5 @@
-# Taken from https://github.com/nachi-hebbar/ARIMA-Temperature_Forecasting
-import pickle
-
 from pandas import Series
 from statsmodels.tsa.statespace.sarimax import SARIMAX
-
-from config import config
 
 from .interface import ArimaOrder
 
@@ -13,7 +8,6 @@ def train_model(
     train_dataset: Series,
     arima_order: ArimaOrder = None,
     optimization_method: str = None,
-    should_save_model: bool = False,
 ) -> SARIMAX:
     """
     Train an ARIMA model using the given train_dataset.
@@ -35,16 +29,4 @@ def train_model(
         seasonal_order=arima_order.seasonal_order,
     )
     fit_model = model.fit(method=optimization_method)
-    if should_save_model:
-        save_model(fit_model)
     return fit_model
-
-
-def save_model(model, filename: str = config.arima_model_path):
-    with open(filename, "wb") as file:
-        pickle.dump(model, file)
-
-
-def load_model(filename: str = config.arima_model_path):
-    with open(filename, "rb") as file:
-        return pickle.load(file)

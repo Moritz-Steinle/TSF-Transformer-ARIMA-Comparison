@@ -95,7 +95,7 @@ class DataloaderParameters(PurgeNone):
     time_idx: str
     target: str
     group_ids: List[str]
-    max_prediction_length: int = config.transformer_max_prediction_length
+    max_prediction_length: int
     batch_size: Optional[int] = 64
     max_encoder_length: Optional[int] = None
     min_encoder_length: Optional[int] = None
