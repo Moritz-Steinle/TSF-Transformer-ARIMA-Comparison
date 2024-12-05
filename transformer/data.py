@@ -1,11 +1,10 @@
-import pandas as pd
 from optuna import Study
-from optuna.trial import FrozenTrial
 from pandas import DataFrame
 from pytorch_forecasting import TimeSeriesDataSet
 from pytorch_forecasting.models.temporal_fusion_transformer.tuning import (
     optimize_hyperparameters,
 )
+from torch.utils.data import DataLoader
 
 from config import config
 from log.log import get_path_with_timestamp
@@ -28,32 +27,49 @@ def create_dataloaders(
         dataloader_parameters (DataloaderParameters): Parameters for creating dataloaders.
     Returns:
         Dataloaders: Train and validation dataloaders.
+    Raises:
+        ValueError: If the max prediction length is longer than the dataset.
     """
-    training_cutoff = (
-        dataset[dataloader_parameters.time_idx].max()
-        - dataloader_parameters.max_prediction_length
-    )
-    training_dataset = dataset[lambda x: x.time_idx <= training_cutoff]
-    validation_dataset = dataset[lambda x: x.time_idx > training_cutoff]
+
+    # Split dataset into training and validation
+    max_time = dataset[dataloader_parameters.time_idx].max()
+    training_cutoff = max_time - dataloader_parameters.max_prediction_length
     if training_cutoff <= 0:
         raise ValueError(
-            f"Max prediction length {dataloader_parameters.max_prediction_length} is too large for dataset"
+            f"Dataset length ({max_time}) is too small for "
+            f"max prediction length {dataloader_parameters.max_prediction_length}"
         )
-    _parameters = dataloader_parameters.function_none_filtered_dict(
+    training_dataset = dataset[
+        dataset[dataloader_parameters.time_idx] <= training_cutoff
+    ].copy()
+    validation_dataset = dataset[
+        dataset[dataloader_parameters.time_idx] > training_cutoff
+    ].copy()
+
+    # Create TimeSeriesDataSets
+    parameters = dataloader_parameters.function_none_filtered_dict(
         function=TimeSeriesDataSet
     )
     training_timeseries = TimeSeriesDataSet(
         training_dataset,
-        **_parameters,
+        **parameters,
     )
-    train_dataloader = training_timeseries.to_dataloader(
-        train=True, batch_size=dataloader_parameters.batch_size, num_workers=11
-    )
-    validation = TimeSeriesDataSet.from_dataset(
+    validation_timeseries = TimeSeriesDataSet.from_dataset(
         training_timeseries, dataset, predict=True, stop_randomization=True
     )
-    val_dataloader = validation.to_dataloader(
-        train=False, batch_size=dataloader_parameters.batch_size * 10, num_workers=11
+
+    # Create DataLoaders
+    train_dataloader = _create_dataloader(
+        training_timeseries,
+        batch_size=dataloader_parameters.batch_size,
+        num_workers=11,
+        is_train=True,
+    )
+    val_dataloader = _create_dataloader(
+        dataset=validation_timeseries,
+        batch_size=dataloader_parameters.batch_size * 10,
+        num_workers=11,
+        is_train=False,
     )
     return Dataloaders(
         train_dataloader=train_dataloader,
@@ -104,3 +120,28 @@ def save_hyperparameter_study(study: Study) -> None:
     study_dataframe = study_dataframe.sort_values(by="value")
     full_path = get_path_with_timestamp(config.hyperparameter_study_path, "json")
     study_dataframe.to_json(full_path, orient="records", lines=True)
+
+
+def _create_dataloader(
+    dataset: TimeSeriesDataSet,
+    batch_size: int,
+    num_workers: int,
+    is_train: bool,
+) -> DataLoader:
+    """
+    Create a DataLoader from a TimeSeriesDataSet.
+    Parameters:
+        dataset (TimeSeriesDataSet): The dataset to load data from.
+        batch_size (int): Number of samples per batch to load.
+        num_workers (int): How many subprocesses to use for data loading.
+        is_train (bool): If True, the DataLoader will be used for training.
+    Returns:
+        DataLoader: A DataLoader instance for the given dataset.
+    """
+    return dataset.to_dataloader(
+        train=is_train,
+        batch_size=batch_size,
+        num_workers=num_workers,
+        pin_memory=True,
+        persistent_workers=True if num_workers > 0 else False,
+    )

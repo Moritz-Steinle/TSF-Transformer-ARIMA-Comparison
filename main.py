@@ -30,19 +30,21 @@ def transformer_empirical():
     """
     train_and_evaluate_transformer(
         max_training_epochs=1,
-        hyperparameters_study_trials=2,
+        hyperparameters_study_trials=50,
+        # Contrary to documentation, hidden_size is not needed if all variables are continuous
+        hyperparameter_ranges=Hyperparamters(hidden_size=(0, 0)),
         dataset=get_csv_dataset(filename="influxdb-2h-chained"),
         dataloader_parameters=transformer.interface.get_base_dataloader_parameters(
             max_prediction_length=14
         ),
-        # hyperparameters=Hyperparamters(
-        #     gradient_clip_val=6.9953515571,
-        #     hidden_continuous_size=40,
-        #     dropout=0.1558743686,
-        #     attention_head_size=3,
-        #     learning_rate=0.0039810717,
-        #     hidden_size=0,
-        # ),
+        hyperparameters=Hyperparamters(
+            gradient_clip_val=6.9953515571,
+            hidden_continuous_size=40,
+            dropout=0.1558743686,
+            attention_head_size=3,
+            learning_rate=0.0039810717,
+            hidden_size=0,
+        ),
     )
 
 

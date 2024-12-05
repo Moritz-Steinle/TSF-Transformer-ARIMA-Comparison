@@ -19,6 +19,7 @@ def train_and_evaluate_transformer(
     dataloader_parameters: DataloaderParameters = None,
     hyperparameters: Hyperparamters = None,
     hyperparameters_study_trials: int = 0,
+    hyperparameter_ranges: HyperparameterRanges = None,
     log_label: str = "",
     fast_dev_run: bool = False,
 ) -> None:
@@ -44,6 +45,7 @@ def train_and_evaluate_transformer(
         dataloaders=dataloaders,
         hyperparameters=hyperparameters,
         hyperparameters_study_trials=hyperparameters_study_trials,
+        hyperparameter_ranges=hyperparameter_ranges,
     )
     start_time = time.time()
     result = transformer.model.train_model(
