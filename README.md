@@ -11,7 +11,7 @@ This project evaluates the time series forecasting capabilities of deep learning
 ### **Datasets**
 1. **Empirical Data:**  
    - Collected through an experimental setup monitoring soil dryness levels in a potted plant.  
-   - Contains ~840,000 data points over 97 days.  
+   - Contains ~840,000 data points collected over 97 days in 10-second steps.  
 
 2. **Synthetic Data:**  
    - Artificially generated to approximate the empirical data using a sawtooth function.
