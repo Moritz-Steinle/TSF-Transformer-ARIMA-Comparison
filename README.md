@@ -18,10 +18,10 @@ This project evaluates the time series forecasting capabilities of deep learning
 
 ---
 
-## **Dependencies**
-- **Python 3.10:** Required due to compatibility constraints.  
-  - Python < 3.10: Incompatible due to missing language features.  
-  - Python > 3.10: Incompatible with `pytorch-forecasting`.
+### **Dependencies**
+- **Python 3.12:** Recommended for the current pinned dependency set.
+   - Python < 3.10: Incompatible due to missing language features.
+   - Python 3.10 and 3.11: Should work, but the checked environment here is Python 3.12.
 
 ---
 
